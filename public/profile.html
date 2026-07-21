@@ -193,7 +193,7 @@
             }
         }
 
-        // جلب الروابط (مع استبعاد المخفية والالتزام بالترتيب)
+        // جلب الروابط وتفعيل عداد النقرات (Clicks Counter) عند النقر عليها
         async function loadLinks() {
             const container = document.getElementById('links-container');
             const { data: links } = await supabase
@@ -209,11 +209,22 @@
             }
 
             container.innerHTML = links.map(link => `
-                <a href="${link.url}" target="_blank" class="block w-full bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 transition-all hover:scale-[1.02] shadow-lg">
+                <a href="${link.url}" target="_blank" onclick="trackClick('${link.id}')" class="block w-full bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 transition-all hover:scale-[1.02] shadow-lg">
                     ${link.title}
                 </a>
             `).join('');
         }
+
+        // دالة زيادة عدد النقرات في قاعدة البيانات
+        window.trackClick = async (linkId) => {
+            try {
+                const { data: linkData } = await supabase.from('links').select('clicks').eq('id', linkId).single();
+                const currentClicks = linkData?.clicks || 0;
+                await supabase.from('links').update({ clicks: currentClicks + 1 }).eq('id', linkId);
+            } catch (err) {
+                console.error("Error tracking click:", err);
+            }
+        };
 
         // جلب المنتجات
         async function loadProducts() {
