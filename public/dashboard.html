@@ -55,13 +55,19 @@
                     <i class="fa-solid fa-users w-5"></i> إدارة الفريق
                 </button>
                 <button onclick="switchTab('qrcode')" id="tab-btn-qrcode" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-700/50 hover:text-white">
-                    <i class="fa-solid fa-qrcode w-5"></i> مولد ה-QR
+                    <i class="fa-solid fa-qrcode w-5"></i> مولد الـ QR
+                </button>
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-700/50 hover:text-white">
+                    <i class="fa-solid fa-gear w-5"></i> الإعدادات
                 </button>
             </nav>
         </div>
 
-        <!-- Logout Button -->
-        <div class="mt-8 pt-4 border-t border-slate-700">
+        <!-- Logout & Preview buttons -->
+        <div class="mt-8 pt-4 border-t border-slate-700 space-y-2">
+            <a id="view-live-profile" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-sm transition-colors border border-indigo-500/20">
+                <i class="fa-solid fa-eye"></i> معاينة الصفحة العامة
+            </a>
             <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm transition-colors">
                 <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج
             </button>
@@ -84,8 +90,8 @@
             <form id="form-add-link" class="bg-slate-800 border border-slate-700 p-5 rounded-2xl mb-8 space-y-4">
                 <h3 class="font-bold text-slate-200">إضافة رابط جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="link-title" required placeholder="عنوان الرابط (مثال: حسابي في X)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
-                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <input type="text" id="link-title" required placeholder="عنوان الرابط (مثال: حسابي في X)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
                 </div>
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all">إضافة الرابط</button>
             </form>
@@ -100,17 +106,23 @@
         <section id="sec-store" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold">المتجر المصغر (Lite Store)</h2>
-                <p class="text-slate-400 text-sm">اعرض منتجاتك أو خدماتك المباشرة للجمهور</p>
+                <p class="text-slate-400 text-sm">اعرض منتجاتك أو خدماتك المباشرة للجمهور مع الصور</p>
             </div>
 
             <form id="form-add-product" class="bg-slate-800 border border-slate-700 p-5 rounded-2xl mb-8 space-y-4">
                 <h3 class="font-bold text-slate-200">إضافة منتج جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="prod-title" required placeholder="اسم المنتج" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
-                    <input type="number" step="0.01" id="prod-price" required placeholder="السعر (ر.س)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="prod-title" required placeholder="اسم المنتج" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <input type="number" step="0.01" id="prod-price" required placeholder="السعر (ر.س)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
                 </div>
-                <input type="text" id="prod-desc" placeholder="وصف قصير للمنتج" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all">إضافة المنتج</button>
+                <input type="text" id="prod-desc" placeholder="وصف قصير للمنتج" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">صورة المنتج (بحد أقصى 5 ميجابايت)</label>
+                    <input type="file" id="prod-image" accept="image/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-slate-300 file:ml-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
+                </div>
+                <button type="submit" id="submit-prod-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> إضافة المنتج
+                </button>
             </form>
 
             <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -128,12 +140,12 @@
             <form id="form-add-branch" class="bg-slate-800 border border-slate-700 p-5 rounded-2xl mb-8 space-y-4">
                 <h3 class="font-bold text-slate-200">إضافة فرع جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="branch-name" required placeholder="اسم الفرع (مثال: فرع الرياض - العليا)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
-                    <input type="text" id="branch-city" required placeholder="المدينة" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="branch-name" required placeholder="اسم الفرع (مثال: فرع الرياض - العليا)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <input type="text" id="branch-city" required placeholder="المدينة" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="tel" id="branch-phone" placeholder="رقم الهاتف / الواتساب" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500" dir="ltr">
-                    <input type="url" id="branch-map" placeholder="رابط الخريطة (Google Maps)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <input type="tel" id="branch-phone" placeholder="رقم الهاتف / الواتساب" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                    <input type="url" id="branch-map" placeholder="رابط الخريطة (Google Maps)" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
                 </div>
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all">حفظ الفرع</button>
             </form>
@@ -153,7 +165,7 @@
             <form id="form-add-team" class="bg-slate-800 border border-slate-700 p-5 rounded-2xl mb-8 space-y-4">
                 <h3 class="font-bold text-slate-200">دعوة عضو جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <input type="email" id="team-email" required placeholder="البريد الإلكتروني للعضو" class="sm:col-span-2 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <input type="email" id="team-email" required placeholder="البريد الإلكتروني للعضو" class="sm:col-span-2 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
                     <select id="team-role" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
                         <option value="editor">محرر (Editor)</option>
                         <option value="admin">مسؤول (Admin)</option>
@@ -180,9 +192,31 @@
                 </div>
                 <p id="qr-profile-url" class="text-sm text-indigo-400 font-mono mb-6 break-all">https://keymerv.com/...</p>
                 <button onclick="downloadQR()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-3 rounded-xl text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-download"></i> تنزيل رمز ה-QR
+                    <i class="fa-solid fa-download"></i> تنزيل رمز الـ QR
                 </button>
             </div>
+        </section>
+
+        <!-- 6. تبويب الإعدادات (Settings Tab) -->
+        <section id="sec-settings" class="tab-content hidden">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold">إعدادات الحساب والصفحة</h2>
+                <p class="text-slate-400 text-sm">قم بتعديل بيانات اسمك واسم المستخدم ومعرف الرابط العام</p>
+            </div>
+
+            <form id="form-settings" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl space-y-4 max-w-xl">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">الاسم الظاهري (Display Name)</label>
+                    <input type="text" id="settings-display-name" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">اسم المستخدم (Username - معرف الرابط)</label>
+                    <input type="text" id="settings-username" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                </div>
+                <button type="submit" id="save-settings-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">
+                    حفظ التغييرات
+                </button>
+            </form>
         </section>
 
     </main>
@@ -213,11 +247,21 @@
             currentProfile = profile;
             
             // تحديث الواجهة
-            document.getElementById('user-display-name').textContent = profile?.display_name || currentUser.email.split('@')[0];
-            document.getElementById('user-handle').textContent = `@${profile?.username || 'user'}`;
-            document.getElementById('user-avatar').textContent = (profile?.display_name || currentUser.email)[0].toUpperCase();
+            const displayName = profile?.display_name || currentUser.email.split('@')[0];
+            const username = profile?.username || 'user';
 
-            // جلب بيانات التبويب الأول
+            document.getElementById('user-display-name').textContent = displayName;
+            document.getElementById('user-handle').textContent = `@${username}`;
+            document.getElementById('user-avatar').textContent = displayName[0].toUpperCase();
+            
+            // رابط المعاينة المباشر
+            document.getElementById('view-live-profile').href = `profile.html?u=${username}`;
+
+            // تعبئة نموذج الإعدادات
+            document.getElementById('settings-display-name').value = profile?.display_name || '';
+            document.getElementById('settings-username').value = profile?.username || '';
+
+            // جلب البيانات الأولية للروابط
             loadLinks();
             setupQR();
         }
@@ -255,7 +299,7 @@
             loadLinks();
         });
 
-        // 2. إدارة المنتجات
+        // 2. إدارة المنتجات مع رفع الصورة في Supabase Storage
         async function loadProducts() {
             const container = document.getElementById('products-list');
             const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
@@ -266,13 +310,14 @@
             }
 
             container.innerHTML = products.map(prod => `
-                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl flex justify-between items-start">
-                    <div>
-                        <h4 class="font-bold text-slate-200">${prod.title}</h4>
-                        <p class="text-xs text-slate-400 mt-1">${prod.description || 'بدون وصف'}</p>
-                        <span class="inline-block mt-3 font-bold text-indigo-400 text-sm">${prod.price} ر.س</span>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl flex items-center gap-4">
+                    ${prod.image_url ? `<img src="${prod.image_url}" class="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-700">` : '<div class="w-16 h-16 rounded-xl bg-slate-900 flex items-center justify-center text-slate-600 shrink-0"><i class="fa-solid fa-image"></i></div>'}
+                    <div class="flex-grow overflow-hidden">
+                        <h4 class="font-bold text-slate-200 truncate">${prod.title}</h4>
+                        <p class="text-xs text-slate-400 truncate mt-0.5">${prod.description || 'بدون وصف'}</p>
+                        <span class="inline-block mt-2 font-bold text-indigo-400 text-xs">${prod.price} ر.س</span>
                     </div>
-                    <button onclick="deleteItem('products', '${prod.id}')" class="text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-colors">
+                    <button onclick="deleteItem('products', '${prod.id}')" class="text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-colors shrink-0">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
@@ -281,13 +326,53 @@
 
         document.getElementById('form-add-product').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = document.getElementById('submit-prod-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> جاري النشر...`;
+
             const title = document.getElementById('prod-title').value;
             const price = parseFloat(document.getElementById('prod-price').value);
             const description = document.getElementById('prod-desc').value;
+            const imageFile = document.getElementById('prod-image').files[0];
 
-            await supabase.from('products').insert([{ user_id: currentUser.id, title, price, description }]);
+            let imageUrl = '';
+
+            // رفع الصورة للباكيت uploads
+            if (imageFile) {
+                const fileExt = imageFile.name.split('.').pop();
+                const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+                const filePath = `products/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('uploads')
+                    .upload(filePath, imageFile);
+
+                if (uploadError) {
+                    alert("خطأ في رفع الصورة: " + uploadError.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i class="fa-solid fa-plus"></i> إضافة المنتج`;
+                    return;
+                }
+
+                const { data: publicUrlData } = supabase.storage
+                    .from('uploads')
+                    .getPublicUrl(filePath);
+
+                imageUrl = publicUrlData.publicUrl;
+            }
+
+            await supabase.from('products').insert([{ 
+                user_id: currentUser.id, 
+                title, 
+                price, 
+                description, 
+                image_url: imageUrl 
+            }]);
+
             e.target.reset();
             loadProducts();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-plus"></i> إضافة المنتج`;
         });
 
         // 3. إدارة الفروع
@@ -358,9 +443,28 @@
             loadTeam();
         });
 
+        // 5. حفظ إعدادات الحساب
+        document.getElementById('form-settings').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const display_name = document.getElementById('settings-display-name').value;
+            const username = document.getElementById('settings-username').value;
+
+            const { error } = await supabase
+                .from('users_profiles')
+                .update({ display_name, username })
+                .eq('id', currentUser.id);
+
+            if (error) {
+                alert("خطأ أثناء الحفظ (ربما اسم المستخدم مستخدم مسبقاً): " + error.message);
+            } else {
+                alert("تم حفظ الإعدادات بنجاح!");
+                location.reload();
+            }
+        });
+
         // الحذف العام
         window.deleteItem = async (table, id) => {
-            if (confirm("هل أنت تأكد من الرغبة في الحذف؟")) {
+            if (confirm("هل أنت متأكد من رغبتك في الحذف؟")) {
                 await supabase.from(table).delete().eq('id', id);
                 if (table === 'links') loadLinks();
                 if (table === 'products') loadProducts();
@@ -371,7 +475,7 @@
 
         // الـ QR
         function setupQR() {
-            const profileUrl = `https://keymerv.com/${currentProfile?.username || ''}`;
+            const profileUrl = `${window.location.origin}/profile.html?u=${currentProfile?.username || ''}`;
             document.getElementById('qr-profile-url').textContent = profileUrl;
             
             const container = document.getElementById('qrcode-canvas');
