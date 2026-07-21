@@ -202,7 +202,7 @@
             <div id="branches-list" class="space-y-3"></div>
         </section>
 
-        <!-- 4. مولد QR المحدث (أشكال 3 + زر توليد يفتح نافذة باختيار الشكل والتصدير) -->
+        <!-- 4. QR Code -->
         <section id="sec-qrcode" class="tab-content hidden space-y-6">
             <div class="mb-4">
                 <h2 class="text-2xl font-bold" data-i18n="qrcode_title">مولد رمز الـ QR الذكي</h2>
@@ -251,11 +251,11 @@
             </div>
         </section>
 
-        <!-- 5. الإعدادات (قائمة منسدلة للروابط ذات سكرول، يوزرنيم غير قابل للتعديل بعد الإنشاء، بايو إجباري) -->
+        <!-- 5. الإعدادات (تم إزالة خيارات الترتيب بناءً على طلبك) -->
         <section id="sec-settings" class="tab-content hidden space-y-6">
             <div class="mb-4">
                 <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2>
-                <p class="text-slate-400 text-sm" data-i18n="settings_desc">تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب الروابط</p>
+                <p class="text-slate-400 text-sm" data-i18n="settings_desc">تحكم بكافة تفاصيل هويتك وعرض صفحاتك</p>
             </div>
 
             <form id="form-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-6 max-w-2xl shadow-xl">
@@ -314,34 +314,6 @@
                     </div>
                 </div>
 
-                <!-- ترتيب الروابط المتاحة (قائمة منسدلة مع سكرول) -->
-                <div class="space-y-3 pt-2">
-                    <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2">
-                        <i class="fa-solid fa-list-ol"></i> <span data-i18n="sec_ordering">تفضيلات ترتيب ظهور الروابط المتاحة</span>
-                    </h3>
-                    <p class="text-xs text-slate-400" data-i18n="ordering_desc">اختر أيهما يظهر أولاً في صفحتك العامة:</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1" data-i18n="order_first_lbl">الرابط الأول في الترتيب</label>
-                            <select id="settings-order-1" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 max-h-40 overflow-y-auto">
-                                <option value="social" data-i18n="opt_social">منصات التواصل الاجتماعي</option>
-                                <option value="custom_links" data-i18n="opt_custom_links">الروابط العامة الإضافية</option>
-                                <option value="store" data-i18n="opt_store">المتجر الخفيف</option>
-                                <option value="branches" data-i18n="opt_branches">الفروع</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1" data-i18n="order_second_lbl">الرابط الثاني في الترتيب</label>
-                            <select id="settings-order-2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 max-h-40 overflow-y-auto">
-                                <option value="custom_links" data-i18n="opt_custom_links">الروابط العامة الإضافية</option>
-                                <option value="social" data-i18n="opt_social">منصات التواصل الاجتماعي</option>
-                                <option value="store" data-i18n="opt_store">المتجر الخفيف</option>
-                                <option value="branches" data-i18n="opt_branches">الفروع</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="pt-4 border-t border-slate-800">
                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_save">حفظ جميع التغييرات</button>
                 </div>
@@ -360,27 +332,20 @@
             
             <p class="text-xs text-slate-400" data-i18n="modal_qr_desc">يحتوي الكود تلقائياً على بصمة "Created by Keymerv":</p>
             
-            <!-- أشكال الكود الثلاثة -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <!-- 1. عادي بيسك -->
                 <div onclick="selectQrStyle('basic')" id="qr-card-basic" class="qr-style-card bg-slate-950 border-2 border-indigo-600 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
                     <div class="bg-white p-2 rounded-xl" id="preview-basic"></div>
                     <span class="text-xs font-bold text-slate-200" data-i18n="style_basic">عادي (بيسك)</span>
                 </div>
-                <!-- 2. فخم بإطار -->
                 <div onclick="selectQrStyle('luxury')" id="qr-card-luxury" class="qr-style-card bg-slate-950 border-2 border-slate-800 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
                     <div class="bg-gradient-to-tr from-amber-500 to-indigo-600 p-2.5 rounded-xl shadow-lg" id="preview-luxury"></div>
                     <span class="text-xs font-bold text-slate-200" data-i18n="style_luxury">فخم بإطار</span>
                 </div>
-                <!-- 3. مدوش بتصميم -->
                 <div onclick="selectQrStyle('glitch')" id="qr-card-glitch" class="qr-style-card bg-slate-950 border-2 border-slate-800 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
                     <div class="bg-slate-900 border-2 border-dashed border-purple-500 p-2 rounded-xl shadow-xl" id="preview-glitch"></div>
                     <span class="text-xs font-bold text-slate-200" data-i18n="style_glitch">عصري مدوش</span>
                 </div>
             </div>
-
-            <!-- الكود الفعلي المخفي للتصدير -->
-            <div id="hidden-qr-export-container" class="hidden"></div>
 
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <button onclick="downloadSelectedQrImage()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
