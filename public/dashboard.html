@@ -4,28 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Keymerv | لوحة التحكم</title>
-    <!-- استدعاء Tailwind CSS و FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- ربط ملف الـ CSS الخارجي -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
 
-    <!-- نافذة التنبيه الأنيقة -->
     <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
         <div id="toast-icon" class="text-indigo-400 text-lg"></div>
         <span id="toast-message" class="text-xs font-bold"></span>
     </div>
 
-    <!-- القائمة الجانبية -->
     <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-l border-slate-800 p-5 flex flex-col justify-between shrink-0">
         <div>
-            <!-- شعار وأزرار علوية (معاينة، نسخ، لغة) -->
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg">K</div>
@@ -33,7 +28,6 @@
                 </div>
             </div>
 
-            <!-- شريط أدوات المعاينة والنسخ واللغة -->
             <div class="grid grid-cols-3 gap-2 mb-6">
                 <a id="view-live-profile" href="#" target="_blank" title="معاينة الصفحة العامة" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-400 flex items-center justify-center text-sm transition-all shadow-sm"><i class="fa-solid fa-eye"></i></a>
                 <button onclick="copyProfileUrl()" title="نسخ رابط الصفحة" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 flex items-center justify-center text-sm transition-all shadow-sm"><i class="fa-solid fa-copy"></i></button>
@@ -73,98 +67,91 @@
         </div>
     </aside>
 
-    <!-- المحتوى الرئيسي -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- 1. الروابط (تمت إعادة التسمية وإضافة الأقسام والـ 30 منصة) -->
+        <!-- 1. الروابط -->
         <section id="sec-links" class="tab-content space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="links_title">إدارة الروابط والمنصات</h2>
-                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك والمنصات الـ 30 المقسمة بذكاء لتظهر بأيقوناتها الاحترافية</p>
+                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية</p>
             </div>
 
-            <!-- رابط عام إضافي في الأعلى -->
             <form id="form-add-link" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
                 <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base"><i class="fa-solid fa-link text-indigo-400"></i> <span data-i18n="add_link_heading">إضافة رابط عام إضافي</span></h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="link-title" required placeholder="عنوان الرابط (مثال: موقعي الشخصي)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
                     <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
                 </div>
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_add_link">إضافة الرابط العام</button>
             </form>
             <div id="links-list" class="space-y-3"></div>
 
-            <!-- أقسام الـ 30 منصة المنسدلة -->
             <div class="space-y-4 pt-4">
-                <!-- قسم 1: منصات التواصل الاجتماعي المشهورة -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-social')" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-share-nodes text-indigo-400"></i> <span data-i18n="cat_social">سوشيال ميديا أساسية</span></span>
                         <i id="icon-acc-social" class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div id="acc-social" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-x-twitter text-slate-200"></i> X (تويتر)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-instagram text-pink-500"></i> Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-snapchat text-yellow-400"></i> Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-tiktok text-cyan-400"></i> TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-youtube text-red-500"></i> YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-facebook text-blue-500"></i> Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-whatsapp text-emerald-500"></i> WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-telegram text-sky-400"></i> Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-linkedin text-blue-600"></i> LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-threads text-slate-200"></i> Threads</label><input type="url" id="soc-threads" placeholder="https://threads.net/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">X (تويتر)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Threads</label><input type="url" id="soc-threads" placeholder="https://threads.net/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
                     </div>
                 </div>
 
-                <!-- قسم 2: منصات البث والترفيه والصوتيات -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-media')" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-video text-purple-400"></i> <span data-i18n="cat_media">بث وتصوير وترفيه</span></span>
                         <i id="icon-acc-media" class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div id="acc-media" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-video text-purple-400"></i> Jaco (جاكو)</label><input type="url" id="soc-jaco" placeholder="https://jaco.live/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-twitch text-purple-600"></i> Twitch</label><input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-spotify text-emerald-400"></i> Spotify</label><input type="url" id="soc-spotify" placeholder="https://spotify.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-podcast text-amber-500"></i> Apple Podcasts</label><input type="url" id="soc-applepodcasts" placeholder="https://podcasts.apple.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-music text-pink-400"></i> Anghami</label><input type="url" id="soc-anghami" placeholder="https://anghami.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-soundcloud text-orange-500"></i> SoundCloud</label><input type="url" id="soc-soundcloud" placeholder="https://soundcloud.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-gamepad text-indigo-400"></i> Steam</label><input type="url" id="soc-steam" placeholder="https://steamcommunity.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-xbox text-emerald-600"></i> Xbox / PlayStation</label><input type="url" id="soc-gaming" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Jaco (جاكو)</label><input type="url" id="soc-jaco" placeholder="https://jaco.live/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Twitch</label><input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Spotify</label><input type="url" id="soc-spotify" placeholder="https://spotify.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Apple Podcasts</label><input type="url" id="soc-applepodcasts" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Anghami</label><input type="url" id="soc-anghami" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">SoundCloud</label><input type="url" id="soc-soundcloud" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Steam</label><input type="url" id="soc-steam" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Xbox / PS</label><input type="url" id="soc-gaming" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
                     </div>
                 </div>
 
-                <!-- قسم 3: مجتمعات ومبرمجين ومنصات أعمال -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-dev')" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-code text-cyan-400"></i> <span data-i18n="cat_dev">مجتمعات وبرمجة وأعمال</span></span>
                         <i id="icon-acc-dev" class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div id="acc-dev" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-discord text-indigo-500"></i> Discord</label><input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-github text-slate-200"></i> GitHub</label><input type="url" id="soc-github" placeholder="https://github.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-reddit text-orange-600"></i> Reddit</label><input type="url" id="soc-reddit" placeholder="https://reddit.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-pinterest text-red-600"></i> Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://pinterest.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-patreon text-orange-500"></i> Patreon</label><input type="url" id="soc-patreon" placeholder="https://patreon.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-newspaper text-amber-400"></i> Substack</label><input type="url" id="soc-substack" placeholder="https://substack.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-brands fa-medium text-slate-200"></i> Medium</label><input type="url" id="soc-medium" placeholder="https://medium.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-envelope text-blue-400"></i> Email / Contact</label><input type="email" id="soc-email" placeholder="name@example.com" class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-globe text-emerald-400"></i> Website / Blog</label><input type="url" id="soc-website" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-store text-purple-400"></i> Salla / Zid Store</label><input type="url" id="soc-storeplatform" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Discord</label><input type="url" id="soc-discord" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">GitHub</label><input type="url" id="soc-github" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Reddit</label><input type="url" id="soc-reddit" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Patreon</label><input type="url" id="soc-patreon" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Substack</label><input type="url" id="soc-substack" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Medium</label><input type="url" id="soc-medium" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Email</label><input type="email" id="soc-email" placeholder="name@example.com" class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Website</label><input type="url" id="soc-website" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Store Platform</label><input type="url" id="soc-storeplatform" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
                     </div>
                 </div>
 
-                <!-- قسم 4: إضافات أخرى (لتغطية الـ 30 تماماً) -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-extra')" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-plus text-teal-400"></i> <span data-i18n="cat_extra">منصات إضافية أخرى</span></span>
                         <i id="icon-acc-extra" class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div id="acc-extra" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-comment-sms text-green-400"></i> Signal / Viber</label><input type="url" id="soc-signal" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-book text-yellow-500"></i> Goodreads</label><input type="url" id="soc-goodreads" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-briefcase text-blue-400"></i> Behance / Dribbble</label><input type="url" id="soc-behance" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1"><i class="fa-solid fa-graduation-cap text-indigo-400"></i> ResearchGate / Scholar</label><input type="url" id="soc-scholar" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Signal / Viber</label><input type="url" id="soc-signal" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Goodreads</label><input type="url" id="soc-goodreads" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Behance / Dribbble</label><input type="url" id="soc-behance" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Scholar</label><input type="url" id="soc-scholar" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
                     </div>
                 </div>
 
@@ -174,7 +161,7 @@
             </div>
         </section>
 
-        <!-- 2. المتجر الخفيف (مع زر رمادي "قريباً") -->
+        <!-- 2. المتجر الخفيف -->
         <section id="sec-store" class="tab-content hidden space-y-6">
             <div class="mb-4">
                 <h2 class="text-2xl font-bold" data-i18n="store_title">المتجر المصغر</h2>
@@ -215,17 +202,15 @@
             <div id="branches-list" class="space-y-3"></div>
         </section>
 
-        <!-- 4. QR Code (مُصغر + دعم واي فاي + تحميل بدون حفظ على السيرفر) -->
+        <!-- 4. مولد QR المحدث (أشكال 3 + زر توليد يفتح نافذة باختيار الشكل والتصدير) -->
         <section id="sec-qrcode" class="tab-content hidden space-y-6">
             <div class="mb-4">
                 <h2 class="text-2xl font-bold" data-i18n="qrcode_title">مولد رمز الـ QR الذكي</h2>
-                <p class="text-slate-400 text-sm" data-i18n="qrcode_desc">أنشئ رمز استجابة سريع لصفحتك، أو لأي رابط، أو لتسجيل الدخول السريع لشبكة واي فاي</p>
+                <p class="text-slate-400 text-sm" data-i18n="qrcode_desc">أنشئ رمز استجابة سريع مع إطارات وتصاميم مميزة وبصمة Keymerv</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- خيارات الإنشاء -->
-                <div class="md:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl">
-                    <h3 class="font-bold text-slate-200 text-base" data-i18n="qr_settings_heading">تخصيص محتوى الـ QR</h3>
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-xl mx-auto space-y-6 shadow-xl">
+                <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1" data-i18n="qr_type_lbl">نوع المحتوى</label>
                         <select id="qr-type-select" onchange="toggleQrInputs()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
@@ -258,42 +243,23 @@
                             </select>
                         </div>
                     </div>
-
-                    <button type="button" onclick="generateQrCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_gen_qr">توليد الـ QR</button>
                 </div>
 
-                <!-- المعاينة والتحميل -->
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl text-center flex flex-col items-center justify-between shadow-xl">
-                    <div>
-                        <h4 class="font-bold text-slate-200 text-sm mb-4" data-i18n="qr_preview_title">معاينة الكود</h4>
-                        <div id="qrcode-wrapper" class="bg-white p-4 rounded-2xl mb-4 shadow-inner inline-block">
-                            <div id="qrcode-canvas" class="flex justify-center items-center"></div>
-                        </div>
-                        <p id="qr-profile-url" class="text-xs text-indigo-400 font-mono mb-4 break-all max-w-xs"></p>
-                    </div>
-
-                    <div class="w-full space-y-2">
-                        <button onclick="openDownloadModal('image')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-image"></i> <span data-i18n="dl_image">تحميل كصورة (PNG)</span>
-                        </button>
-                        <button onclick="openDownloadModal('pdf')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> <span data-i18n="dl_pdf">تحميل كملف PDF</span>
-                        </button>
-                    </div>
-                </div>
+                <button type="button" onclick="openQrStyleModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="btn_gen_qr_popup">توليد واختيار تصميم الكود</span>
+                </button>
             </div>
         </section>
 
-        <!-- 5. الإعدادات (منظمة، ترتيب روابط بالقائمة المنسدلة، تحكم بالظهور، بايو إجباري) -->
+        <!-- 5. الإعدادات (قائمة منسدلة للروابط ذات سكرول، يوزرنيم غير قابل للتعديل بعد الإنشاء، بايو إجباري) -->
         <section id="sec-settings" class="tab-content hidden space-y-6">
             <div class="mb-4">
                 <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2>
-                <p class="text-slate-400 text-sm" data-i18n="settings_desc">تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب روابطك</p>
+                <p class="text-slate-400 text-sm" data-i18n="settings_desc">تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب الروابط</p>
             </div>
 
             <form id="form-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-6 max-w-2xl shadow-xl">
                 
-                <!-- القسم الأول: الهوية والاسم والصورة -->
                 <div class="space-y-4">
                     <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2">
                         <i class="fa-solid fa-user-pen"></i> <span data-i18n="sec_identity">معلومات الحساب والهوية</span>
@@ -304,17 +270,16 @@
                             <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1" data-i18n="username_lbl">اسم المستخدم (الرابط)</label>
-                            <input type="text" id="settings-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                            <label class="block text-xs text-slate-400 mb-1" data-i18n="username_lbl">اسم المستخدم (لا يمكن تعديله)</label>
+                            <input type="text" id="settings-username" disabled class="w-full bg-slate-950/50 border border-slate-800/50 rounded-xl p-3 text-sm text-slate-400 cursor-not-allowed" dir="ltr">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1" data-i18n="avatar_lbl">صورة الحساب / الشعار (صورة البروفايل العام)</label>
+                        <label class="block text-xs text-slate-400 mb-1" data-i18n="avatar_lbl">صورة الحساب / الشعار</label>
                         <input type="file" id="settings-avatar-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-sm text-slate-300">
                     </div>
                 </div>
 
-                <!-- القسم الثاني: النبذة (إجباري عربي وإنجليزي) -->
                 <div class="space-y-4 pt-2">
                     <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2">
                         <i class="fa-solid fa-align-right"></i> <span data-i18n="sec_bio">النبذة الترحيبية (Bio) - إجباري</span>
@@ -329,7 +294,6 @@
                     </div>
                 </div>
 
-                <!-- القسم الثالث: التحكم بظهور التصنيفات الثلاثة -->
                 <div class="space-y-3 pt-2">
                     <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2">
                         <i class="fa-solid fa-eye"></i> <span data-i18n="sec_visibility">إظهار أو إخفاء التصنيفات في الصفحة العامة</span>
@@ -345,21 +309,21 @@
                         </label>
                         <label class="flex items-center gap-2.5 bg-slate-950/60 border border-slate-800 p-3 rounded-xl cursor-pointer">
                             <input type="checkbox" id="chk-show-branches" class="w-4 h-4 rounded accent-indigo-600">
-                            <span class="text-xs text-slate-300 font-bold" data-i18n="chk_branches">تبويب الفروع</span>
+                            <span class="text-xs text-slate-400 font-bold" data-i18n="chk_branches">تبويب الفروع</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- القسم الرابع: ترتيب الروابط بالقوائم المنسدلة -->
+                <!-- ترتيب الروابط المتاحة (قائمة منسدلة مع سكرول) -->
                 <div class="space-y-3 pt-2">
                     <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2">
-                        <i class="fa-solid fa-list-ol"></i> <span data-i18n="sec_ordering">تفضيلات ترتيب ظهور الروابط</span>
+                        <i class="fa-solid fa-list-ol"></i> <span data-i18n="sec_ordering">تفضيلات ترتيب ظهور الروابط المتاحة</span>
                     </h3>
-                    <p class="text-xs text-slate-400" data-i18n="ordering_desc">اختر أيهما يظهر أولاً في صفحتك العامة لزيادة التفاعل:</p>
+                    <p class="text-xs text-slate-400" data-i18n="ordering_desc">اختر أيهما يظهر أولاً في صفحتك العامة:</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="order_first_lbl">الرابط الأول في الترتيب</label>
-                            <select id="settings-order-1" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                            <select id="settings-order-1" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 max-h-40 overflow-y-auto">
                                 <option value="social" data-i18n="opt_social">منصات التواصل الاجتماعي</option>
                                 <option value="custom_links" data-i18n="opt_custom_links">الروابط العامة الإضافية</option>
                                 <option value="store" data-i18n="opt_store">المتجر الخفيف</option>
@@ -368,7 +332,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="order_second_lbl">الرابط الثاني في الترتيب</label>
-                            <select id="settings-order-2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                            <select id="settings-order-2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 max-h-40 overflow-y-auto">
                                 <option value="custom_links" data-i18n="opt_custom_links">الروابط العامة الإضافية</option>
                                 <option value="social" data-i18n="opt_social">منصات التواصل الاجتماعي</option>
                                 <option value="store" data-i18n="opt_store">المتجر الخفيف</option>
@@ -386,27 +350,49 @@
 
     </main>
 
-    <!-- نافذة منبثقة لتأكيد وتحميل الـ QR Code -->
-    <div id="qr-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl">
-            <div class="w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-full mx-auto flex items-center justify-center text-xl">
-                <i class="fa-solid fa-qrcode"></i>
+    <!-- نافذة منبثقة لاختيار تصميم الـ QR وتصديره -->
+    <div id="qr-style-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-lg w-full space-y-5 shadow-2xl text-center max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-slate-100 text-base" data-i18n="modal_qr_title">اختر تصميم الـ QR المناسب</h3>
+                <button onclick="closeQrStyleModal()" class="text-slate-400 hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <h3 class="font-bold text-slate-100 text-lg" data-i18n="modal_qr_title">تصدير وتحميل الكود</h3>
-            <p class="text-xs text-slate-400" data-i18n="modal_qr_desc">اختر صيغة التحميل المناسبة لجهازك (لا يتم حفظ أي بيانات على الخادم):</p>
+            
+            <p class="text-xs text-slate-400" data-i18n="modal_qr_desc">يحتوي الكود تلقائياً على بصمة "Created by Keymerv":</p>
+            
+            <!-- أشكال الكود الثلاثة -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <!-- 1. عادي بيسك -->
+                <div onclick="selectQrStyle('basic')" id="qr-card-basic" class="qr-style-card bg-slate-950 border-2 border-indigo-600 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
+                    <div class="bg-white p-2 rounded-xl" id="preview-basic"></div>
+                    <span class="text-xs font-bold text-slate-200" data-i18n="style_basic">عادي (بيسك)</span>
+                </div>
+                <!-- 2. فخم بإطار -->
+                <div onclick="selectQrStyle('luxury')" id="qr-card-luxury" class="qr-style-card bg-slate-950 border-2 border-slate-800 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
+                    <div class="bg-gradient-to-tr from-amber-500 to-indigo-600 p-2.5 rounded-xl shadow-lg" id="preview-luxury"></div>
+                    <span class="text-xs font-bold text-slate-200" data-i18n="style_luxury">فخم بإطار</span>
+                </div>
+                <!-- 3. مدوش بتصميم -->
+                <div onclick="selectQrStyle('glitch')" id="qr-card-glitch" class="qr-style-card bg-slate-950 border-2 border-slate-800 p-3 rounded-2xl cursor-pointer transition-all flex flex-col items-center gap-2">
+                    <div class="bg-slate-900 border-2 border-dashed border-purple-500 p-2 rounded-xl shadow-xl" id="preview-glitch"></div>
+                    <span class="text-xs font-bold text-slate-200" data-i18n="style_glitch">عصري مدوش</span>
+                </div>
+            </div>
+
+            <!-- الكود الفعلي المخفي للتصدير -->
+            <div id="hidden-qr-export-container" class="hidden"></div>
+
             <div class="grid grid-cols-2 gap-3 pt-2">
-                <button onclick="downloadQrImage()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-xl text-xs transition-all shadow-md flex flex-col items-center gap-1">
-                    <i class="fa-solid fa-image text-lg"></i> <span data-i18n="dl_png_btn">صورة PNG</span>
+                <button onclick="downloadSelectedQrImage()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-image"></i> <span data-i18n="dl_png_btn">تحميل كصورة (PNG)</span>
                 </button>
-                <button onclick="downloadQrPdf()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold p-3 rounded-xl text-xs transition-all shadow-md flex flex-col items-center gap-1">
-                    <i class="fa-solid fa-file-pdf text-lg"></i> <span data-i18n="dl_pdf_btn">ملف PDF</span>
+                <button onclick="downloadSelectedQrPdf()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold p-3 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> <span data-i18n="dl_pdf_btn">تحميل كملف PDF</span>
                 </button>
             </div>
-            <button onclick="closeDownloadModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition-all mt-2" data-i18n="cancel">إلغاء</button>
         </div>
     </div>
 
-    <!-- ربط ملف الـ JS الخارجي الرئيسي -->
     <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
