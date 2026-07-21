@@ -56,7 +56,7 @@ const translations = {
         bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
         sec_visibility: "إظهار أو إخفاء التصنيفات في الصفحة العامة",
         chk_links: "تبويب الروابط",
-        chk_store: "تبويب المتجر",
+        chk_store: "تبويب المتجر (قريباً)",
         chk_branches: "تبويب الفروع",
         btn_save: "حفظ جميع التغييرات",
         modal_qr_title: "اختر تصميم الـ QR المناسب",
@@ -117,7 +117,7 @@ const translations = {
         bio_en_lbl: "English Bio (Required)",
         sec_visibility: "Section Visibility on Public Page",
         chk_links: "Links Tab",
-        chk_store: "Store Tab",
+        chk_store: "Store Tab (Soon)",
         chk_branches: "Branches Tab",
         btn_save: "Save All Changes",
         modal_qr_title: "Choose QR Design Style",
@@ -185,7 +185,7 @@ window.toggleAccordion = (id) => {
 
 window.copyProfileUrl = () => {
     if (!currentProfile || !currentProfile.username) return;
-    const fullUrl = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username}`;
+    const fullUrl = `${window.location.origin}/public/profile.html?u=${currentProfile.username}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
         showToast(currentLang === 'ar' ? 'تم نسخ رابط البروفايل بنجاح!' : 'Profile link copied successfully!');
     });
@@ -233,7 +233,10 @@ async function checkAuth() {
     const chkBranches = document.getElementById('chk-show-branches');
 
     if (chkLinks) chkLinks.checked = currentProfile.show_links ?? true;
-    if (chkStore) chkStore.checked = currentProfile.show_store ?? true;
+    if (chkStore) {
+        chkStore.checked = false;
+        chkStore.disabled = true; // المتجر قريباً وغير قابل للتعديل
+    }
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
 
     const socInputs = document.querySelectorAll('.soc-input');
@@ -355,7 +358,7 @@ window.closeQrStyleModal = function() {
 
 function getQrTextToEncode() {
     const type = document.getElementById('qr-type-select').value;
-    let textToEncode = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username || 'user'}`;
+    let textToEncode = `${window.location.origin}/public/profile.html?u=${currentProfile.username || 'user'}`;
     if (type === 'custom') {
         textToEncode = document.getElementById('qr-custom-text').value || textToEncode;
     } else if (type === 'wifi') {
@@ -476,15 +479,15 @@ if (formSettings) {
         }
 
         const show_links = document.getElementById('chk-show-links').checked;
-        const show_store = document.getElementById('chk-show-store').checked;
-        const show_branches = document.getElementById('chk-show-branches').checked;
+        const show_branches = document.getElementById('chk-show-branches').checked; // حفظ حالة الفروع بنجاح
 
         const { error } = await supabase.from('users_profiles').update({
             display_name: document.getElementById('settings-display-name').value,
             bio: bioAr,
             bio_en: bioEn,
             avatar_url: avatarUrl,
-            show_links, show_store, show_branches
+            show_links, 
+            show_branches
         }).eq('id', currentUser.id);
 
         if (error) showToast("خطأ: " + error.message, "error");
