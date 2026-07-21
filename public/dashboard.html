@@ -494,9 +494,9 @@
         async function loadCounts() {
             if (!currentUser) return;
             const [linksRes, prodsRes, branchesRes] = await Promise.all([
-                supabase.from('user_links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('user_products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('user_branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id)
+                supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
+                supabase.from('products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
+                supabase.from('branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id)
             ]);
 
             document.getElementById('stat-links-count').textContent = linksRes.count || 0;
@@ -506,7 +506,7 @@
 
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
-            const { data: links } = await supabase.from('user_links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
+            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
             loadCounts();
             if (!links || links.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
             container.innerHTML = links.map((link) => `
@@ -522,7 +522,7 @@
                         <button onclick="moveLink('${link.id}', 'up')" class="text-slate-400 hover:text-white p-2 rounded bg-slate-950/50"><i class="fa-solid fa-arrow-up text-xs"></i></button>
                         <button onclick="moveLink('${link.id}', 'down')" class="text-slate-400 hover:text-white p-2 rounded bg-slate-950/50"><i class="fa-solid fa-arrow-down text-xs"></i></button>
                         <button onclick="toggleHideLink('${link.id}', ${!link.is_hidden})" class="text-slate-400 hover:text-amber-400 p-2 rounded bg-slate-950/50"><i class="fa-solid ${link.is_hidden ? 'fa-eye' : 'fa-eye-slash'} text-xs"></i></button>
-                        <button onclick="deleteItem('user_links', '${link.id}')" class="text-red-400 hover:bg-red-500/10 p-2 rounded"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <button onclick="deleteItem('links', '${link.id}')" class="text-red-400 hover:bg-red-500/10 p-2 rounded"><i class="fa-solid fa-trash text-xs"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -532,16 +532,16 @@
             e.preventDefault();
             const title = document.getElementById('link-title').value;
             const url = document.getElementById('link-url').value;
-            const { count } = await supabase.from('user_links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+            const { count } = await supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
 
-            await supabase.from('user_links').insert([{ user_id: currentUser.id, title, url, sort_order: count || 0, is_hidden: false }]);
+            await supabase.from('links').insert([{ user_id: currentUser.id, title, url, sort_order: count || 0, is_hidden: false }]);
             e.target.reset();
             loadLinks();
             showToast("toast_link_added");
         });
 
         window.moveLink = async (id, direction) => {
-            const { data: links } = await supabase.from('user_links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
+            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
             const index = links.findIndex(l => l.id === id);
             if (index === -1) return;
             if (direction === 'up' && index === 0) return;
@@ -552,19 +552,19 @@
             links[index].sort_order = links[targetIndex].sort_order;
             links[targetIndex].sort_order = tempOrder;
 
-            await supabase.from('user_links').update({ sort_order: links[index].sort_order }).eq('id', links[index].id);
-            await supabase.from('user_links').update({ sort_order: links[targetIndex].sort_order }).eq('id', links[targetIndex].id);
+            await supabase.from('links').update({ sort_order: links[index].sort_order }).eq('id', links[index].id);
+            await supabase.from('links').update({ sort_order: links[targetIndex].sort_order }).eq('id', links[targetIndex].id);
             loadLinks();
         };
 
         window.toggleHideLink = async (id, newHiddenState) => {
-            await supabase.from('user_links').update({ is_hidden: newHiddenState }).eq('id', id);
+            await supabase.from('links').update({ is_hidden: newHiddenState }).eq('id', id);
             loadLinks();
         };
 
         window.loadProducts = async function() {
             const container = document.getElementById('products-list');
-            const { data: products } = await supabase.from('user_products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+            const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
             loadCounts();
             if (!products || products.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">${translations[currentLang].loading}</div>`; return; }
 
@@ -575,7 +575,7 @@
                         <h4 class="font-bold text-slate-200 truncate">${prod.title}</h4>
                         <span class="inline-block mt-2 font-bold text-indigo-400 text-xs">${prod.price} ر.س</span>
                     </div>
-                    <button onclick="deleteItem('user_products', '${prod.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                    <button onclick="deleteItem('products', '${prod.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
         };
@@ -599,7 +599,7 @@
                 imageUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
             }
 
-            await supabase.from('user_products').insert([{ user_id: currentUser.id, title, price, description, image_url: imageUrl }]);
+            await supabase.from('products').insert([{ user_id: currentUser.id, title, price, description, image_url: imageUrl }]);
             e.target.reset();
             loadProducts();
             showToast("toast_prod_added");
@@ -607,7 +607,7 @@
 
         window.loadBranches = async function() {
             const container = document.getElementById('branches-list');
-            const { data: branches } = await supabase.from('user_branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
+            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
             loadCounts();
             if (!branches || branches.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
             container.innerHTML = branches.map(b => `
@@ -618,7 +618,7 @@
                     </div>
                     <div class="flex gap-2">
                         ${b.location_url ? `<a href="${b.location_url}" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-map-location-dot"></i> الخريطة</a>` : ''}
-                        <button onclick="deleteItem('user_branches', '${b.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteItem('branches', '${b.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -626,7 +626,7 @@
 
         document.getElementById('form-add-branch').addEventListener('submit', async (e) => {
             e.preventDefault();
-            await supabase.from('user_branches').insert([{ 
+            await supabase.from('branches').insert([{ 
                 owner_id: currentUser.id, 
                 branch_name: document.getElementById('branch-name').value, 
                 city: document.getElementById('branch-city').value,
@@ -655,7 +655,7 @@
             await supabase.from('team_members').insert([{ 
                 owner_id: currentUser.id, 
                 member_email: document.getElementById('team-email').value, 
-                role: document.getElementById('team-role').value 
+                role: document.getElementById('team-role'].value 
             }]);
             e.target.reset();
             loadTeam();
@@ -700,9 +700,9 @@
         window.deleteItem = async (table, id) => {
             if (confirm("هل أنت متأكد من الحذف؟")) {
                 await supabase.from(table).delete().eq('id', id);
-                if (table === 'user_links') loadLinks();
-                if (table === 'user_products') loadProducts();
-                if (table === 'user_branches') loadBranches();
+                if (table === 'links') loadLinks();
+                if (table === 'products') loadProducts();
+                if (table === 'branches') loadBranches();
                 if (table === 'team_members') loadTeam();
                 showToast("toast_deleted");
             }
