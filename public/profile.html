@@ -25,7 +25,7 @@
                 <i class="fa-solid fa-globe"></i> <span id="lang-text">English</span>
             </button>
             <button onclick="shareProfile()" class="bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs text-slate-300 font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-share-nodes"></i> مشاركة
+                <i class="fa-solid fa-share-nodes"></i> <span data-i18n="share_btn">مشاركة</span>
             </button>
         </div>
 
@@ -39,17 +39,9 @@
             <p id="profile-bio" class="text-xs text-slate-400 mt-3 leading-relaxed px-2">...</p>
         </div>
 
-        <!-- أزرار التبديل بين الأقسام Navigation -->
-        <div class="flex bg-slate-900/90 border border-slate-800 p-1.5 rounded-2xl gap-1">
-            <button onclick="switchTab('links')" id="btn-tab-links" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white transition-all flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-link"></i> <span data-i18n="tab_links">الروابط</span>
-            </button>
-            <button onclick="switchTab('store')" id="btn-tab-store" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-store"></i> <span data-i18n="tab_store">المتجر</span>
-            </button>
-            <button onclick="switchTab('branches')" id="btn-tab-branches" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-code-branch"></i> <span data-i18n="tab_branches">الفروع</span>
-            </button>
+        <!-- أزرار التبديل بين الأقسام (تظهر بناءً على إعدادات المستخدم) -->
+        <div id="tabs-nav-container" class="flex bg-slate-900/90 border border-slate-800 p-1.5 rounded-2xl gap-1">
+            <!-- سيتم تعبئتها ديناميكياً بناءً على الأقسام المفعلة فقط -->
         </div>
 
         <!-- 1. قسم الروابط (Links Section) -->
@@ -79,7 +71,7 @@
     <footer class="mt-8 text-center">
         <a href="index.html" class="inline-flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
             <div class="w-5 h-5 bg-indigo-600 rounded-md flex items-center justify-center text-[10px] font-black text-white">K</div>
-            <span class="text-xs text-slate-400 font-bold">صُنع بواسطة <span class="text-indigo-400">Keymerv</span></span>
+            <span class="text-xs text-slate-400 font-bold" data-i18n="footer_text">صُنع بواسطة <span class="text-indigo-400">Keymerv</span></span>
         </a>
     </footer>
 
@@ -99,7 +91,12 @@
                 no_store: "لا توجد منتجات معروضة حالياً",
                 no_branches: "لا توجد فروع مضافة حالياً",
                 buy_now: "اطلب الآن",
-                lang_btn: "English"
+                lang_btn: "English",
+                share_btn: "مشاركة",
+                share_alert: "تم نسخ رابط البروفايل للحافظة!",
+                not_found_title: "حساب غير موجود",
+                not_found_desc: "المستخدم غير موجود",
+                footer_text: 'صُنع بواسطة <span class="text-indigo-400">Keymerv</span>'
             },
             en: {
                 tab_links: "Links",
@@ -109,21 +106,25 @@
                 no_store: "No products available at the moment",
                 no_branches: "No branches added yet",
                 buy_now: "Order Now",
-                lang_btn: "عربي"
+                lang_btn: "عربي",
+                share_btn: "Share",
+                share_alert: "Profile link copied to clipboard!",
+                not_found_title: "Account Not Found",
+                not_found_desc: "User does not exist",
+                footer_text: 'Powered by <span class="text-indigo-400">Keymerv</span>'
             }
         };
 
-        // 1. تحديد المستخدم المستهدف من الـ URL (مثال: ?u=ahmed_ali)
         async function initProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const username = urlParams.get('u');
 
             if (!username) {
-                document.getElementById('profile-name').textContent = "حساب غير موجود";
+                document.getElementById('profile-name').textContent = i18n[currentLang].not_found_title;
+                document.getElementById('profile-username').textContent = "@not_found";
                 return;
             }
 
-            // جلب البروفايل من Supabase
             const { data: profile, error } = await supabase
                 .from('users_profiles')
                 .select('*')
@@ -131,30 +132,76 @@
                 .single();
 
             if (error || !profile) {
-                document.getElementById('profile-name').textContent = "المستخدم غير موجود";
+                document.getElementById('profile-name').textContent = i18n[currentLang].not_found_title;
                 document.getElementById('profile-username').textContent = "@not_found";
+                document.getElementById('profile-bio').textContent = i18n[currentLang].not_found_desc;
                 return;
             }
 
             targetUser = profile;
 
-            // تحديث واجهة المستخدم
             document.getElementById('profile-name').textContent = profile.display_name || profile.username;
             document.getElementById('profile-username').textContent = `@${profile.username}`;
             document.getElementById('profile-bio').textContent = profile.bio || '';
             document.getElementById('profile-avatar').textContent = (profile.display_name || profile.username)[0].toUpperCase();
 
-            // جلب المحتوى
-            loadLinks();
-            loadProducts();
-            loadBranches();
+            // بناء أزرار التبديل ديناميكياً بناءً على تفعيلها من الإعدادات
+            buildTabsNavigation(profile);
+
+            // جلب البيانات لكل قسم مفعل
+            if (profile.show_links ?? true) loadLinks();
+            if (profile.show_store ?? true) loadProducts();
+            if (profile.show_branches ?? true) loadBranches();
+
             applyLanguage(currentLang);
         }
 
-        // جلب الروابط
+        function buildTabsNavigation(profile) {
+            const showLinks = profile.show_links ?? true;
+            const showStore = profile.show_store ?? true;
+            const showBranches = profile.show_branches ?? true;
+
+            let tabsHtml = '';
+            let firstActiveTab = null;
+
+            if (showLinks) {
+                if (!firstActiveTab) firstActiveTab = 'links';
+                tabsHtml += `<button onclick="switchTab('links')" id="btn-tab-links" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl ${firstActiveTab === 'links' ? 'bg-indigo-600 text-white' : 'text-slate-400'} transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-link"></i> <span data-i18n="tab_links">${i18n[currentLang].tab_links}</span></button>`;
+            } else {
+                document.getElementById('sec-links').classList.add('hidden');
+            }
+
+            if (showStore) {
+                if (!firstActiveTab) firstActiveTab = 'store';
+                tabsHtml += `<button onclick="switchTab('store')" id="btn-tab-store" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl ${firstActiveTab === 'store' ? 'bg-indigo-600 text-white' : 'text-slate-400'} transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-store"></i> <span data-i18n="tab_store">${i18n[currentLang].tab_store}</span></button>`;
+            } else {
+                document.getElementById('sec-store').classList.add('hidden');
+            }
+
+            if (showBranches) {
+                if (!firstActiveTab) firstActiveTab = 'branches';
+                tabsHtml += `<button onclick="switchTab('branches')" id="btn-tab-branches" class="tab-btn flex-1 py-2 text-xs font-bold rounded-xl ${firstActiveTab === 'branches' ? 'bg-indigo-600 text-white' : 'text-slate-400'} transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-code-branch"></i> <span data-i18n="tab_branches">${i18n[currentLang].tab_branches}</span></button>`;
+            } else {
+                document.getElementById('sec-branches').classList.add('hidden');
+            }
+
+            document.getElementById('tabs-nav-container').innerHTML = tabsHtml;
+
+            // تفعيل أول تبويب متاح وجعله مرئياً
+            if (firstActiveTab) {
+                switchTab(firstActiveTab);
+            }
+        }
+
+        // جلب الروابط (مع استبعاد المخفية والالتزام بالترتيب)
         async function loadLinks() {
             const container = document.getElementById('links-container');
-            const { data: links } = await supabase.from('links').select('*').eq('user_id', targetUser.id).order('created_at', { ascending: false });
+            const { data: links } = await supabase
+                .from('links')
+                .select('*')
+                .eq('user_id', targetUser.id)
+                .eq('is_hidden', false)
+                .order('sort_order', { ascending: true });
 
             if (!links || links.length === 0) {
                 container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">${i18n[currentLang].no_links}</div>`;
@@ -171,7 +218,11 @@
         // جلب المنتجات
         async function loadProducts() {
             const container = document.getElementById('store-container');
-            const { data: products } = await supabase.from('products').select('*').eq('user_id', targetUser.id).order('created_at', { ascending: false });
+            const { data: products } = await supabase
+                .from('products')
+                .select('*')
+                .eq('user_id', targetUser.id)
+                .order('created_at', { ascending: false });
 
             if (!products || products.length === 0) {
                 container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">${i18n[currentLang].no_store}</div>`;
@@ -179,10 +230,11 @@
             }
 
             container.innerHTML = products.map(prod => `
-                <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl flex justify-between items-center gap-4 shadow-lg">
-                    <div class="space-y-1">
-                        <h3 class="font-bold text-sm text-slate-100">${prod.title}</h3>
-                        <p class="text-xs text-slate-400">${prod.description || ''}</p>
+                <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
+                    ${prod.image_url ? `<img src="${prod.image_url}" class="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-700">` : ''}
+                    <div class="space-y-1 flex-grow overflow-hidden">
+                        <h3 class="font-bold text-sm text-slate-100 truncate">${prod.title}</h3>
+                        <p class="text-xs text-slate-400 truncate">${prod.description || ''}</p>
                         <span class="inline-block text-xs font-bold text-indigo-400">${prod.price} ر.س</span>
                     </div>
                     <a href="https://wa.me/?text=مرحباً، أود طلب منتج: ${encodeURIComponent(prod.title)}" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shrink-0">
@@ -195,7 +247,11 @@
         // جلب الفروع
         async function loadBranches() {
             const container = document.getElementById('branches-container');
-            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', targetUser.id).order('created_at', { ascending: false });
+            const { data: branches } = await supabase
+                .from('branches')
+                .select('*')
+                .eq('owner_id', targetUser.id)
+                .order('created_at', { ascending: false });
 
             if (!branches || branches.length === 0) {
                 container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">${i18n[currentLang].no_branches}</div>`;
@@ -224,10 +280,14 @@
                 btn.classList.add('text-slate-400');
             });
 
-            document.getElementById(`sec-${tab}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`btn-tab-${tab}`);
-            activeBtn.classList.add('bg-indigo-600', 'text-white');
-            activeBtn.classList.remove('text-slate-400');
+            const targetSec = document.getElementById(`sec-${tab}`);
+            const targetBtn = document.getElementById(`btn-tab-${tab}`);
+
+            if (targetSec) targetSec.classList.remove('hidden');
+            if (targetBtn) {
+                targetBtn.classList.add('bg-indigo-600', 'text-white');
+                targetBtn.classList.remove('text-slate-400');
+            }
         };
 
         // مشاركة البروفايل
@@ -239,7 +299,7 @@
                 });
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                alert("تم نسخ رابط البروفايل للحافظة!");
+                alert(i18n[currentLang].share_alert);
             }
         };
 
@@ -248,6 +308,7 @@
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             localStorage.setItem('app_lang', currentLang);
             applyLanguage(currentLang);
+            if (targetUser) buildTabsNavigation(targetUser);
         };
 
         function applyLanguage(lang) {
@@ -255,7 +316,7 @@
             document.getElementById('lang-text').textContent = i18n[lang].lang_btn;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (i18n[lang][key]) el.textContent = i18n[lang][key];
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
             });
         }
 
