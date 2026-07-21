@@ -243,6 +243,21 @@
 
         let currentUser = null;
         let currentProfile = null;
+        let qrCodeInstance = null;
+
+        // دالة التبديل بين التبويبات (Tabs Switcher)
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-600', 'text-white');
+                el.classList.add('text-slate-400', 'hover:bg-slate-700/50', 'hover:text-white');
+            });
+
+            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-700/50', 'hover:text-white');
+            activeBtn.classList.add('bg-indigo-600', 'text-white');
+        };
 
         // دالة التنبيهات الأنيقة (Toast Notification)
         function showToast(message, type = 'success') {
@@ -301,6 +316,44 @@
             setupQR();
         }
 
+        checkAuth();
+
+        // إعداد وتوليد الـ QR Code
+        window.setupQR = function() {
+            const profileUrl = `${window.location.origin}/profile.html?u=${currentProfile?.username || ''}`;
+            document.getElementById('qr-profile-url').textContent = profileUrl;
+            
+            const container = document.getElementById('qrcode-canvas');
+            container.innerHTML = "";
+            qrCodeInstance = new QRCode(container, {
+                text: profileUrl,
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        };
+
+        // تنزيل الـ QR Code
+        window.downloadQR = function() {
+            const img = document.querySelector('#qrcode-canvas img');
+            if (!img) return;
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = `${currentProfile?.username || 'keymerv'}-qrcode.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("تم تنزيل رمز الـ QR بنجاح!");
+        };
+
+        // زر تسجيل الخروج
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = "login.html";
+        });
+
         // 1. الروابط مع الترتيب والإخفاء
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
@@ -327,7 +380,7 @@
                         <button onclick="deleteItem('links', '${link.id}')" title="حذف" class="text-red-400 hover:bg-red-500/10 p-2 rounded"><i class="fa-solid fa-trash text-xs"></i></button>
                     </div>
                 </div>
-            `).join('');
+          `).join('');
         };
 
         document.getElementById('form-add-link').addEventListener('submit', async (e) => {
@@ -524,49 +577,21 @@
             showToast("تم نسخ رابط البروفايل بنجاح!");
         };
 
+        // دالة الحذف العامة المصححة
         window.deleteItem = async (table, id) => {
             if (confirm("هل أنت متأكد من الحذف؟")) {
-                await supabase.from(table).delete().eq('id', id);
-                if (table === 'links') loadLinks();
-                if (table === 'products') loadProducts();
-                if (table === 'branches') loadBranches();
-                if (table === 'team_members') loadTeam();
-                showToast("تم الحذف بنجاح!");
+                const { error } = await supabase.from(table).delete().eq('id', id);
+                if (error) {
+                    showToast("فشل الحذف: " + error.message, "error");
+                } else {
+                    showToast("تم الحذف بنجاح!");
+                    if (table === 'links') loadLinks();
+                    if (table === 'products') loadProducts();
+                    if (table === 'branches') loadBranches();
+                    if (table === 'team_members') loadTeam();
+                }
             }
         };
-
-        function setupQR() {
-            const profileUrl = `${window.location.origin}/profile.html?u=${currentProfile?.username || ''}`;
-            document.getElementById('qr-profile-url').textContent = profileUrl;
-            const container = document.getElementById('qrcode-canvas');
-            container.innerHTML = '';
-            new QRCode(container, { text: profileUrl, width: 180, height: 180, colorDark : "#1e293b", colorLight : "#ffffff" });
-        }
-
-        window.switchTab = (tabName) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => { 
-                btn.classList.remove('bg-indigo-600', 'text-white'); 
-                btn.classList.add('text-slate-400'); 
-            });
-
-            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
-            activeBtn.classList.add('bg-indigo-600', 'text-white');
-            activeBtn.classList.remove('text-slate-400');
-
-            if (tabName === 'links') loadLinks();
-            if (tabName === 'store') loadProducts();
-            if (tabName === 'branches') loadBranches();
-            if (tabName === 'team') loadTeam();
-        };
-
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            window.location.href = "login.html";
-        });
-
-        checkAuth();
     </script>
 </body>
 </html>
