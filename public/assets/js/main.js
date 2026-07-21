@@ -3,7 +3,7 @@ import { supabase } from './supabase-config.js';
 let currentUser = null;
 let currentProfile = null;
 let currentLang = localStorage.getItem('dashboard_lang') || 'ar';
-let activeQrCodeInstance = null;
+let selectedQrStyle = 'basic';
 
 const translations = {
     ar: {
@@ -15,7 +15,7 @@ const translations = {
         tab_settings: "الإعدادات",
         logout: "تسجيل الخروج",
         links_title: "إدارة الروابط والمنصات",
-        links_desc: "أضف روابطك والمنصات الـ 30 المقسمة بذكاء لتظهر بأيقوناتها الاحترافية",
+        links_desc: "أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية",
         add_link_heading: "إضافة رابط عام إضافي",
         btn_add_link: "إضافة الرابط العام",
         btn_save_social: "حفظ جميع المنصات",
@@ -34,7 +34,7 @@ const translations = {
         add_branch_heading: "إضافة فرع جديد",
         btn_save_branch: "حفظ الفرع",
         qrcode_title: "مولد رمز الـ QR الذكي",
-        qrcode_desc: "أنشئ رمز استجابة سريع لصفحتك، أو لأي رابط، أو لتسجيل الدخول السريع لشبكة واي فاي",
+        qrcode_desc: "أنشئ رمز استجابة سريع مع إطارات وتصاميم مميزة وبصمة Keymerv",
         qr_settings_heading: "تخصيص محتوى الـ QR",
         qr_type_lbl: "نوع المحتوى",
         qr_opt_profile: "رابط صفحتي الشخصية العامة",
@@ -44,16 +44,13 @@ const translations = {
         wifi_ssid_lbl: "اسم شبكة الواي فاي (SSID)",
         wifi_pass_lbl: "كلمة المرور",
         wifi_enc_lbl: "نوع التشفير",
-        btn_gen_qr: "توليد الـ QR",
-        qr_preview_title: "معاينة الكود",
-        dl_image: "تحميل كصورة (PNG)",
-        dl_pdf: "تحميل كملف PDF",
+        btn_gen_qr_popup: "توليد واختيار تصميم الكود",
         settings_title: "إعدادات الحساب والصفحة",
-        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب روابطك",
+        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب الروابط",
         sec_identity: "معلومات الحساب والهوية",
         display_name_lbl: "الاسم الظاهري",
-        username_lbl: "اسم المستخدم (الرابط)",
-        avatar_lbl: "صورة الحساب / الشعار (صورة البروفايل العام)",
+        username_lbl: "اسم المستخدم (لا يمكن تعديله)",
+        avatar_lbl: "صورة الحساب / الشعار",
         sec_bio: "النبذة الترحيبية (Bio) - إجباري",
         bio_ar_lbl: "النبذة بالعربية (إجباري)",
         bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
@@ -61,8 +58,8 @@ const translations = {
         chk_links: "تبويب الروابط",
         chk_store: "تبويب المتجر",
         chk_branches: "تبويب الفروع",
-        sec_ordering: "تفضيلات ترتيب ظهور الروابط",
-        ordering_desc: "اختر أيهما يظهر أولاً في صفحتك العامة لزيادة التفاعل:",
+        sec_ordering: "تفضيلات ترتيب ظهور الروابط المتاحة",
+        ordering_desc: "اختر أيهما يظهر أولاً في صفحتك العامة:",
         order_first_lbl: "الرابط الأول في الترتيب",
         order_second_lbl: "الرابط الثاني في الترتيب",
         opt_social: "منصات التواصل الاجتماعي",
@@ -70,11 +67,13 @@ const translations = {
         opt_store: "المتجر الخفيف",
         opt_branches: "الفروع",
         btn_save: "حفظ جميع التغييرات",
-        modal_qr_title: "تصدير وتحميل الكود",
-        modal_qr_desc: "اختر صيغة التحميل المناسبة لجهازك (لا يتم حفظ أي بيانات على الخادم):",
-        dl_png_btn: "صورة PNG",
-        dl_pdf_btn: "ملف PDF",
-        cancel: "إلغاء"
+        modal_qr_title: "اختر تصميم الـ QR المناسب",
+        modal_qr_desc: "يحتوي الكود تلقائياً على بصمة 'Created by Keymerv':",
+        style_basic: "عادي (بيسك)",
+        style_luxury: "فخم بإطار",
+        style_glitch: "عصري مدوش",
+        dl_png_btn: "تحميل كصورة (PNG)",
+        dl_pdf_btn: "تحميل كملف PDF"
     },
     en: {
         page_title: "Keymerv | Dashboard",
@@ -104,7 +103,7 @@ const translations = {
         add_branch_heading: "Add New Branch",
         btn_save_branch: "Save Branch",
         qrcode_title: "Smart QR Code Generator",
-        qrcode_desc: "Generate custom QR codes for your profile, custom links, or Wi-Fi login",
+        qrcode_desc: "Generate custom QR codes with frames and Keymerv watermark",
         qr_settings_heading: "Customize QR Content",
         qr_type_lbl: "Content Type",
         qr_opt_profile: "My Public Profile URL",
@@ -114,15 +113,12 @@ const translations = {
         wifi_ssid_lbl: "Wi-Fi Network Name (SSID)",
         wifi_pass_lbl: "Password",
         wifi_enc_lbl: "Encryption Type",
-        btn_gen_qr: "Generate QR",
-        qr_preview_title: "QR Preview",
-        dl_image: "Download as Image (PNG)",
-        dl_pdf: "Download as PDF",
+        btn_gen_qr_popup: "Generate & Choose QR Design",
         settings_title: "Account & Page Settings",
         settings_desc: "Manage your identity, visibility preferences, and link ordering",
         sec_identity: "Identity & Account Info",
         display_name_lbl: "Display Name",
-        username_lbl: "Username (URL slug)",
+        username_lbl: "Username (Read-only)",
         avatar_lbl: "Account Avatar / Logo",
         sec_bio: "Bio - Required",
         bio_ar_lbl: "Arabic Bio (Required)",
@@ -140,11 +136,13 @@ const translations = {
         opt_store: "Lite Store",
         opt_branches: "Branches",
         btn_save: "Save All Changes",
-        modal_qr_title: "Export & Download QR",
-        modal_qr_desc: "Choose download format (No data is saved on the server):",
+        modal_qr_title: "Choose QR Design Style",
+        modal_qr_desc: "Includes 'Created by Keymerv' watermark automatically:",
+        style_basic: "Basic",
+        style_luxury: "Luxury Frame",
+        style_glitch: "Modern Glitch",
         dl_png_btn: "PNG Image",
-        dl_pdf_btn: "PDF File",
-        cancel: "Cancel"
+        dl_pdf_btn: "PDF File"
     }
 };
 
@@ -182,7 +180,7 @@ function showToast(msg, type = 'success') {
 
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white', 'text-slate-200'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white'));
     
     const sec = document.getElementById(`sec-${tabId}`);
@@ -221,7 +219,6 @@ async function checkAuth() {
     const handleEl = document.getElementById('user-handle');
     const avatarEl = document.getElementById('user-avatar');
     const viewProfileEl = document.getElementById('view-live-profile');
-    const qrUrlEl = document.getElementById('qr-profile-url');
 
     if (displayNameEl) displayNameEl.textContent = currentProfile.display_name || currentUser.email.split('@')[0];
     if (handleEl) handleEl.textContent = `@${currentProfile.username || 'user'}`;
@@ -233,16 +230,17 @@ async function checkAuth() {
         }
     }
     if (viewProfileEl) viewProfileEl.href = `profile.html?u=${currentProfile.username || ''}`;
-    if (qrUrlEl) qrUrlEl.textContent = `${window.location.origin}/profile.html?u=${currentProfile.username || ''}`;
 
-    // تعبئة حقول الإعدادات
     const settingsName = document.getElementById('settings-display-name');
     const settingsUser = document.getElementById('settings-username');
     const settingsBioAr = document.getElementById('settings-bio-ar');
     const settingsBioEn = document.getElementById('settings-bio-en');
 
     if (settingsName) settingsName.value = currentProfile.display_name || '';
-    if (settingsUser) settingsUser.value = currentProfile.username || '';
+    if (settingsUser) {
+        settingsUser.value = currentProfile.username || '';
+        settingsUser.disabled = true; // اليوزر لا يمكن تعديله بعد الإنشاء
+    }
     if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
     if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
 
@@ -259,20 +257,17 @@ async function checkAuth() {
     if (order1) order1.value = currentProfile.order_1 || 'social';
     if (order2) order2.value = currentProfile.order_2 || 'custom_links';
 
-    // تعبئة خانات المنصات الـ 30
     const socInputs = document.querySelectorAll('.soc-input');
     socInputs.forEach(input => {
         const key = input.id.replace('soc-', '');
         if (currentProfile[key]) input.value = currentProfile[key];
     });
 
-    generateQrCode();
     applyLanguage();
     loadLinks();
     loadBranches();
 }
 
-// حفظ المنصات الـ 30
 window.saveSocialAccounts = async function() {
     const socInputs = document.querySelectorAll('.soc-input');
     const dataObj = {};
@@ -286,13 +281,12 @@ window.saveSocialAccounts = async function() {
     else showToast(currentLang === 'ar' ? 'تم حفظ جميع المنصات بنجاح!' : 'All platforms saved successfully!');
 };
 
-// الروابط العامة الإضافية
 window.loadLinks = async function() {
     const container = document.getElementById('links-list');
     if (!container) return;
     const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id);
     if (!links || links.length === 0) { 
-        container.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs" data-i18n="no_extra_links">لا توجد روابط عامة إضافية حالياً</div>`; 
+        container.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs">لا توجد روابط عامة إضافية حالياً</div>`; 
         return; 
     }
     container.innerHTML = links.map(l => `
@@ -316,7 +310,6 @@ if (formAddLink) {
     });
 }
 
-// الفروع
 window.loadBranches = async function() {
     const container = document.getElementById('branches-list');
     if (!container) return;
@@ -359,27 +352,32 @@ window.deleteItem = async (table, id) => {
     }
 };
 
-// مولد الـ QR الذكي
 window.toggleQrInputs = function() {
     const type = document.getElementById('qr-type-select').value;
     const customWrap = document.getElementById('qr-input-custom-wrap');
     const wifiWrap = document.getElementById('qr-input-wifi-wrap');
     if (!customWrap || !wifiWrap) return;
-
     customWrap.classList.add('hidden');
     wifiWrap.classList.add('hidden');
-
     if (type === 'custom') customWrap.classList.remove('hidden');
     if (type === 'wifi') wifiWrap.classList.remove('hidden');
 };
 
-window.generateQrCode = function() {
+// إدارة النافذة المنبثقة لاختيار تصميم الـ QR وتوليد الأشكال الثلاثة
+window.openQrStyleModal = function() {
+    const modal = document.getElementById('qr-style-modal');
+    if (modal) modal.classList.remove('hidden');
+    renderAllQrStyles();
+};
+
+window.closeQrStyleModal = function() {
+    const modal = document.getElementById('qr-style-modal');
+    if (modal) modal.classList.add('hidden');
+};
+
+function getQrTextToEncode() {
     const type = document.getElementById('qr-type-select').value;
-    const canvasContainer = document.getElementById('qrcode-canvas');
-    if (!canvasContainer || !window.QRCode) return;
-
     let textToEncode = `${window.location.origin}/profile.html?u=${currentProfile.username || 'user'}`;
-
     if (type === 'custom') {
         textToEncode = document.getElementById('qr-custom-text').value || textToEncode;
     } else if (type === 'wifi') {
@@ -388,83 +386,105 @@ window.generateQrCode = function() {
         const enc = document.getElementById('wifi-enc').value;
         textToEncode = `WIFI:S:${ssid};T:${enc};P:${pass};;`;
     }
+    return textToEncode;
+}
 
-    canvasContainer.innerHTML = "";
-    activeQrCodeInstance = new QRCode(canvasContainer, {
-        text: textToEncode,
-        width: 150,
-        height: 150,
-        colorDark: "#020617",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+function renderAllQrStyles() {
+    const text = getQrTextToEncode();
+    
+    // تفريغ المعاينات الثلاثة وتوليدها مع بصمة Created by Keymerv
+    ['basic', 'luxury', 'glitch'].forEach(style => {
+        const container = document.getElementById(`preview-${style}`);
+        if (container) {
+            container.innerHTML = "";
+            new QRCode(container, {
+                text: text,
+                width: 110,
+                height: 110,
+                colorDark: style === 'luxury' ? "#1e1b4b" : style === 'glitch' ? "#581c87" : "#020617",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            // حقن بصمة Keymerv الإجبارية داخل الكود
+            setTimeout(() => {
+                let watermark = container.querySelector('.keymerv-wm');
+                if (!watermark) {
+                    watermark = document.createElement('div');
+                    watermark.className = 'keymerv-wm text-[8px] font-bold text-slate-500 uppercase tracking-tighter mt-1 text-center';
+                    watermark.textContent = 'Created by Keymerv';
+                    container.appendChild(watermark);
+                }
+            }, 50);
+        }
+    });
+}
+
+window.selectQrStyle = function(style) {
+    selectedQrStyle = style;
+    document.querySelectorAll('.qr-style-card').forEach(card => {
+        card.classList.remove('border-indigo-600', 'border-2');
+        card.classList.add('border-slate-800', 'border-2');
+    });
+    const activeCard = document.getElementById(`qr-card-${style}`);
+    if (activeCard) {
+        activeCard.classList.remove('border-slate-800');
+        activeCard.classList.add('border-indigo-600');
+    }
+};
+
+window.downloadSelectedQrImage = function() {
+    const sourceCard = document.getElementById(`preview-${selectedQrStyle}`);
+    if (!sourceCard || !window.html2canvas) {
+        showToast('خطأ في توليد الصورة', 'error');
+        return;
+    }
+    html2canvas(sourceCard, { scale: 3 }).then(canvas => {
+        const imageUri = canvas.toDataURL("image/png");
+        const a = document.createElement('a');
+        a.href = imageUri;
+        a.download = `Keymerv-QR-${selectedQrStyle}-${currentProfile.username || 'code'}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        closeQrStyleModal();
+        showToast(currentLang === 'ar' ? 'تم تحميل الكود كصورة بنجاح!' : 'QR image downloaded successfully!');
     });
 };
 
-// نظام التحميل والتصدير المنبثق (بدون حفظ على السيرفر)
-window.openDownloadModal = function(format) {
-    const modal = document.getElementById('qr-modal');
-    if (modal) modal.classList.remove('hidden');
-};
-
-window.closeDownloadModal = function() {
-    const modal = document.getElementById('qr-modal');
-    if (modal) modal.classList.add('hidden');
-};
-
-window.downloadQrImage = function() {
-    const qrCanvas = document.querySelector('#qrcode-canvas canvas');
-    if (!qrCanvas) {
-        showToast(currentLang === 'ar' ? 'الرجاء توليد الكود أولاً' : 'Please generate QR first', 'error');
-        return;
-    }
-    const imageUri = qrCanvas.toDataURL("image/png");
-    const downloadLink = document.createElement('a');
-    downloadLink.href = imageUri;
-    downloadLink.download = `Keymerv-QR-${currentProfile.username || 'code'}.png`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    closeDownloadModal();
-    showToast(currentLang === 'ar' ? 'تم تحميل الكود كصورة بنجاح!' : 'QR image downloaded successfully!');
-};
-
-window.downloadQrPdf = async function() {
-    const qrWrapper = document.getElementById('qrcode-wrapper');
-    if (!qrWrapper || !window.html2canvas || !window.jspdf) {
-        showToast(currentLang === 'ar' ? 'حدث خطأ في تحميل مكتبة الـ PDF' : 'PDF library error', 'error');
+window.downloadSelectedQrPdf = async function() {
+    const sourceCard = document.getElementById(`preview-${selectedQrStyle}`);
+    if (!sourceCard || !window.html2canvas || !window.jspdf) {
+        showToast('خطأ في تحميل مكتبة الـ PDF', 'error');
         return;
     }
     try {
-        const canvas = await html2canvas(qrWrapper, { scale: 3 });
+        const canvas = await html2canvas(sourceCard, { scale: 3 });
         const imgData = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
         
         pdf.setFont("Tajawal", "normal");
-        pdf.setFontSize(20);
+        pdf.setFontSize(18);
         pdf.text("Keymerv Smart QR Code", 105, 30, { align: 'center' });
-        pdf.setFontSize(12);
-        pdf.text(`Profile: @${currentProfile.username || ''}`, 105, 40, { align: 'center' });
+        pdf.setFontSize(10);
+        pdf.text("Created by Keymerv", 105, 38, { align: 'center' });
         
-        const imgWidth = 60;
-        const imgHeight = 60;
-        pdf.addImage(imgData, 'PNG', (210 - imgWidth) / 2, 60, imgWidth, imgHeight);
+        const imgWidth = 70;
+        const imgHeight = 70;
+        pdf.addImage(imgData, 'PNG', (210 - imgWidth) / 2, 55, imgWidth, imgHeight);
         
-        pdf.save(`Keymerv-QR-${currentProfile.username || 'code'}.pdf`);
-        closeDownloadModal();
+        pdf.save(`Keymerv-QR-${selectedQrStyle}-${currentProfile.username || 'code'}.pdf`);
+        closeQrStyleModal();
         showToast(currentLang === 'ar' ? 'تم تحميل ملف الـ PDF بنجاح!' : 'PDF downloaded successfully!');
     } catch (err) {
-        showToast(currentLang === 'ar' ? 'فشل تصدير الـ PDF' : 'Failed to export PDF', 'error');
+        showToast('فشل تصدير الـ PDF', 'error');
     }
 };
 
-// الإعدادات والحفظ
 const formSettings = document.getElementById('form-settings');
 if (formSettings) {
     formSettings.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        // التحقق من إلزامية البايو بالعربي والانجليزي
         const bioAr = document.getElementById('settings-bio-ar').value.trim();
         const bioEn = document.getElementById('settings-bio-en').value.trim();
         if (!bioAr || !bioEn) {
@@ -488,7 +508,6 @@ if (formSettings) {
 
         const { error } = await supabase.from('users_profiles').update({
             display_name: document.getElementById('settings-display-name').value,
-            username: document.getElementById('settings-username').value.trim().toLowerCase(),
             bio: bioAr,
             bio_en: bioEn,
             avatar_url: avatarUrl,
