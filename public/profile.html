@@ -41,7 +41,7 @@
 
         <!-- أزرار التبديل بين الأقسام (تظهر بناءً على إعدادات المستخدم) -->
         <div id="tabs-nav-container" class="flex bg-slate-900/90 border border-slate-800 p-1.5 rounded-2xl gap-1">
-            <!-- سيتم تعبئتها ديناميكياً بناءً على الأقسام المفعلة فقط -->
+            <!-- سيتم تعبئتها ديناميكياً -->
         </div>
 
         <!-- 1. قسم الروابط (Links Section) -->
@@ -204,21 +204,26 @@
                 return;
             }
 
+            // ربط الضغط بدالة تتبع النقرات عبر RPC
             container.innerHTML = links.map(link => `
-                <a href="${link.url}" target="_blank" onclick="trackClick('${link.id}')" class="block w-full bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 transition-all hover:scale-[1.02] shadow-lg">
+                <a href="${link.url}" target="_blank" onclick="handleLinkClick(event, '${link.id}', '${link.url}')" class="block w-full bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 transition-all hover:scale-[1.02] shadow-lg cursor-pointer">
                     ${link.title}
                 </a>
             `).join('');
         }
 
-        // دالة احتساب وزيادة النقرات فعلياً في قاعدة البيانات
-        window.trackClick = async (linkId) => {
+        // دالة التعامل مع النقرة واستدعاء دالة Supabase البرمجية (RPC)
+        window.handleLinkClick = async (e, linkId, linkUrl) => {
+            e.preventDefault(); // منع الانتقال الفوري لحين تسجيل النقرة
+
             try {
-                const { data: linkData } = await supabase.from('links').select('clicks').eq('id', linkId).single();
-                const currentClicks = linkData?.clicks || 0;
-                await supabase.from('links').update({ clicks: currentClicks + 1 }).eq('id', linkId);
+                await supabase.rpc('increment_link_clicks', {
+                    link_id_param: linkId
+                });
             } catch (err) {
                 console.error("Error tracking click:", err);
+            } finally {
+                window.open(linkUrl, '_blank', 'noopener,noreferrer');
             }
         };
 
