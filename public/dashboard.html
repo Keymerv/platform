@@ -51,10 +51,15 @@
                 </div>
             </div>
 
-            <!-- زر نسخ الرابط العام السريع -->
-            <button onclick="copyProfileUrl()" class="w-full mb-6 flex items-center justify-center gap-2 bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
-                <i class="fa-solid fa-link"></i> <span data-i18n="copy_link_btn">نسخ رابط صفحتي العامة</span>
-            </button>
+            <!-- أزرار المعاينة والنسخ السريع (معاينة الصفحة العامة أصبحت فوق) -->
+            <div class="space-y-2 mb-6">
+                <a id="view-live-profile" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-xs transition-colors border border-indigo-500/20">
+                    <i class="fa-solid fa-eye"></i> <span data-i18n="preview_page">معاينة الصفحة العامة</span>
+                </a>
+                <button onclick="copyProfileUrl()" class="w-full flex items-center justify-center gap-2 bg-slate-900/40 hover:bg-slate-900/70 border border-slate-700 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
+                    <i class="fa-solid fa-link"></i> <span data-i18n="copy_link_btn">نسخ رابط صفحتي العامة</span>
+                </button>
+            </div>
 
             <nav class="space-y-1.5">
                 <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all bg-indigo-600 text-white">
@@ -78,10 +83,7 @@
             </nav>
         </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-700 space-y-2">
-            <a id="view-live-profile" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-sm transition-colors border border-indigo-500/20">
-                <i class="fa-solid fa-eye"></i> <span data-i18n="preview_page">معاينة الصفحة العامة</span>
-            </a>
+        <div class="mt-8 pt-4 border-t border-slate-700">
             <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm transition-colors">
                 <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">تسجيل الخروج</span>
             </button>
@@ -91,7 +93,7 @@
     <!-- Main Content Area -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- بطاقات الإحصائيات العامة (Analytics Cards) -->
+        <!-- بطاقات الإحصائيات العامة -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div class="bg-slate-800 dark:bg-slate-800 border border-slate-700 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
                 <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-link"></i></div>
@@ -288,7 +290,6 @@
         let currentLang = localStorage.getItem('dash_lang') || 'ar';
         let currentTheme = localStorage.getItem('dash_theme') || 'dark';
 
-        // قاموس الترجمات الكامل للداشبورد
         const translations = {
             ar: {
                 title: "Keymerv | لوحة التحكم",
@@ -408,7 +409,6 @@
             }
         };
 
-        // تطبيق اللغة والثيم عند البدء
         applyTheme(currentTheme);
         applyLanguage(currentLang);
 
@@ -436,7 +436,6 @@
             localStorage.setItem('dash_theme', currentTheme);
             applyTheme(currentTheme);
 
-            // تدوير أيقونة الثيم حركة أنيقة
             const icon = document.getElementById('theme-icon');
             icon.classList.add('rotate-icon');
             setTimeout(() => icon.classList.remove('rotate-icon'), 500);
@@ -503,7 +502,6 @@
             updateStats();
         }
 
-        // تحديث إحصائيات العدادات التلقائية
         async function updateStats() {
             const { count: linksCount } = await supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
             const { count: prodCount } = await supabase.from('products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
@@ -520,7 +518,6 @@
             showToast("toast_copied");
         };
 
-        // الروابط
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
             const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
@@ -579,7 +576,6 @@
             loadLinks();
         };
 
-        // المتجر
         window.loadProducts = async function() {
             const container = document.getElementById('products-list');
             const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
@@ -623,7 +619,6 @@
             showToast("toast_prod_added");
         });
 
-        // الفروع
         window.loadBranches = async function() {
             const container = document.getElementById('branches-list');
             const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
@@ -649,7 +644,6 @@
             showToast("toast_branch_saved");
         });
 
-        // الفريق
         window.loadTeam = async function() {
             const container = document.getElementById('team-list');
             const { data: team } = await supabase.from('team_members').select('*').eq('owner_id', currentUser.id);
@@ -674,7 +668,6 @@
             showToast("toast_invite_sent");
         });
 
-        // الإعدادات
         document.getElementById('form-settings').addEventListener('submit', async (e) => {
             e.preventDefault();
             const display_name = document.getElementById('settings-display-name').value;
