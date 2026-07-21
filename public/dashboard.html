@@ -1,1 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Keymerv | لوحة التحكم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>body { font-family: 'Tajawal', sans-serif; }</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
 
+    <!-- نافذة التنبيه الأنيقة -->
+    <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+        <div id="toast-icon" class="text-indigo-400 text-lg"></div>
+        <span id="toast-message" class="text-xs font-bold"></span>
+    </div>
+
+    <!-- القائمة الجانبية -->
+    <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-l border-slate-800 p-5 flex flex-col justify-between shrink-0">
+        <div>
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg">K</div>
+                    <span class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Keymerv</span>
+                </div>
+                <button onclick="toggleDashboardLang()" id="lang-btn-top" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold">AR</button>
+            </div>
+
+            <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-2xl mb-6 flex items-center gap-3">
+                <div id="user-avatar" class="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-lg shrink-0">K</div>
+                <div class="overflow-hidden">
+                    <h4 id="user-display-name" class="font-bold text-sm text-slate-200 truncate">جاري التحميل...</h4>
+                    <p id="user-handle" class="text-xs text-indigo-400 truncate">@username</p>
+                </div>
+            </div>
+
+            <nav class="space-y-1.5">
+                <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all bg-indigo-600 text-white">
+                    <i class="fa-solid fa-share-nodes w-5"></i> <span data-i18n="tab_social">السوشيال والروابط</span>
+                </button>
+                <button onclick="switchTab('store')" id="tab-btn-store" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-store w-5"></i> <span data-i18n="tab_store">المتجر الخفيف</span>
+                </button>
+                <button onclick="switchTab('branches')" id="tab-btn-branches" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-code-branch w-5"></i> <span data-i18n="tab_branches">الفروع</span>
+                </button>
+                <button onclick="switchTab('qrcode')" id="tab-btn-qrcode" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-qrcode w-5"></i> <span data-i18n="tab_qrcode">مولد الـ QR</span>
+                </button>
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-gear w-5"></i> <span data-i18n="tab_settings">الإعدادات</span>
+                </button>
+            </nav>
+        </div>
+        <div class="mt-8 pt-4 border-t border-slate-800">
+            <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm">
+                <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">تسجيل الخروج</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
+
+        <!-- 1. السوشيال والروابط -->
+        <section id="sec-links" class="tab-content space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold" data-i18n="social_title">حسابات السوشيال ميديا والروابط</h2>
+                <p class="text-slate-400 text-sm" data-i18n="social_desc">أضف روابط حساباتك ومنصاتك الـ 20 لتظهر بأيقوناتها الاحترافية</p>
+            </div>
+
+            <!-- نموذج الـ 20 منصة -->
+            <form id="form-social" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200 text-base"><i class="fa-solid fa-globe text-indigo-400"></i> الـ 20 منصة المدعومة</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="block text-xs text-slate-400 mb-1">X (تويتر سابقاً)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Spotify</label><input type="url" id="soc-spotify" placeholder="https://spotify.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Jaco (جاكو)</label><input type="url" id="soc-jaco" placeholder="https://jaco.live/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Reddit</label><input type="url" id="soc-reddit" placeholder="https://reddit.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Discord</label><input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://pinterest.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Twitch</label><input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">GitHub</label><input type="url" id="soc-github" placeholder="https://github.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Patreon</label><input type="url" id="soc-patreon" placeholder="https://patreon.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Substack</label><input type="url" id="soc-substack" placeholder="https://substack.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Threads</label><input type="url" id="soc-threads" placeholder="https://threads.net/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Medium</label><input type="url" id="soc-medium" placeholder="https://medium.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                </div>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_save_social">حفظ حسابات السوشيال</button>
+            </form>
+
+            <!-- الروابط الإضافية -->
+            <form id="form-add-link" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200" data-i18n="add_link_heading">إضافة رابط عام إضافي</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                </div>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_add_link">إضافة الرابط</button>
+            </form>
+            <div id="links-list" class="space-y-3"><div class="text-center py-4 text-slate-500">جاري التحميل...</div></div>
+        </section>
+
+        <!-- 2. المتجر الخفيف -->
+        <section id="sec-store" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="store_title">المتجر المصغر</h2></div>
+            <form id="form-add-product" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200" data-i18n="add_prod_heading">إضافة منتج جديد</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="prod-title" required placeholder="اسم المنتج" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="number" step="0.01" id="prod-price" required placeholder="السعر (ر.س)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                </div>
+                <input type="text" id="prod-desc" placeholder="وصف قصير" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                <input type="file" id="prod-image" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-sm text-slate-300">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_add_prod">إضافة المنتج</button>
+            </form>
+            <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="text-center py-8 text-slate-500 col-span-2">جاري التحميل...</div></div>
+        </section>
+
+        <!-- 3. الفروع -->
+        <section id="sec-branches" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2></div>
+            <form id="form-add-branch" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200" data-i18n="add_branch_heading">إضافة فرع جديد</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="branch-name" required placeholder="اسم الفرع" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="text" id="branch-city" required placeholder="المدينة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="tel" id="branch-phone" placeholder="رقم الجوال" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                    <input type="url" id="branch-map-url" placeholder="رابط الخريطة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                </div>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_save_branch">حفظ الفرع</button>
+            </form>
+            <div id="branches-list" class="space-y-3"><div class="text-center py-8 text-slate-500">جاري التحميل...</div></div>
+        </section>
+
+        <!-- 4. QR Code -->
+        <section id="sec-qrcode" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="qrcode_title">رمز الـ QR</h2></div>
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center max-w-md mx-auto flex flex-col items-center">
+                <div class="bg-white p-4 rounded-2xl mb-6 shadow-xl"><div id="qrcode-canvas"></div></div>
+                <p id="qr-profile-url" class="text-sm text-indigo-400 font-mono mb-6 break-all"></p>
+                <button onclick="copyProfileUrl()" class="bg-indigo-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm" data-i18n="copy_url">نسخ الرابط</button>
+            </div>
+        </section>
+
+        <!-- 5. الإعدادات (النبذة المنفصلة عربي وانجليزي والتبويبات) -->
+        <section id="sec-settings" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2></div>
+            <form id="form-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 max-w-xl">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_lbl">الاسم الظاهري</label>
+                    <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1" data-i18n="username_lbl">اسم المستخدم</label>
+                    <input type="text" id="settings-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                </div>
+                <div class="border-t border-slate-800 pt-4 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-sm text-slate-200" data-i18n="bio_heading">النبذة الترحيبية (Bio)</h4>
+                        <span class="text-[11px] text-amber-400 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20" data-i18n="bio_warning">يرجى كتابة النبذة بالعربي والانجليزي</span>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1" data-i18n="bio_ar_lbl">النبذة بالعربية</label>
+                        <textarea id="settings-bio-ar" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1" data-i18n="bio_en_lbl">النبذة بالإنجليزية</label>
+                        <textarea id="settings-bio-en" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></textarea>
+                    </div>
+                </div>
+
+                <!-- التحكم بالتبويبات -->
+                <div class="border-t border-slate-800 pt-4 space-y-3">
+                    <h4 class="font-bold text-sm text-slate-200" data-i18n="tabs_vis_heading">إظهار أو إخفاء التبويبات</h4>
+                    <label class="flex items-center gap-3 cursor-pointer pt-1">
+                        <input type="checkbox" id="chk-show-links" class="w-4 h-4 rounded accent-indigo-600">
+                        <span class="text-sm text-slate-300" data-i18n="chk_links">إظهار تبويب الروابط والسوشيال</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" id="chk-show-store" class="w-4 h-4 rounded accent-indigo-600">
+                        <span class="text-sm text-slate-300" data-i18n="chk_store">إظهار تبويب المتجر</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" id="chk-show-branches" class="w-4 h-4 rounded accent-indigo-600">
+                        <span class="text-sm text-slate-300" data-i18n="chk_branches">إظهار تبويب الفروع</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm" data-i18n="btn_save">حفظ التغييرات</button>
+            </form>
+        </section>
+
+    </main>
+
+    <script type="module">
+        import { supabase } from './assets/js/supabase-config.js';
+        let currentUser = null;
+        let currentProfile = null;
+        let currentLang = localStorage.getItem('dashboard_lang') || 'ar';
+
+        const translations = {
+            ar: {
+                page_title: "Keymerv | لوحة التحكم",
+                tab_social: "السوشيال والروابط",
+                tab_store: "المتجر الخفيف",
+                tab_branches: "الفروع",
+                tab_qrcode: "مولد الـ QR",
+                tab_settings: "الإعدادات",
+                logout: "تسجيل الخروج",
+                social_title: "حسابات السوشيال ميديا والروابط",
+                social_desc: "أضف روابط حساباتك ومنصاتك الـ 20 لتظهر بأيقوناتها الاحترافية",
+                btn_save_social: "حفظ حسابات السوشيال",
+                add_link_heading: "إضافة رابط عام إضافي",
+                btn_add_link: "إضافة الرابط",
+                store_title: "المتجر المصغر",
+                add_prod_heading: "إضافة منتج جديد",
+                btn_add_prod: "إضافة المنتج",
+                branches_title: "إدارة الفروع",
+                add_branch_heading: "إضافة فرع جديد",
+                btn_save_branch: "حفظ الفرع",
+                qrcode_title: "رمز الـ QR",
+                copy_url: "نسخ الرابط",
+                settings_title: "إعدادات الحساب والصفحة",
+                display_name_lbl: "الاسم الظاهري",
+                username_lbl: "اسم المستخدم",
+                bio_heading: "النبذة الترحيبية (Bio)",
+                bio_warning: "يرجى كتابة النبذة بالعربي والانجليزي",
+                bio_ar_lbl: "النبذة بالعربية",
+                bio_en_lbl: "النبذة بالإنجليزية",
+                tabs_vis_heading: "إظهار أو إخفاء التبويبات",
+                chk_links: "إظهار تبويب الروابط والسوشيال",
+                chk_store: "إظهار تبويب المتجر",
+                chk_branches: "إظهار تبويب الفروع",
+                btn_save: "حفظ التغييرات"
+            },
+            en: {
+                page_title: "Keymerv | Dashboard",
+                tab_social: "Social & Links",
+                tab_store: "Lite Store",
+                tab_branches: "Branches",
+                tab_qrcode: "QR Code",
+                tab_settings: "Settings",
+                logout: "Sign Out",
+                social_title: "Social Media & Links",
+                social_desc: "Add your 20 social accounts with professional icons",
+                btn_save_social: "Save Social Accounts",
+                add_link_heading: "Add Extra General Link",
+                btn_add_link: "Add Link",
+                store_title: "Lite Store",
+                add_prod_heading: "Add New Product",
+                btn_add_prod: "Add Product",
+                branches_title: "Manage Branches",
+                add_branch_heading: "Add New Branch",
+                btn_save_branch: "Save Branch",
+                qrcode_title: "QR Code",
+                copy_url: "Copy URL",
+                settings_title: "Account & Page Settings",
+                display_name_lbl: "Display Name",
+                username_lbl: "Username",
+                bio_heading: "Bio",
+                bio_warning: "Please write bio in Arabic and English",
+                bio_ar_lbl: "Arabic Bio",
+                bio_en_lbl: "English Bio",
+                tabs_vis_heading: "Show or Hide Tabs",
+                chk_links: "Show Social & Links Tab",
+                chk_store: "Show Store Tab",
+                chk_branches: "Show Branches Tab",
+                btn_save: "Save Changes"
+            }
+        };
+
+        window.toggleDashboardLang = function() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('dashboard_lang', currentLang);
+            applyLanguage();
+        };
+
+        function applyLanguage() {
+            const html = document.getElementById('html-root');
+            html.setAttribute('lang', currentLang);
+            html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('lang-btn-top').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+            const dict = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.textContent = dict[key];
+            });
+            document.getElementById('page-title').textContent = dict.page_title;
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            document.getElementById('toast-icon').innerHTML = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        window.switchTab = (tabId) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('bg-indigo-600', 'text-white');
+        };
+
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { window.location.href = "login.html"; return; }
+            currentUser = session.user;
+
+            const { data: profile } = await supabase.from('users_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+            currentProfile = profile || {};
+
+            document.getElementById('user-display-name').textContent = currentProfile.display_name || currentUser.email.split('@')[0];
+            document.getElementById('user-handle').textContent = `@${currentProfile.username || 'user'}`;
+            document.getElementById('user-avatar').textContent = (currentProfile.display_name || 'K')[0].toUpperCase();
+            document.getElementById('qr-profile-url').textContent = `${window.location.origin}/profile.html?u=${currentProfile.username}`;
+
+            document.getElementById('settings-display-name').value = currentProfile.display_name || '';
+            document.getElementById('settings-username').value = currentProfile.username || '';
+            document.getElementById('settings-bio-ar').value = currentProfile.bio || '';
+            document.getElementById('settings-bio-en').value = currentProfile.bio_en || '';
+
+            document.getElementById('chk-show-links').checked = currentProfile.show_links ?? true;
+            document.getElementById('chk-show-store').checked = currentProfile.show_store ?? true;
+            document.getElementById('chk-show-branches').checked = currentProfile.show_branches ?? true;
+
+            const socList = ['x', 'instagram', 'snapchat', 'tiktok', 'linkedin', 'spotify', 'jaco', 'telegram', 'youtube', 'facebook', 'whatsapp', 'reddit', 'discord', 'pinterest', 'twitch', 'github', 'patreon', 'substack', 'threads', 'medium'];
+            socList.forEach(soc => {
+                const el = document.getElementById(`soc-${soc}`);
+                if (el && currentProfile[soc]) el.value = currentProfile[soc];
+            });
+
+            const qrContainer = document.getElementById('qrcode-canvas');
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, { text: `${window.location.origin}/profile.html?u=${currentProfile.username}`, width: 160, height: 160 });
+
+            applyLanguage();
+            loadLinks();
+            loadProducts();
+            loadBranches();
+        }
+
+        // حفظ السوشيال
+        document.getElementById('form-social').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const socList = ['x', 'instagram', 'snapchat', 'tiktok', 'linkedin', 'spotify', 'jaco', 'telegram', 'youtube', 'facebook', 'whatsapp', 'reddit', 'discord', 'pinterest', 'twitch', 'github', 'patreon', 'substack', 'threads', 'medium'];
+            const dataObj = {};
+            socList.forEach(soc => { dataObj[soc] = document.getElementById(`soc-${soc}`).value; });
+
+            const { error } = await supabase.from('users_profiles').update(dataObj).eq('id', currentUser.id);
+            if (error) showToast("خطأ أثناء الحفظ", "error");
+            else showToast("تم حفظ حسابات السوشيال بنجاح!");
+        });
+
+        // الروابط
+        window.loadLinks = async function() {
+            const container = document.getElementById('links-list');
+            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id);
+            if (!links || links.length === 0) { container.innerHTML = `<div class="text-center py-4 text-slate-500">لا توجد روابط إضافية</div>`; return; }
+            container.innerHTML = links.map(l => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                    <div><h4 class="font-bold text-slate-200">${l.title}</h4><a href="${l.url}" target="_blank" class="text-xs text-indigo-400" dir="ltr">${l.url}</a></div>
+                    <button onclick="deleteItem('links', '${l.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        };
+
+        document.getElementById('form-add-link').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await supabase.from('links').insert([{ user_id: currentUser.id, title: document.getElementById('link-title').value, url: document.getElementById('link-url').value }]);
+            e.target.reset();
+            loadLinks();
+            showToast("تمت الإضافة بنجاح!");
+        });
+
+        // المنتجات
+        window.loadProducts = async function() {
+            const container = document.getElementById('products-list');
+            const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id);
+            if (!products || products.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">لا توجد منتجات</div>`; return; }
+            container.innerHTML = products.map(p => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center gap-4">
+                    ${p.image_url ? `<img src="${p.image_url}" class="w-16 h-16 rounded-xl object-cover shrink-0">` : ''}
+                    <div class="flex-grow"><h4 class="font-bold text-slate-200">${p.title}</h4><span class="text-xs text-indigo-400 font-bold">${p.price} ر.س</span></div>
+                    <button onclick="deleteItem('products', '${p.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        };
+
+        document.getElementById('form-add-product').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const imageFile = document.getElementById('prod-image').files[0];
+            let imageUrl = '';
+            if (imageFile) {
+                const filePath = `products/${currentUser.id}-${Date.now()}.${imageFile.name.split('.').pop()}`;
+                await supabase.storage.from('uploads').upload(filePath, imageFile);
+                imageUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
+            }
+            await supabase.from('products').insert([{ user_id: currentUser.id, title: document.getElementById('prod-title').value, price: parseFloat(document.getElementById('prod-price').value), description: document.getElementById('prod-desc').value, image_url: imageUrl }]);
+            e.target.reset();
+            loadProducts();
+            showToast("تمت إضافة المنتج!");
+        });
+
+        // الفروع
+        window.loadBranches = async function() {
+            const container = document.getElementById('branches-list');
+            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id);
+            if (!branches || branches.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">لا توجد فروع</div>`; return; }
+            container.innerHTML = branches.map(b => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                    <div><h4 class="font-bold text-slate-200">${b.branch_name || b.name} (${b.city})</h4></div>
+                    <button onclick="deleteItem('branches', '${b.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        };
+
+        document.getElementById('form-add-branch').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await supabase.from('branches').insert([{ 
+                owner_id: currentUser.id, 
+                branch_name: document.getElementById('branch-name').value, 
+                city: document.getElementById('branch-city').value,
+                phone: document.getElementById('branch-phone').value,
+                location_url: document.getElementById('branch-map-url').value 
+            }]);
+            e.target.reset();
+            loadBranches();
+            showToast("تم حفظ الفرع!");
+        });
+
+        window.deleteItem = async (table, id) => {
+            if (confirm("هل أنت متأكد من الحذف؟")) {
+                await supabase.from(table).delete().eq('id', id);
+                if (table === 'links') loadLinks();
+                if (table === 'products') loadProducts();
+                if (table === 'branches') loadBranches();
+                showToast("تم الحذف بنجاح!");
+            }
+        };
+
+        // الإعدادات
+        document.getElementById('form-settings').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const show_links = document.getElementById('chk-show-links').checked;
+            const show_store = document.getElementById('chk-show-store').checked;
+            const show_branches = document.getElementById('chk-show-branches').checked;
+
+            const { error } = await supabase.from('users_profiles').update({
+                display_name: document.getElementById('settings-display-name').value,
+                username: document.getElementById('settings-username').value.trim().toLowerCase(),
+                bio: document.getElementById('settings-bio-ar').value,
+                bio_en: document.getElementById('settings-bio-en').value,
+                show_links, show_store, show_branches
+            }).eq('id', currentUser.id);
+
+            if (error) showToast("خطأ: " + error.message, "error");
+            else { showToast("تم حفظ الإعدادات!"); setTimeout(() => location.reload(), 1000); }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = "login.html";
+        });
+
+        checkAuth();
+    </script>
+</body>
+</html>
