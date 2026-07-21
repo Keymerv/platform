@@ -153,10 +153,8 @@
             document.getElementById('profile-bio').textContent = profile.bio || '';
             document.getElementById('profile-avatar').textContent = (profile.display_name || profile.username)[0].toUpperCase();
 
-            // تطبيق اللغة الحالية
             applyLanguage(currentLang);
 
-            // تحميل الأقسام والأعداد بشكل متوازي
             if (profile.show_links ?? true) loadLinks();
             if (profile.show_store ?? true) loadProducts();
             if (profile.show_branches ?? true) loadBranches();
@@ -167,7 +165,7 @@
             const container = document.getElementById('links-container');
             
             const { data: links } = await supabase
-                .from('links')
+                .from('user_links')
                 .select('*')
                 .eq('user_id', targetUser.id)
                 .eq('is_hidden', false)
@@ -189,7 +187,7 @@
             const container = document.getElementById('store-container');
 
             const { data: products } = await supabase
-                .from('products')
+                .from('user_products')
                 .select('*')
                 .eq('user_id', targetUser.id)
                 .order('created_at', { ascending: false });
@@ -218,7 +216,7 @@
             const container = document.getElementById('branches-container');
 
             const { data: branches } = await supabase
-                .from('branches')
+                .from('user_branches')
                 .select('*')
                 .eq('owner_id', targetUser.id)
                 .order('created_at', { ascending: false });
