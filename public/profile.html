@@ -145,10 +145,8 @@
             document.getElementById('profile-bio').textContent = profile.bio || '';
             document.getElementById('profile-avatar').textContent = (profile.display_name || profile.username)[0].toUpperCase();
 
-            // بناء أزرار التبديل ديناميكياً بناءً على تفعيلها من الإعدادات
             buildTabsNavigation(profile);
 
-            // جلب البيانات لكل قسم مفعل
             if (profile.show_links ?? true) loadLinks();
             if (profile.show_store ?? true) loadProducts();
             if (profile.show_branches ?? true) loadBranches();
@@ -187,13 +185,11 @@
 
             document.getElementById('tabs-nav-container').innerHTML = tabsHtml;
 
-            // تفعيل أول تبويب متاح وجعله مرئياً
             if (firstActiveTab) {
                 switchTab(firstActiveTab);
             }
         }
 
-        // جلب الروابط وتفعيل عداد النقرات (Clicks Counter) عند النقر عليها
         async function loadLinks() {
             const container = document.getElementById('links-container');
             const { data: links } = await supabase
@@ -215,7 +211,7 @@
             `).join('');
         }
 
-        // دالة زيادة عدد النقرات في قاعدة البيانات
+        // دالة احتساب وزيادة النقرات فعلياً في قاعدة البيانات
         window.trackClick = async (linkId) => {
             try {
                 const { data: linkData } = await supabase.from('links').select('clicks').eq('id', linkId).single();
@@ -226,7 +222,6 @@
             }
         };
 
-        // جلب المنتجات
         async function loadProducts() {
             const container = document.getElementById('store-container');
             const { data: products } = await supabase
@@ -255,7 +250,6 @@
             `).join('');
         }
 
-        // جلب الفروع
         async function loadBranches() {
             const container = document.getElementById('branches-container');
             const { data: branches } = await supabase
@@ -274,6 +268,7 @@
                     <div>
                         <h3 class="font-bold text-sm text-slate-100">${b.branch_name}</h3>
                         <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot text-indigo-400"></i> ${b.city}</p>
+                        ${b.phone ? `<p class="text-xs text-slate-400 mt-1" dir="ltr"><i class="fa-solid fa-phone text-indigo-400"></i> ${b.phone}</p>` : ''}
                     </div>
                     <div class="flex gap-2">
                         ${b.phone ? `<a href="tel:${b.phone}" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-phone"></i></a>` : ''}
@@ -283,7 +278,6 @@
             `).join('');
         }
 
-        // التبديل بين الأقسام
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-sec').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -301,7 +295,6 @@
             }
         };
 
-        // مشاركة البروفايل
         window.shareProfile = () => {
             if (navigator.share) {
                 navigator.share({
@@ -314,7 +307,6 @@
             }
         };
 
-        // إدارة اللغة
         window.toggleLanguage = () => {
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             localStorage.setItem('app_lang', currentLang);
