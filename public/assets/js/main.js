@@ -46,7 +46,7 @@ const translations = {
         wifi_enc_lbl: "نوع التشفير",
         btn_gen_qr_popup: "توليد واختيار تصميم الكود",
         settings_title: "إعدادات الحساب والصفحة",
-        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك وترتيب الروابط",
+        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك",
         sec_identity: "معلومات الحساب والهوية",
         display_name_lbl: "الاسم الظاهري",
         username_lbl: "اسم المستخدم (لا يمكن تعديله)",
@@ -58,14 +58,6 @@ const translations = {
         chk_links: "تبويب الروابط",
         chk_store: "تبويب المتجر",
         chk_branches: "تبويب الفروع",
-        sec_ordering: "تفضيلات ترتيب ظهور الروابط المتاحة",
-        ordering_desc: "اختر أيهما يظهر أولاً في صفحتك العامة:",
-        order_first_lbl: "الرابط الأول في الترتيب",
-        order_second_lbl: "الرابط الثاني في الترتيب",
-        opt_social: "منصات التواصل الاجتماعي",
-        opt_custom_links: "الروابط العامة الإضافية",
-        opt_store: "المتجر الخفيف",
-        opt_branches: "الفروع",
         btn_save: "حفظ جميع التغييرات",
         modal_qr_title: "اختر تصميم الـ QR المناسب",
         modal_qr_desc: "يحتوي الكود تلقائياً على بصمة 'Created by Keymerv':",
@@ -115,7 +107,7 @@ const translations = {
         wifi_enc_lbl: "Encryption Type",
         btn_gen_qr_popup: "Generate & Choose QR Design",
         settings_title: "Account & Page Settings",
-        settings_desc: "Manage your identity, visibility preferences, and link ordering",
+        settings_desc: "Manage your identity and visibility preferences",
         sec_identity: "Identity & Account Info",
         display_name_lbl: "Display Name",
         username_lbl: "Username (Read-only)",
@@ -127,14 +119,6 @@ const translations = {
         chk_links: "Links Tab",
         chk_store: "Store Tab",
         chk_branches: "Branches Tab",
-        sec_ordering: "Link Display Ordering Preferences",
-        ordering_desc: "Choose which section appears first on your public page:",
-        order_first_lbl: "First Section in Order",
-        order_second_lbl: "Second Section in Order",
-        opt_social: "Social Media Platforms",
-        opt_custom_links: "Extra General Links",
-        opt_store: "Lite Store",
-        opt_branches: "Branches",
         btn_save: "Save All Changes",
         modal_qr_title: "Choose QR Design Style",
         modal_qr_desc: "Includes 'Created by Keymerv' watermark automatically:",
@@ -239,7 +223,7 @@ async function checkAuth() {
     if (settingsName) settingsName.value = currentProfile.display_name || '';
     if (settingsUser) {
         settingsUser.value = currentProfile.username || '';
-        settingsUser.disabled = true; // اليوزر لا يمكن تعديله بعد الإنشاء
+        settingsUser.disabled = true;
     }
     if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
     if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
@@ -251,11 +235,6 @@ async function checkAuth() {
     if (chkLinks) chkLinks.checked = currentProfile.show_links ?? true;
     if (chkStore) chkStore.checked = currentProfile.show_store ?? true;
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
-
-    const order1 = document.getElementById('settings-order-1');
-    const order2 = document.getElementById('settings-order-2');
-    if (order1) order1.value = currentProfile.order_1 || 'social';
-    if (order2) order2.value = currentProfile.order_2 || 'custom_links';
 
     const socInputs = document.querySelectorAll('.soc-input');
     socInputs.forEach(input => {
@@ -363,7 +342,6 @@ window.toggleQrInputs = function() {
     if (type === 'wifi') wifiWrap.classList.remove('hidden');
 };
 
-// إدارة النافذة المنبثقة لاختيار تصميم الـ QR وتوليد الأشكال الثلاثة
 window.openQrStyleModal = function() {
     const modal = document.getElementById('qr-style-modal');
     if (modal) modal.classList.remove('hidden');
@@ -391,8 +369,6 @@ function getQrTextToEncode() {
 
 function renderAllQrStyles() {
     const text = getQrTextToEncode();
-    
-    // تفريغ المعاينات الثلاثة وتوليدها مع بصمة Created by Keymerv
     ['basic', 'luxury', 'glitch'].forEach(style => {
         const container = document.getElementById(`preview-${style}`);
         if (container) {
@@ -405,7 +381,6 @@ function renderAllQrStyles() {
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-            // حقن بصمة Keymerv الإجبارية داخل الكود
             setTimeout(() => {
                 let watermark = container.querySelector('.keymerv-wm');
                 if (!watermark) {
@@ -503,16 +478,13 @@ if (formSettings) {
         const show_links = document.getElementById('chk-show-links').checked;
         const show_store = document.getElementById('chk-show-store').checked;
         const show_branches = document.getElementById('chk-show-branches').checked;
-        const order_1 = document.getElementById('settings-order-1').value;
-        const order_2 = document.getElementById('settings-order-2').value;
 
         const { error } = await supabase.from('users_profiles').update({
             display_name: document.getElementById('settings-display-name').value,
             bio: bioAr,
             bio_en: bioEn,
             avatar_url: avatarUrl,
-            show_links, show_store, show_branches,
-            order_1, order_2
+            show_links, show_store, show_branches
         }).eq('id', currentUser.id);
 
         if (error) showToast("خطأ: " + error.message, "error");
