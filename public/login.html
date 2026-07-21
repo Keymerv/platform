@@ -1,1 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">رابطي | تسجيل الدخول</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <style>
+        body { font-family: 'Tajawal', 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen justify-between">
+
+    <!-- الهيدر البسيط -->
+    <header class="p-4 sm:p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="index.html" class="flex items-center gap-2 text-2xl font-extrabold text-indigo-600">
+            <i data-lucide="link-2" class="w-8 h-8 text-indigo-600"></i>
+            <span>Linky<span class="text-pink-500">.</span></span>
+        </a>
+
+        <!-- زر تحويل اللغة -->
+        <button id="lang-toggle" onclick="toggleLanguage()" class="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm shadow-sm transition-all">
+            <i data-lucide="languages" class="w-4 h-4 text-indigo-600"></i>
+            <span id="lang-text">English</span>
+        </button>
+    </header>
+
+    <!-- النموذج الرئيسي -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80">
+            
+            <!-- عنوان الصفحة -->
+            <div class="text-center mb-6">
+                <h1 id="auth-title" data-i18n="login_title" class="text-2xl font-bold text-slate-900 mb-2">مرحباً بعودتك!</h1>
+                <p id="auth-subtitle" data-i18n="login_subtitle" class="text-sm text-slate-500">سجل دخولك لإدارة روابطك ومتجرك</p>
+            </div>
+
+            <!-- زر الدخول عبر Google -->
+            <button id="btn-google" class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 font-semibold text-slate-700 text-sm transition-all shadow-sm mb-5">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span data-i18n="google_btn">المتابعة باستخدام Google</span>
+            </button>
+
+            <!-- فاصل -->
+            <div class="relative flex py-2 items-center mb-5">
+                <div class="flex-grow border-t border-slate-200"></div>
+                <span class="flex-shrink mx-4 text-xs text-slate-400 font-medium" data-i18n="or_text">أو باستخدام البريد</span>
+                <div class="flex-grow border-t border-slate-200"></div>
+            </div>
+
+            <!-- نموذج البريد وكلمة المرور -->
+            <form id="auth-form" class="space-y-4">
+                <!-- اسم المستخدم (يظهر فقط في حالة إنشاء حساب جديد) -->
+                <div id="username-field" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="label_username">اسم المستخدم (رابطك الخاص)</label>
+                    <div class="relative">
+                        <input type="text" id="input-username" placeholder="username" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="label_email">البريد الإلكتروني</label>
+                    <input type="email" id="input-email" required placeholder="name@example.com" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="label_password">كلمة المرور</label>
+                    <input type="password" id="input-password" required placeholder="••••••••" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                </div>
+
+                <!-- رسائل الخطأ -->
+                <div id="error-msg" class="hidden p-3 bg-red-50 text-red-600 rounded-xl text-xs"></div>
+
+                <!-- زر الإرسال -->
+                <button type="submit" id="btn-submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-100 transition-all text-sm mt-2">
+                    <span id="submit-text" data-i18n="login_submit">تسجيل الدخول</span>
+                </button>
+            </form>
+
+            <!-- التبديل بين التسجيل والإنشاء -->
+            <div class="text-center mt-6 text-xs text-slate-600">
+                <span id="toggle-prompt" data-i18n="no_account">ليس لديك حساب؟</span>
+                <button id="toggle-mode-btn" onclick="switchAuthMode()" class="text-indigo-600 font-bold hover:underline mx-1" data-i18n="signup_link">
+                    إنشاء حساب جديد
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="p-4 text-center text-xs text-slate-400">
+        © 2026 Linky Platform.
+    </footer>
+
+    <!-- سكريبت إدارة الواجهة واللغات -->
+    <script>
+        let isSignUpMode = false;
+        let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+        const translations = {
+            ar: {
+                login_title: "مرحباً بعودتك!",
+                login_subtitle: "سجل دخولك لإدارة روابطك ومتجرك",
+                signup_title: "إنشاء حساب جديد",
+                signup_subtitle: "احصل على رابطك المخصص ومتجرك الخفيف مجاناً",
+                google_btn: "المتابعة باستخدام Google",
+                or_text: "أو باستخدام البريد",
+                label_username: "اسم المستخدم (رابطك الخاص)",
+                label_email: "البريد الإلكتروني",
+                label_password: "كلمة المرور",
+                login_submit: "تسجيل الدخول",
+                signup_submit: "إنشاء الحساب",
+                no_account: "ليس لديك حساب؟",
+                has_account: "لديك حساب بالفعل؟",
+                signup_link: "إنشاء حساب جديد",
+                login_link: "تسجيل الدخول",
+                lang_toggle_btn: "English"
+            },
+            en: {
+                login_title: "Welcome Back!",
+                login_subtitle: "Sign in to manage your links and store",
+                signup_title: "Create New Account",
+                signup_subtitle: "Get your custom bio-link and lite store for free",
+                google_btn: "Continue with Google",
+                or_text: "or with Email",
+                label_username: "Username (Your custom link)",
+                label_email: "Email Address",
+                label_password: "Password",
+                login_submit: "Sign In",
+                signup_submit: "Create Account",
+                no_account: "Don't have an account?",
+                has_account: "Already have an account?",
+                signup_link: "Sign Up",
+                login_link: "Sign In",
+                lang_toggle_btn: "عربي"
+            }
+        };
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('app_lang', lang);
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.getElementById('lang-text').textContent = translations[lang].lang_toggle_btn;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            updateUI();
+            lucide.createIcons();
+        }
+
+        function toggleLanguage() {
+            applyLanguage(currentLang === 'ar' ? 'en' : 'ar');
+        }
+
+        function switchAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = translations[currentLang];
+            const usernameField = document.getElementById('username-field');
+            const authTitle = document.getElementById('auth-title');
+            const authSubtitle = document.getElementById('auth-subtitle');
+            const submitText = document.getElementById('submit-text');
+            const togglePrompt = document.getElementById('toggle-prompt');
+            const toggleBtn = document.getElementById('toggle-mode-btn');
+
+            if (isSignUpMode) {
+                usernameField.classList.remove('hidden');
+                authTitle.textContent = t.signup_title;
+                authSubtitle.textContent = t.signup_subtitle;
+                submitText.textContent = t.signup_submit;
+                togglePrompt.textContent = t.has_account;
+                toggleBtn.textContent = t.login_link;
+            } else {
+                usernameField.classList.add('hidden');
+                authTitle.textContent = t.login_title;
+                authSubtitle.textContent = t.login_subtitle;
+                submitText.textContent = t.login_submit;
+                togglePrompt.textContent = t.no_account;
+                toggleBtn.textContent = t.signup_link;
+            }
+        }
+
+        // قراءة الرابط للتعرف إذا كان الزائر جاء بطلب تسجيل حساب مباشر (?mode=signup)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mode') === 'signup') {
+            isSignUpMode = true;
+        }
+
+        applyLanguage(currentLang);
+    </script>
+
+    <!-- سنقوم بربط Firebase SDK هنا في الخطوة القادمة -->
+</body>
+</html>
