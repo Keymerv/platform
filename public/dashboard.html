@@ -4,43 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keymerv | لوحة التحكم</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Tajawal) -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- QRCode JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; }
-    </style>
+    <style>body { font-family: 'Tajawal', sans-serif; }</style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
+
+    <!-- نافذة التنبيه الأنيقة (Toast) -->
+    <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 border border-slate-700 text-slate-100 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+        <div id="toast-icon" class="text-indigo-400 text-lg"></div>
+        <span id="toast-message" class="text-xs font-bold"></span>
+    </div>
 
     <!-- Sidebar / القائمة الجانبية -->
     <aside class="w-full md:w-64 bg-slate-800 border-b md:border-b-0 md:border-l border-slate-700 p-5 flex flex-col justify-between shrink-0">
         <div>
-            <!-- Logo -->
             <div class="flex items-center gap-3 mb-8">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg shadow-indigo-500/30">
-                    K
-                </div>
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg shadow-indigo-500/30">K</div>
                 <span class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Keymerv</span>
             </div>
 
-            <!-- Profile Badge -->
             <div class="bg-slate-900/60 border border-slate-700/60 p-3 rounded-2xl mb-6 flex items-center gap-3">
-                <div id="user-avatar" class="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-lg shrink-0">
-                    K
-                </div>
+                <div id="user-avatar" class="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-lg shrink-0">K</div>
                 <div class="overflow-hidden">
                     <h4 id="user-display-name" class="font-bold text-sm text-slate-200 truncate">جاري التحميل...</h4>
                     <p id="user-handle" class="text-xs text-indigo-400 truncate">@username</p>
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
             <nav class="space-y-1.5">
                 <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all bg-indigo-600 text-white">
                     <i class="fa-solid fa-link w-5"></i> الروابط
@@ -63,7 +56,6 @@
             </nav>
         </div>
 
-        <!-- Logout & Preview buttons -->
         <div class="mt-8 pt-4 border-t border-slate-700 space-y-2">
             <a id="view-live-profile" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-sm transition-colors border border-indigo-500/20">
                 <i class="fa-solid fa-eye"></i> معاينة الصفحة العامة
@@ -77,14 +69,13 @@
     <!-- Main Content Area -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- 1. تبويب الروابط (مع الترتيب والإخفاء) -->
+        <!-- 1. تبويب الروابط -->
         <section id="sec-links" class="tab-content">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold">إدارة الروابط</h2>
                 <p class="text-slate-400 text-sm">أضف روابطك، تحكم بترتيب ظهورها، أو أخفها مؤقتاً</p>
             </div>
 
-            <!-- Form -->
             <form id="form-add-link" class="bg-slate-800 border border-slate-700 p-5 rounded-2xl mb-8 space-y-4">
                 <h3 class="font-bold text-slate-200">إضافة رابط جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -94,7 +85,6 @@
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all">إضافة الرابط</button>
             </form>
 
-            <!-- Links List -->
             <div id="links-list" class="space-y-3">
                 <div class="text-center py-8 text-slate-500">جاري تحميل الروابط...</div>
             </div>
@@ -153,7 +143,7 @@
             </div>
         </section>
 
-        <!-- 4. تبويب إدارة الفريق (عاد كاملاً) -->
+        <!-- 4. تبويب إدارة الفريق -->
         <section id="sec-team" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold">إدارة فريق العمل</h2>
@@ -177,11 +167,11 @@
             </div>
         </section>
 
-        <!-- 5. تبويب الـ QR Code (عاد كاملاً) -->
+        <!-- 5. تبويب الـ QR Code مع زر النسخ -->
         <section id="sec-qrcode" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold">رمز الـ QR الخاص بك</h2>
-                <p class="text-slate-400 text-sm">قم بتنزيل الرمز المباشر لصفحتك على Keymerv</p>
+                <p class="text-slate-400 text-sm">قم بتنزيل أو نسخ الرابط المباشر لصفحتك</p>
             </div>
 
             <div class="bg-slate-800 border border-slate-700 p-8 rounded-3xl text-center max-w-md mx-auto flex flex-col items-center">
@@ -189,13 +179,18 @@
                     <div id="qrcode-canvas"></div>
                 </div>
                 <p id="qr-profile-url" class="text-sm text-indigo-400 font-mono mb-6 break-all"></p>
-                <button onclick="downloadQR()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-3 rounded-xl text-sm shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-download"></i> تنزيل رمز الـ QR
-                </button>
+                <div class="flex gap-2 w-full">
+                    <button onclick="copyProfileUrl()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-copy"></i> نسخ الرابط
+                    </button>
+                    <button onclick="downloadQR()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-all">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- 6. تبويب الإعدادات (تخصيص النبذة + إخفاء/إظهار الأقسام بالشرط الذكي) -->
+        <!-- 6. تبويب الإعدادات (مع فحص تكرار اليوزرنيم بصرامة) -->
         <section id="sec-settings" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold">إعدادات الحساب والصفحة</h2>
@@ -249,6 +244,23 @@
         let currentUser = null;
         let currentProfile = null;
 
+        // دالة التنبيهات الأنيقة (Toast Notification)
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMessage.textContent = message;
+            toastIcon.innerHTML = type === 'success' 
+                ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' 
+                : '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
         async function checkAuth() {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) {
@@ -266,16 +278,16 @@
             currentProfile = profile;
             
             const displayName = profile?.display_name || currentUser.email.split('@')[0];
-            const username = profile?.username || 'user';
+            const username = profile?.username || '';
 
             document.getElementById('user-display-name').textContent = displayName;
             document.getElementById('user-handle').textContent = `@${username}`;
             document.getElementById('user-avatar').textContent = displayName[0].toUpperCase();
             document.getElementById('view-live-profile').href = `profile.html?u=${username}`;
 
-            // تعبئة نموذج الإعدادات
+            // تعبئة حقول الإعدادات بشكل صحيح ودقيق لتجنب الفراغ
             document.getElementById('settings-display-name').value = profile?.display_name || '';
-            document.getElementById('settings-username').value = profile?.username || '';
+            document.getElementById('settings-username').value = username;
             document.getElementById('settings-bio').value = profile?.bio || 'مرحباً بك في صفحتي الشخصية على Keymerv!';
             
             document.getElementById('chk-show-links').checked = profile?.show_links ?? true;
@@ -283,6 +295,9 @@
             document.getElementById('chk-show-branches').checked = profile?.show_branches ?? true;
 
             loadLinks();
+            loadProducts();
+            loadBranches();
+            loadTeam();
             setupQR();
         }
 
@@ -324,6 +339,7 @@
             await supabase.from('links').insert([{ user_id: currentUser.id, title, url, sort_order: count || 0, is_hidden: false }]);
             e.target.reset();
             loadLinks();
+            showToast("تمت إضافة الرابط بنجاح!");
         });
 
         window.moveLink = async (id, direction) => {
@@ -387,6 +403,7 @@
             await supabase.from('products').insert([{ user_id: currentUser.id, title, price, description, image_url: imageUrl }]);
             e.target.reset();
             loadProducts();
+            showToast("تمت إضافة المنتج بنجاح!");
         });
 
         // 3. الفروع
@@ -418,6 +435,7 @@
             }]);
             e.target.reset();
             loadBranches();
+            showToast("تم حفظ الفرع بنجاح!");
         });
 
         // 4. إدارة الفريق
@@ -450,32 +468,61 @@
             }]);
             e.target.reset();
             loadTeam();
+            showToast("تم إرسال دعوة الفريق بنجاح!");
         });
 
-        // 5. حفظ الإعدادات مع الشرط الذكي (لا يمكن إخفاء الجميع)
+        // 5. حفظ الإعدادات مع الشرط الذكي ومنع تشابه اليوزرنيم
         document.getElementById('form-settings').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const display_name = document.getElementById('settings-display-name').value;
+            const newUsername = document.getElementById('settings-username').value.trim().toLowerCase();
+            const bio = document.getElementById('settings-bio').value;
             const show_links = document.getElementById('chk-show-links').checked;
             const show_store = document.getElementById('chk-show-store').checked;
             const show_branches = document.getElementById('chk-show-branches').checked;
 
             if (!show_links && !show_store && !show_branches) {
-                alert("تنبيه: لا يمكنك إخفاء جميع التصنيفات! يجب إبقاء تصنيف واحد على الأقل ظاهراً.");
+                showToast("لا يمكنك إخفاء جميع التصنيفات!", "error");
                 return;
             }
 
+            if (newUsername !== currentProfile.username) {
+                const { data: existingUser } = await supabase
+                    .from('users_profiles')
+                    .select('id')
+                    .eq('username', newUsername)
+                    .maybeSingle();
+
+                if (existingUser) {
+                    showToast("اسم المستخدم هذا مستخدم مسبقاً!", "error");
+                    document.getElementById('settings-username').value = currentProfile.username;
+                    return;
+                }
+            }
+
             const { error } = await supabase.from('users_profiles').update({
-                display_name: document.getElementById('settings-display-name').value,
-                username: document.getElementById('settings-username').value,
-                bio: document.getElementById('settings-bio').value,
+                display_name,
+                username: newUsername,
+                bio,
                 show_links,
                 show_store,
                 show_branches
             }).eq('id', currentUser.id);
 
-            if (error) alert("خطأ: " + error.message);
-            else { alert("تم حفظ الإعدادات بنجاح!"); location.reload(); }
+            if (error) {
+                showToast("خطأ أثناء الحفظ: " + error.message, "error");
+            } else {
+                showToast("تم حفظ الإعدادات بنجاح!");
+                setTimeout(() => location.reload(), 1000);
+            }
         });
+
+        // زر نسخ الرابط
+        window.copyProfileUrl = () => {
+            const profileUrl = `${window.location.origin}/profile.html?u=${currentProfile?.username || ''}`;
+            navigator.clipboard.writeText(profileUrl);
+            showToast("تم نسخ رابط البروفايل بنجاح!");
+        };
 
         window.deleteItem = async (table, id) => {
             if (confirm("هل أنت متأكد من الحذف؟")) {
@@ -484,25 +531,18 @@
                 if (table === 'products') loadProducts();
                 if (table === 'branches') loadBranches();
                 if (table === 'team_members') loadTeam();
+                showToast("تم الحذف بنجاح!");
             }
         };
 
-        // الـ QR
         function setupQR() {
             const profileUrl = `${window.location.origin}/profile.html?u=${currentProfile?.username || ''}`;
             document.getElementById('qr-profile-url').textContent = profileUrl;
             const container = document.getElementById('qrcode-canvas');
             container.innerHTML = '';
-            new QRCode(container, {
-                text: profileUrl,
-                width: 180,
-                height: 180,
-                colorDark : "#1e293b",
-                colorLight : "#ffffff"
-            });
+            new QRCode(container, { text: profileUrl, width: 180, height: 180, colorDark : "#1e293b", colorLight : "#ffffff" });
         }
 
-        // التبديل بين التبويبات
         window.switchTab = (tabName) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => { 
