@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Keymerv | لوحة التحكم</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body { font-family: 'Tajawal', sans-serif; }
-        .theme-spin { transition: transform 0.5s ease; }
-        .rotate-icon { transform: rotate(180deg); }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col md:flex-row relative transition-colors duration-300">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
 
     <!-- نافذة التنبيه الأنيقة -->
     <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
@@ -34,12 +29,8 @@
                     <span class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Keymerv</span>
                 </div>
                 
-                <div class="flex items-center gap-1.5">
-                    <button onclick="toggleDashboardLang()" id="lang-btn-top" title="تغيير اللغة" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all">AR</button>
-                    <button onclick="toggleTheme()" id="theme-toggle-btn" title="تغيير المظهر" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 flex items-center justify-center transition-all">
-                        <i id="theme-icon" class="fa-solid fa-moon theme-spin text-sm"></i>
-                    </button>
-                </div>
+                <!-- زر اللغة فقط بعد حذف الثيم -->
+                <button onclick="toggleDashboardLang()" id="lang-btn-top" title="تغيير اللغة" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all">AR</button>
             </div>
 
             <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-2xl mb-6 flex items-center gap-3">
@@ -62,6 +53,9 @@
             <nav class="space-y-1.5">
                 <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all bg-indigo-600 text-white">
                     <i class="fa-solid fa-link w-5"></i> <span data-i18n="tab_links">الروابط</span>
+                </button>
+                <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-chart-line w-5"></i> <span data-i18n="tab_analytics">التحليلات</span>
                 </button>
                 <button onclick="switchTab('store')" id="tab-btn-store" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-store w-5"></i> <span data-i18n="tab_store">المتجر الخفيف</span>
@@ -91,31 +85,6 @@
     <!-- Main Content Area -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- بطاقات الإحصائيات العامة -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
-                <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-link"></i></div>
-                <div>
-                    <p class="text-xs text-slate-400" data-i18n="stat_links">إجمالي الروابط</p>
-                    <h3 id="stat-links-count" class="text-xl font-black text-slate-100">0</h3>
-                </div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
-                <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-mouse-pointer"></i></div>
-                <div>
-                    <p class="text-xs text-slate-400" data-i18n="stat_clicks">إجمالي النقرات</p>
-                    <h3 id="stat-clicks-count" class="text-xl font-black text-slate-100">0</h3>
-                </div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
-                <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-code-branch"></i></div>
-                <div>
-                    <p class="text-xs text-slate-400" data-i18n="stat_branches">الفروع المضافة</p>
-                    <h3 id="stat-branches-count" class="text-xl font-black text-slate-100">0</h3>
-                </div>
-            </div>
-        </div>
-
         <!-- 1. تبويب الروابط -->
         <section id="sec-links" class="tab-content">
             <div class="mb-6">
@@ -137,7 +106,48 @@
             </div>
         </section>
 
-        <!-- 2. تبويب المتجر الخفيف -->
+        <!-- 2. تبويب التحليلات الإحصائية (المستقل) -->
+        <section id="sec-analytics" class="tab-content hidden space-y-6">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold" data-i18n="analytics_title">التحليلات والإحصائيات</h2>
+                <p class="text-slate-400 text-sm" data-i18n="analytics_desc">نظرة شاملة على أداء روابطك وتفاعل الزوار</p>
+            </div>
+
+            <!-- بطاقات الإحصائيات -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+                    <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-link"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-400" data-i18n="stat_links">إجمالي الروابط</p>
+                        <h3 id="stat-links-count" class="text-xl font-black text-slate-100">0</h3>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+                    <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-mouse-pointer"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-400" data-i18n="stat_clicks">إجمالي النقرات</p>
+                        <h3 id="stat-clicks-count" class="text-xl font-black text-slate-100">0</h3>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center gap-4 shadow-lg">
+                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-code-branch"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-400" data-i18n="stat_branches">الفروع المضافة</p>
+                        <h3 id="stat-branches-count" class="text-xl font-black text-slate-100">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تفصيل النقرات لكل رابط -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200 text-lg" data-i18n="links_performance">أداء الروابط الفردية</h3>
+                <div id="analytics-links-breakdown" class="space-y-3">
+                    <div class="text-center py-6 text-slate-500 text-xs" data-i18n="loading">جاري التحميل...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. تبويب المتجر الخفيف -->
         <section id="sec-store" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold" data-i18n="store_title">المتجر المصغر (Lite Store)</h2>
@@ -165,7 +175,7 @@
             </div>
         </section>
 
-        <!-- 3. تبويب الفروع (مُحدث مع رقم الجوال ورابط الخريطة) -->
+        <!-- 4. تبويب الفروع -->
         <section id="sec-branches" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2>
@@ -190,7 +200,7 @@
             </div>
         </section>
 
-        <!-- 4. تبويب إدارة الفريق -->
+        <!-- 5. تبويب إدارة الفريق -->
         <section id="sec-team" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold" data-i18n="team_title">إدارة فريق العمل</h2>
@@ -214,7 +224,7 @@
             </div>
         </section>
 
-        <!-- 5. تبويب الـ QR Code -->
+        <!-- 6. تبويب الـ QR Code -->
         <section id="sec-qrcode" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold" data-i18n="qr_title">رمز الـ QR الخاص بك</h2>
@@ -237,7 +247,7 @@
             </div>
         </section>
 
-        <!-- 6. تبويب الإعدادات -->
+        <!-- 7. تبويب الإعدادات -->
         <section id="sec-settings" class="tab-content hidden">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2>
@@ -290,13 +300,13 @@
         let currentUser = null;
         let currentProfile = null;
         let currentLang = localStorage.getItem('dash_lang') || 'ar';
-        let currentTheme = localStorage.getItem('dash_theme') || 'dark';
 
         const translations = {
             ar: {
                 title: "Keymerv | لوحة التحكم",
                 copy_link_btn: "نسخ رابط صفحتي العامة",
                 tab_links: "الروابط",
+                tab_analytics: "التحليلات",
                 tab_store: "المتجر الخفيف",
                 tab_branches: "الفروع",
                 tab_team: "إدارة الفريق",
@@ -312,6 +322,9 @@
                 add_link_heading: "إضافة رابط جديد",
                 add_link_btn: "إضافة الرابط",
                 loading: "جاري التحميل...",
+                analytics_title: "التحليلات والإحصائيات",
+                analytics_desc: "نظرة شاملة على أداء روابطك وتفاعل الزوار",
+                links_performance: "أداء الروابط الفردية",
                 store_title: "المتجر المصغر (Lite Store)",
                 store_desc: "اعرض منتجاتك وخدماتك للجمهور مع الصور",
                 add_prod_heading: "إضافة منتج جديد",
@@ -355,6 +368,7 @@
                 title: "Keymerv | Dashboard",
                 copy_link_btn: "Copy Public Profile Link",
                 tab_links: "Links",
+                tab_analytics: "Analytics",
                 tab_store: "Lite Store",
                 tab_branches: "Branches",
                 tab_team: "Team Management",
@@ -370,6 +384,9 @@
                 add_link_heading: "Add New Link",
                 add_link_btn: "Add Link",
                 loading: "Loading...",
+                analytics_title: "Analytics & Statistics",
+                analytics_desc: "Comprehensive overview of your links and visitor interactions",
+                links_performance: "Individual Link Performance",
                 store_title: "Lite Store",
                 store_desc: "Showcase your products and services with images",
                 add_prod_heading: "Add New Product",
@@ -411,8 +428,6 @@
             }
         };
 
-        // تفعيل الثيم واللغة فوراً
-        applyTheme(currentTheme);
         applyLanguage(currentLang);
 
         window.toggleDashboardLang = () => {
@@ -432,30 +447,6 @@
                     el.textContent = translations[lang][key];
                 }
             });
-        }
-
-        window.toggleTheme = () => {
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('dash_theme', currentTheme);
-            applyTheme(currentTheme);
-
-            const icon = document.getElementById('theme-icon');
-            icon.classList.add('rotate-icon');
-            setTimeout(() => icon.classList.remove('rotate-icon'), 500);
-        };
-
-        function applyTheme(theme) {
-            const root = document.getElementById('html-root');
-            const icon = document.getElementById('theme-icon');
-            if (theme === 'light') {
-                root.classList.remove('dark');
-                root.classList.add('light');
-                if(icon) { icon.className = "fa-solid fa-sun theme-spin text-sm text-amber-500"; }
-            } else {
-                root.classList.add('dark');
-                root.classList.remove('light');
-                if(icon) { icon.className = "fa-solid fa-moon theme-spin text-sm text-amber-400"; }
-            }
         }
 
         function showToast(messageKey, type = 'success') {
@@ -498,27 +489,41 @@
             document.getElementById('chk-show-branches').checked = profile?.show_branches ?? true;
 
             loadLinks();
+            loadAnalytics();
             loadProducts();
             loadBranches();
             loadTeam();
             setupQR();
-            updateStats();
         }
 
-        async function updateStats() {
-            const { data: links } = await supabase.from('links').select('clicks').eq('user_id', currentUser.id);
+        // تحديث وإدارة إحصائيات الروابط والنقرات والفروع
+        async function loadAnalytics() {
+            const { data: links } = await supabase.from('links').select('title, clicks').eq('user_id', currentUser.id);
             const { count: branchCount } = await supabase.from('branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id);
 
             let totalClicks = 0;
+            let linksCount = links ? links.length : 0;
+            
             if (links) {
                 links.forEach(l => totalClicks += (l.clicks || 0));
-                document.getElementById('stat-links-count').textContent = links.length;
-            } else {
-                document.getElementById('stat-links-count').textContent = 0;
             }
 
+            document.getElementById('stat-links-count').textContent = linksCount;
             document.getElementById('stat-clicks-count').textContent = totalClicks;
             document.getElementById('stat-branches-count').textContent = branchCount || 0;
+
+            const breakdownContainer = document.getElementById('analytics-links-breakdown');
+            if (!links || links.length === 0) {
+                breakdownContainer.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs">${translations[currentLang].loading}</div>`;
+                return;
+            }
+
+            breakdownContainer.innerHTML = links.map(l => `
+                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between">
+                    <span class="font-bold text-slate-200 text-sm">${l.title}</span>
+                    <span class="text-xs bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-lg font-mono font-bold">${l.clicks || 0} نقرة</span>
+                </div>
+            `).join('');
         }
 
         window.copyProfileUrl = () => {
@@ -530,7 +535,7 @@
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
             const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
-            updateStats();
+            loadAnalytics();
             if (!links || links.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
             container.innerHTML = links.map((link) => `
                 <div class="bg-slate-900 border ${link.is_hidden ? 'border-dashed border-amber-500/50 opacity-60' : 'border-slate-800'} p-4 rounded-xl flex items-center justify-between gap-3">
@@ -631,7 +636,7 @@
         window.loadBranches = async function() {
             const container = document.getElementById('branches-list');
             const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
-            updateStats();
+            loadAnalytics();
             if (!branches || branches.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
             container.innerHTML = branches.map(b => `
                 <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
