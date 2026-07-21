@@ -342,5 +342,80 @@
         }
     }
 </script>
+    <script type="module">
+    import { supabase } from './assets/js/supabase-config.js';
+
+    const authForm = document.getElementById('auth-form');
+    const errorMsg = document.getElementById('error-msg');
+    const btnGoogle = document.getElementById('btn-google');
+
+    // متغير لمعرفة ما إذا كنا في وضع إنشاء حساب أو تسجيل دخول
+    let isSignUpMode = false; 
+
+    if (authForm) {
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('input-email').value.trim();
+            const password = document.getElementById('input-password').value;
+            const usernameInput = document.getElementById('input-username');
+
+            hideError();
+
+            if (isSignUpMode) {
+                const username = usernameInput ? usernameInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+                if (!username) return showError("يرجى إدخال اسم مستخدم صالح (حروف إنجليزية وأرقام)");
+
+                // 1. إنشاء الحساب في Supabase Auth
+                const { data, error } = await supabase.auth.signUp({ email, password });
+                if (error) return showError(error.message);
+
+                // 2. إنشاء بروفايل للمستخدم في جدول users_profiles
+                if (data.user) {
+                    const { error: profileError } = await supabase
+                        .from('users_profiles')
+                        .insert([{
+                            id: data.user.id,
+                            username: username,
+                            display_name: username,
+                            bio: "مرحباً بك في صفحتي الشخصية!"
+                        }]);
+                    
+                    if (profileError) console.error("Profile creation error:", profileError);
+                }
+                
+                alert("تم إنشاء الحساب بنجاح!");
+                window.location.href = "dashboard.html";
+
+            } else {
+                // تسجيل الدخول لحساب حالي
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) return showError("بيانات الدخول غير صحيحة أو الحساب غير موجود");
+                
+                window.location.href = "dashboard.html";
+            }
+        });
+    }
+
+    // تسجيل الدخول عبر Google
+    if (btnGoogle) {
+        btnGoogle.addEventListener('click', async () => {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+            });
+            if (error) showError(error.message);
+        });
+    }
+
+    function showError(msg) {
+        if (errorMsg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.remove('hidden');
+        }
+    }
+
+    function hideError() {
+        if (errorMsg) errorMsg.classList.add('hidden');
+    }
+</script>
 </body>
 </html>
