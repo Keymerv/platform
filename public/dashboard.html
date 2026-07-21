@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; }
-    </style>
+    <style>body { font-family: 'Tajawal', sans-serif; }</style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
 
@@ -20,16 +18,15 @@
         <span id="toast-message" class="text-xs font-bold"></span>
     </div>
 
-    <!-- Sidebar / القائمة الجانبية -->
+    <!-- القائمة الجانبية -->
     <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-l border-slate-800 p-5 flex flex-col justify-between shrink-0">
         <div>
             <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg shadow-indigo-500/30">K</div>
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-2xl text-white shadow-lg">K</div>
                     <span class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Keymerv</span>
                 </div>
-                
-                <button onclick="toggleDashboardLang()" id="lang-btn-top" title="تغيير اللغة" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all">AR</button>
+                <button onclick="toggleDashboardLang()" id="lang-btn-top" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold">AR</button>
             </div>
 
             <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-2xl mb-6 flex items-center gap-3">
@@ -40,42 +37,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 mb-6">
-                <div class="bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl text-center">
-                    <p id="lbl-stat-links" class="text-[10px] text-slate-400">الروابط</p>
-                    <h3 id="stat-links-count" class="text-sm font-black text-indigo-400">0</h3>
-                </div>
-                <div class="bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl text-center">
-                    <p id="lbl-stat-prods" class="text-[10px] text-slate-400">المنتجات</p>
-                    <h3 id="stat-products-count" class="text-sm font-black text-purple-400">0</h3>
-                </div>
-                <div class="bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl text-center">
-                    <p id="lbl-stat-branches" class="text-[10px] text-slate-400">الفروع</p>
-                    <h3 id="stat-branches-count" class="text-sm font-black text-emerald-400">0</h3>
-                </div>
-            </div>
-
-            <div class="space-y-2 mb-6">
-                <a id="view-live-profile" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-xs transition-colors border border-indigo-500/20">
-                    <i class="fa-solid fa-eye"></i> <span data-i18n="preview_profile">معاينة الصفحة العامة</span>
-                </a>
-                <button onclick="copyProfileUrl()" class="w-full flex items-center justify-center gap-2 bg-slate-950/40 hover:bg-slate-950/70 border border-slate-800 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
-                    <i class="fa-solid fa-link"></i> <span data-i18n="copy_profile_url">نسخ رابط صفحتي العامة</span>
-                </button>
-            </div>
-
             <nav class="space-y-1.5">
                 <button onclick="switchTab('links')" id="tab-btn-links" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all bg-indigo-600 text-white">
-                    <i class="fa-solid fa-link w-5"></i> <span data-i18n="tab_links">الروابط</span>
+                    <i class="fa-solid fa-share-nodes w-5"></i> <span data-i18n="tab_social">السوشيال والروابط</span>
                 </button>
                 <button onclick="switchTab('store')" id="tab-btn-store" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-store w-5"></i> <span data-i18n="tab_store">المتجر الخفيف</span>
                 </button>
                 <button onclick="switchTab('branches')" id="tab-btn-branches" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-code-branch w-5"></i> <span data-i18n="tab_branches">الفروع</span>
-                </button>
-                <button onclick="switchTab('team')" id="tab-btn-team" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
-                    <i class="fa-solid fa-users w-5"></i> <span data-i18n="tab_team">إدارة الفريق</span>
                 </button>
                 <button onclick="switchTab('qrcode')" id="tab-btn-qrcode" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-qrcode w-5"></i> <span data-i18n="tab_qrcode">مولد الـ QR</span>
@@ -85,190 +55,159 @@
                 </button>
             </nav>
         </div>
-
         <div class="mt-8 pt-4 border-t border-slate-800">
-            <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm transition-colors">
+            <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm">
                 <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">تسجيل الخروج</span>
             </button>
         </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- المحتوى الرئيسي -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- 1. الروابط -->
-        <section id="sec-links" class="tab-content">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="links_title">إدارة الروابط</h2>
-                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك، تحكم بترتيب ظهورها، أو أخفها مؤقتاً</p>
+        <!-- 1. السوشيال والروابط -->
+        <section id="sec-links" class="tab-content space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold" data-i18n="social_title">حسابات السوشيال ميديا والروابط</h2>
+                <p class="text-slate-400 text-sm" data-i18n="social_desc">أضف روابط حساباتك ومنصاتك الـ 20 لتظهر بأيقوناتها الاحترافية</p>
             </div>
-            <form id="form-add-link" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl mb-8 space-y-4">
-                <h3 class="font-bold text-slate-200" data-i18n="add_link_heading">إضافة رابط جديد</h3>
+
+            <!-- نموذج الـ 20 منصة -->
+            <form id="form-social" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200 text-base"><i class="fa-solid fa-globe text-indigo-400"></i> الـ 20 منصة المدعومة</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
-                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                    <div><label class="block text-xs text-slate-400 mb-1">X (تويتر سابقاً)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Spotify</label><input type="url" id="soc-spotify" placeholder="https://spotify.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Jaco (جاكو)</label><input type="url" id="soc-jaco" placeholder="https://jaco.live/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Reddit</label><input type="url" id="soc-reddit" placeholder="https://reddit.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Discord</label><input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://pinterest.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Twitch</label><input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">GitHub</label><input type="url" id="soc-github" placeholder="https://github.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Patreon</label><input type="url" id="soc-patreon" placeholder="https://patreon.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Substack</label><input type="url" id="soc-substack" placeholder="https://substack.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Threads</label><input type="url" id="soc-threads" placeholder="https://threads.net/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">Medium</label><input type="url" id="soc-medium" placeholder="https://medium.com/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
                 </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all" data-i18n="btn_add_link">إضافة الرابط</button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_save_social">حفظ حسابات السوشيال</button>
             </form>
-            <div id="links-list" class="space-y-3">
-                <div class="text-center py-8 text-slate-500" data-i18n="loading">جاري التحميل...</div>
-            </div>
+
+            <!-- الروابط الإضافية -->
+            <form id="form-add-link" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <h3 class="font-bold text-slate-200" data-i18n="add_link_heading">إضافة رابط عام إضافي</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                </div>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_add_link">إضافة الرابط</button>
+            </form>
+            <div id="links-list" class="space-y-3"><div class="text-center py-4 text-slate-500">جاري التحميل...</div></div>
         </section>
 
         <!-- 2. المتجر الخفيف -->
-        <section id="sec-store" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="store_title">المتجر المصغر (Lite Store)</h2>
-                <p class="text-slate-400 text-sm" data-i18n="store_desc">اعرض منتجاتك وخدماتك للجمهور مع الصور</p>
-            </div>
-            <form id="form-add-product" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl mb-8 space-y-4">
+        <section id="sec-store" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="store_title">المتجر المصغر</h2></div>
+            <form id="form-add-product" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
                 <h3 class="font-bold text-slate-200" data-i18n="add_prod_heading">إضافة منتج جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="prod-title" required placeholder="اسم المنتج" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
-                    <input type="number" step="0.01" id="prod-price" required placeholder="السعر (ر.س)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <input type="text" id="prod-title" required placeholder="اسم المنتج" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="number" step="0.01" id="prod-price" required placeholder="السعر (ر.س)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
                 </div>
-                <input type="text" id="prod-desc" placeholder="وصف قصير للمنتج" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">صورة المنتج</label>
-                    <input type="file" id="prod-image" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-sm text-slate-300">
-                </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all" data-i18n="btn_add_prod">إضافة المنتج</button>
+                <input type="text" id="prod-desc" placeholder="وصف قصير" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                <input type="file" id="prod-image" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-sm text-slate-300">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_add_prod">إضافة المنتج</button>
             </form>
-            <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="text-center py-8 text-slate-500 col-span-2" data-i18n="loading">جاري التحميل...</div>
-            </div>
+            <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="text-center py-8 text-slate-500 col-span-2">جاري التحميل...</div></div>
         </section>
 
         <!-- 3. الفروع -->
-        <section id="sec-branches" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2>
-                <p class="text-slate-400 text-sm" data-i18n="branches_desc">أضف مواقع وفروع نشاطك التجاري</p>
-            </div>
-            <form id="form-add-branch" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl mb-8 space-y-4">
+        <section id="sec-branches" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2></div>
+            <form id="form-add-branch" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
                 <h3 class="font-bold text-slate-200" data-i18n="add_branch_heading">إضافة فرع جديد</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="branch-name" required placeholder="اسم الفرع" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
-                    <input type="text" id="branch-city" required placeholder="المدينة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <input type="text" id="branch-name" required placeholder="اسم الفرع" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <input type="text" id="branch-city" required placeholder="المدينة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="tel" id="branch-phone" placeholder="رقم الجوال" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
-                    <input type="url" id="branch-map-url" placeholder="رابط الخريطة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                    <input type="tel" id="branch-phone" placeholder="رقم الجوال" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                    <input type="url" id="branch-map-url" placeholder="رابط الخريطة" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
                 </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all" data-i18n="btn_save_branch">حفظ الفرع</button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm" data-i18n="btn_save_branch">حفظ الفرع</button>
             </form>
-            <div id="branches-list" class="space-y-3">
-                <div class="text-center py-8 text-slate-500" data-i18n="loading">جاري التحميل...</div>
-            </div>
+            <div id="branches-list" class="space-y-3"><div class="text-center py-8 text-slate-500">جاري التحميل...</div></div>
         </section>
 
-        <!-- 4. الفريق -->
-        <section id="sec-team" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="team_title">إدارة فريق العمل</h2>
-                <p class="text-slate-400 text-sm" data-i18n="team_desc">أضف أعضاء لإدارة الصفحة معك</p>
-            </div>
-            <form id="form-add-team" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl mb-8 space-y-4">
-                <h3 class="font-bold text-slate-200" data-i18n="add_team_heading">دعوة عضو جديد</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <input type="email" id="team-email" required placeholder="البريد الإلكتروني" class="sm:col-span-2 bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
-                    <select id="team-role" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
-                        <option value="editor">محرر (Editor)</option>
-                        <option value="admin">مسؤول (Admin)</option>
-                    </select>
-                </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all" data-i18n="btn_send_invite">إرسال الدعوة</button>
-            </form>
-            <div id="team-list" class="space-y-3">
-                <div class="text-center py-8 text-slate-500" data-i18n="loading">جاري التحميل...</div>
-            </div>
-        </section>
-
-        <!-- 5. QR Code -->
-        <section id="sec-qrcode" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="qrcode_title">رمز الـ QR الخاص بك</h2>
-                <p class="text-slate-400 text-sm" data-i18n="qrcode_desc">قم بتنزيل أو نسخ الرابط المباشر لصفحتك</p>
-            </div>
+        <!-- 4. QR Code -->
+        <section id="sec-qrcode" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="qrcode_title">رمز الـ QR</h2></div>
             <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center max-w-md mx-auto flex flex-col items-center">
-                <div class="bg-white p-4 rounded-2xl mb-6 shadow-xl">
-                    <div id="qrcode-canvas"></div>
-                </div>
+                <div class="bg-white p-4 rounded-2xl mb-6 shadow-xl"><div id="qrcode-canvas"></div></div>
                 <p id="qr-profile-url" class="text-sm text-indigo-400 font-mono mb-6 break-all"></p>
-                <div class="flex gap-2 w-full">
-                    <button onclick="copyProfileUrl()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-copy"></i> نسخ الرابط
-                    </button>
-                    <button onclick="downloadQR()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-all">
-                        <i class="fa-solid fa-download"></i>
-                    </button>
-                </div>
+                <button onclick="copyProfileUrl()" class="bg-indigo-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm" data-i18n="copy_url">نسخ الرابط</button>
             </div>
         </section>
 
-        <!-- 6. الإعدادات -->
-        <section id="sec-settings" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2>
-                <p class="text-slate-400 text-sm" data-i18n="settings_desc">تخصيص البروفايل، المتجر، بيانات التواصل، وظهور التبويبات</p>
-            </div>
-
+        <!-- 5. الإعدادات (النبذة المنفصلة عربي وانجليزي والتبويبات) -->
+        <section id="sec-settings" class="tab-content hidden space-y-6">
+            <div class="mb-4"><h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والصفحة</h2></div>
             <form id="form-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 max-w-xl">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_label">الاسم الظاهري (Display Name)</label>
-                    <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100">
+                    <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_lbl">الاسم الظاهري</label>
+                    <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1" data-i18n="username_label">اسم المستخدم (Username)</label>
-                    <input type="text" id="settings-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                    <label class="block text-xs text-slate-400 mb-1" data-i18n="username_lbl">اسم المستخدم</label>
+                    <input type="text" id="settings-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
                 </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1" data-i18n="bio_label">النبذة الترحيبية (Bio)</label>
-                    <textarea id="settings-bio" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100"></textarea>
-                </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h4 class="font-bold text-sm text-slate-200" data-i18n="contact_data_heading">بيانات التواصل (لتبويب تواصل)</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="tel" id="settings-contact-phone" placeholder="رقم الهاتف / الواتساب" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
-                        <input type="email" id="settings-contact-email" placeholder="البريد الإلكتروني" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-100" dir="ltr">
+                <div class="border-t border-slate-800 pt-4 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-sm text-slate-200" data-i18n="bio_heading">النبذة الترحيبية (Bio)</h4>
+                        <span class="text-[11px] text-amber-400 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20" data-i18n="bio_warning">يرجى كتابة النبذة بالعربي والانجليزي</span>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1" data-i18n="bio_ar_lbl">النبذة بالعربية</label>
+                        <textarea id="settings-bio-ar" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1" data-i18n="bio_en_lbl">النبذة بالإنجليزية</label>
+                        <textarea id="settings-bio-en" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></textarea>
                     </div>
                 </div>
 
+                <!-- التحكم بالتبويبات -->
                 <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h4 class="font-bold text-sm text-slate-200" data-i18n="sections_visibility_heading">إظهار أو إخفاء التبويبات في صفحتك العامة</h4>
-                    <p class="text-[11px] text-amber-400" data-i18n="sections_warning">ملاحظة: يجب إبقاء قسم واحد على الأقل مفَعَّلاً ظاهراً.</p>
-                    
+                    <h4 class="font-bold text-sm text-slate-200" data-i18n="tabs_vis_heading">إظهار أو إخفاء التبويبات</h4>
                     <label class="flex items-center gap-3 cursor-pointer pt-1">
                         <input type="checkbox" id="chk-show-links" class="w-4 h-4 rounded accent-indigo-600">
-                        <span class="text-sm text-slate-300">إظهار تبويب الروابط</span>
+                        <span class="text-sm text-slate-300" data-i18n="chk_links">إظهار تبويب الروابط والسوشيال</span>
                     </label>
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" id="chk-show-store" class="w-4 h-4 rounded accent-indigo-600">
-                        <span class="text-sm text-slate-300">إظهار تبويب المتجر</span>
+                        <span class="text-sm text-slate-300" data-i18n="chk_store">إظهار تبويب المتجر</span>
                     </label>
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" id="chk-show-branches" class="w-4 h-4 rounded accent-indigo-600">
-                        <span class="text-sm text-slate-300">إظهار تبويب الفروع</span>
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" id="chk-show-contact" class="w-4 h-4 rounded accent-indigo-600">
-                        <span class="text-sm text-slate-300">إظهار تبويب التواصل</span>
+                        <span class="text-sm text-slate-300" data-i18n="chk_branches">إظهار تبويب الفروع</span>
                     </label>
                 </div>
 
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all" data-i18n="btn_save_changes">
-                    حفظ التغييرات
-                </button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm" data-i18n="btn_save">حفظ التغييرات</button>
             </form>
         </section>
 
     </main>
 
-    <!-- Supabase & App Script -->
     <script type="module">
         import { supabase } from './assets/js/supabase-config.js';
-
         let currentUser = null;
         let currentProfile = null;
         let currentLang = localStorage.getItem('dashboard_lang') || 'ar';
@@ -276,89 +215,71 @@
         const translations = {
             ar: {
                 page_title: "Keymerv | لوحة التحكم",
-                preview_profile: "معاينة الصفحة العامة",
-                copy_profile_url: "نسخ رابط صفحتي العامة",
-                tab_links: "الروابط",
+                tab_social: "السوشيال والروابط",
                 tab_store: "المتجر الخفيف",
                 tab_branches: "الفروع",
-                tab_team: "إدارة الفريق",
                 tab_qrcode: "مولد الـ QR",
                 tab_settings: "الإعدادات",
                 logout: "تسجيل الخروج",
-                stat_links: "الروابط",
-                stat_prods: "المنتجات",
-                stat_branches: "الفروع",
-                links_title: "إدارة الروابط",
-                links_desc: "أضف روابطك، تحكم بترتيب ظهورها، أو أخفها مؤقتاً",
-                add_link_heading: "إضافة رابط جديد",
+                social_title: "حسابات السوشيال ميديا والروابط",
+                social_desc: "أضف روابط حساباتك ومنصاتك الـ 20 لتظهر بأيقوناتها الاحترافية",
+                btn_save_social: "حفظ حسابات السوشيال",
+                add_link_heading: "إضافة رابط عام إضافي",
                 btn_add_link: "إضافة الرابط",
-                loading: "جاري التحميل...",
-                store_title: "المتجر المصغر (Lite Store)",
-                store_desc: "اعرض منتجاتك وخدماتك للجمهور مع الصور",
+                store_title: "المتجر المصغر",
                 add_prod_heading: "إضافة منتج جديد",
                 btn_add_prod: "إضافة المنتج",
                 branches_title: "إدارة الفروع",
-                branches_desc: "أضف مواقع وفروع نشاطك التجاري",
                 add_branch_heading: "إضافة فرع جديد",
                 btn_save_branch: "حفظ الفرع",
-                team_title: "إدارة فريق العمل",
-                team_desc: "أضف أعضاء لإدارة الصفحة معك",
-                add_team_heading: "دعوة عضو جديد",
-                btn_send_invite: "إرسال الدعوة",
-                qrcode_title: "رمز الـ QR الخاص بك",
-                qrcode_desc: "قم بتنزيل أو نسخ الرابط المباشر لصفحتك",
+                qrcode_title: "رمز الـ QR",
+                copy_url: "نسخ الرابط",
                 settings_title: "إعدادات الحساب والصفحة",
-                settings_desc: "تخصيص البروفايل، المتجر، بيانات التواصل، وظهور التبويبات",
-                display_name_label: "الاسم الظاهري (Display Name)",
-                username_label: "اسم المستخدم (Username)",
-                bio_label: "النبذة الترحيبية (Bio)",
-                contact_data_heading: "بيانات التواصل (لتبويب تواصل)",
-                sections_visibility_heading: "إظهار أو إخفاء التبويبات في صفحتك العامة",
-                sections_warning: "ملاحظة: يجب إبقاء قسم واحد على الأقل مفَعَّلاً ظاهراً.",
-                btn_save_changes: "حفظ التغييرات"
+                display_name_lbl: "الاسم الظاهري",
+                username_lbl: "اسم المستخدم",
+                bio_heading: "النبذة الترحيبية (Bio)",
+                bio_warning: "يرجى كتابة النبذة بالعربي والانجليزي",
+                bio_ar_lbl: "النبذة بالعربية",
+                bio_en_lbl: "النبذة بالإنجليزية",
+                tabs_vis_heading: "إظهار أو إخفاء التبويبات",
+                chk_links: "إظهار تبويب الروابط والسوشيال",
+                chk_store: "إظهار تبويب المتجر",
+                chk_branches: "إظهار تبويب الفروع",
+                btn_save: "حفظ التغييرات"
             },
             en: {
                 page_title: "Keymerv | Dashboard",
-                preview_profile: "Preview Public Page",
-                copy_profile_url: "Copy Public Profile URL",
-                tab_links: "Links",
+                tab_social: "Social & Links",
                 tab_store: "Lite Store",
                 tab_branches: "Branches",
-                tab_team: "Team Management",
                 tab_qrcode: "QR Code",
                 tab_settings: "Settings",
                 logout: "Sign Out",
-                stat_links: "Links",
-                stat_prods: "Products",
-                stat_branches: "Branches",
-                links_title: "Manage Links",
-                links_desc: "Add your links, control visibility, and order",
-                add_link_heading: "Add New Link",
+                social_title: "Social Media & Links",
+                social_desc: "Add your 20 social accounts with professional icons",
+                btn_save_social: "Save Social Accounts",
+                add_link_heading: "Add Extra General Link",
                 btn_add_link: "Add Link",
-                loading: "Loading...",
                 store_title: "Lite Store",
-                store_desc: "Display your products and services with images",
                 add_prod_heading: "Add New Product",
                 btn_add_prod: "Add Product",
                 branches_title: "Manage Branches",
-                branches_desc: "Add business locations and branches",
                 add_branch_heading: "Add New Branch",
                 btn_save_branch: "Save Branch",
-                team_title: "Team Management",
-                team_desc: "Add members to manage page with you",
-                add_team_heading: "Invite New Member",
-                btn_send_invite: "Send Invitation",
-                qrcode_title: "Your QR Code",
-                qrcode_desc: "Download or copy the direct link to your page",
+                qrcode_title: "QR Code",
+                copy_url: "Copy URL",
                 settings_title: "Account & Page Settings",
-                settings_desc: "Customize profile, store, contact info and tabs",
-                display_name_label: "Display Name",
-                username_label: "Username",
-                bio_label: "Bio",
-                contact_data_heading: "Contact Info (For Contact Tab)",
-                sections_visibility_heading: "Show or Hide Public Tabs",
-                sections_warning: "Note: At least one section must remain active.",
-                btn_save_changes: "Save Changes"
+                display_name_lbl: "Display Name",
+                username_lbl: "Username",
+                bio_heading: "Bio",
+                bio_warning: "Please write bio in Arabic and English",
+                bio_ar_lbl: "Arabic Bio",
+                bio_en_lbl: "English Bio",
+                tabs_vis_heading: "Show or Hide Tabs",
+                chk_links: "Show Social & Links Tab",
+                chk_store: "Show Store Tab",
+                chk_branches: "Show Branches Tab",
+                btn_save: "Save Changes"
             }
         };
 
@@ -381,232 +302,180 @@
             document.getElementById('page-title').textContent = dict.page_title;
         }
 
-        function showToast(message, type = 'success') {
+        function showToast(msg, type = 'success') {
             const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = message;
-            document.getElementById('toast-icon').innerHTML = type === 'success' 
-                ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' 
-                : '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
+            document.getElementById('toast-message').textContent = msg;
+            document.getElementById('toast-icon').innerHTML = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
             toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
-
-        window.copyProfileUrl = () => {
-            if (!currentProfile || !currentProfile.username) return;
-            const fullUrl = `${window.location.origin}/profile.html?u=${currentProfile.username}`;
-            navigator.clipboard.writeText(fullUrl).then(() => {
-                showToast(currentLang === 'ar' ? 'تم نسخ رابط البروفايل بنجاح!' : 'Profile link copied successfully!');
-            });
-        };
 
         window.switchTab = (tabId) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white');
-                btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-            });
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
             document.getElementById(`sec-${tabId}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
-            activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-            activeBtn.classList.add('bg-indigo-600', 'text-white');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('bg-indigo-600', 'text-white');
         };
 
         async function checkAuth() {
-            try {
-                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-                if (sessionError || !session) { window.location.href = "login.html"; return; }
-                currentUser = session.user;
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { window.location.href = "login.html"; return; }
+            currentUser = session.user;
 
-                const { data: profile } = await supabase
-                    .from('users_profiles')
-                    .select('*')
-                    .eq('id', currentUser.id)
-                    .maybeSingle();
+            const { data: profile } = await supabase.from('users_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+            currentProfile = profile || {};
 
-                currentProfile = profile || { username: currentUser.email.split('@')[0], display_name: currentUser.email.split('@')[0] };
-                
-                const displayName = currentProfile.display_name || currentUser.email.split('@')[0];
-                const username = currentProfile.username || '';
+            document.getElementById('user-display-name').textContent = currentProfile.display_name || currentUser.email.split('@')[0];
+            document.getElementById('user-handle').textContent = `@${currentProfile.username || 'user'}`;
+            document.getElementById('user-avatar').textContent = (currentProfile.display_name || 'K')[0].toUpperCase();
+            document.getElementById('qr-profile-url').textContent = `${window.location.origin}/profile.html?u=${currentProfile.username}`;
 
-                document.getElementById('user-display-name').textContent = displayName;
-                document.getElementById('user-handle').textContent = `@${username}`;
-                document.getElementById('user-avatar').textContent = displayName[0].toUpperCase();
-                document.getElementById('view-live-profile').href = `profile.html?u=${username}`;
-                document.getElementById('qr-profile-url').textContent = `${window.location.origin}/profile.html?u=${username}`;
+            document.getElementById('settings-display-name').value = currentProfile.display_name || '';
+            document.getElementById('settings-username').value = currentProfile.username || '';
+            document.getElementById('settings-bio-ar').value = currentProfile.bio || '';
+            document.getElementById('settings-bio-en').value = currentProfile.bio_en || '';
 
-                document.getElementById('settings-display-name').value = displayName;
-                document.getElementById('settings-username').value = username;
-                document.getElementById('settings-bio').value = currentProfile.bio || '';
-                document.getElementById('settings-contact-phone').value = currentProfile.contact_phone || '';
-                document.getElementById('settings-contact-email').value = currentProfile.contact_email || '';
-                
-                document.getElementById('chk-show-links').checked = currentProfile.show_links ?? true;
-                document.getElementById('chk-show-store').checked = currentProfile.show_store ?? true;
-                document.getElementById('chk-show-branches').checked = currentProfile.show_branches ?? true;
-                document.getElementById('chk-show-contact').checked = currentProfile.show_contact ?? true;
+            document.getElementById('chk-show-links').checked = currentProfile.show_links ?? true;
+            document.getElementById('chk-show-store').checked = currentProfile.show_store ?? true;
+            document.getElementById('chk-show-branches').checked = currentProfile.show_branches ?? true;
 
-                const qrContainer = document.getElementById('qrcode-canvas');
-                qrContainer.innerHTML = "";
-                new QRCode(qrContainer, {
-                    text: `${window.location.origin}/profile.html?u=${username}`,
-                    width: 160, height: 160,
-                    colorDark: "#0f172a", colorLight: "#ffffff"
-                });
+            const socList = ['x', 'instagram', 'snapchat', 'tiktok', 'linkedin', 'spotify', 'jaco', 'telegram', 'youtube', 'facebook', 'whatsapp', 'reddit', 'discord', 'pinterest', 'twitch', 'github', 'patreon', 'substack', 'threads', 'medium'];
+            socList.forEach(soc => {
+                const el = document.getElementById(`soc-${soc}`);
+                if (el && currentProfile[soc]) el.value = currentProfile[soc];
+            });
 
-                applyLanguage();
-                loadCounts();
-                loadLinks();
-                loadProducts();
-                loadBranches();
-                loadTeam();
-            } catch (err) {
-                console.error("Auth check failed:", err);
-            }
+            const qrContainer = document.getElementById('qrcode-canvas');
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, { text: `${window.location.origin}/profile.html?u=${currentProfile.username}`, width: 160, height: 160 });
+
+            applyLanguage();
+            loadLinks();
+            loadProducts();
+            loadBranches();
         }
 
-        async function loadCounts() {
-            if (!currentUser) return;
-            const [linksRes, prodsRes, branchesRes] = await Promise.all([
-                supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id)
-            ]);
-            document.getElementById('stat-links-count').textContent = linksRes.count || 0;
-            document.getElementById('stat-products-count').textContent = prodsRes.count || 0;
-            document.getElementById('stat-branches-count').textContent = branchesRes.count || 0;
-        }
+        // حفظ السوشيال
+        document.getElementById('form-social').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const socList = ['x', 'instagram', 'snapchat', 'tiktok', 'linkedin', 'spotify', 'jaco', 'telegram', 'youtube', 'facebook', 'whatsapp', 'reddit', 'discord', 'pinterest', 'twitch', 'github', 'patreon', 'substack', 'threads', 'medium'];
+            const dataObj = {};
+            socList.forEach(soc => { dataObj[soc] = document.getElementById(`soc-${soc}`).value; });
 
+            const { error } = await supabase.from('users_profiles').update(dataObj).eq('id', currentUser.id);
+            if (error) showToast("خطأ أثناء الحفظ", "error");
+            else showToast("تم حفظ حسابات السوشيال بنجاح!");
+        });
+
+        // الروابط
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
-            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
-            loadCounts();
-            if (!links || links.length === 0) { 
-                container.innerHTML = `<div class="text-center py-8 text-slate-500">لا توجد روابط مضافة بعد.</div>`; 
-                return; 
-            }
-            container.innerHTML = links.map(link => `
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                        <h4 class="font-bold text-sm text-slate-200">${link.title}</h4>
-                        <a href="${link.url}" target="_blank" class="text-xs text-indigo-400 truncate block" dir="ltr">${link.url}</a>
-                    </div>
-                    <button onclick="deleteLink('${link.id}')" class="text-rose-400 hover:text-rose-300 p-2 text-sm"><i class="fa-solid fa-trash"></i></button>
+            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id);
+            if (!links || links.length === 0) { container.innerHTML = `<div class="text-center py-4 text-slate-500">لا توجد روابط إضافية</div>`; return; }
+            container.innerHTML = links.map(l => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                    <div><h4 class="font-bold text-slate-200">${l.title}</h4><a href="${l.url}" target="_blank" class="text-xs text-indigo-400" dir="ltr">${l.url}</a></div>
+                    <button onclick="deleteItem('links', '${l.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
-        };
-
-        window.loadProducts = async function() {
-            const container = document.getElementById('products-list');
-            const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id);
-            loadCounts();
-            if (!products || products.length === 0) { 
-                container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">لا توجد منتجات مضافة بعد.</div>`; 
-                return; 
-            }
-            container.innerHTML = products.map(prod => `
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
-                    <div>
-                        ${prod.image_url ? `<img src="${prod.image_url}" class="w-full h-32 object-cover rounded-lg mb-3">` : ''}
-                        <h4 class="font-bold text-sm text-slate-200">${prod.title}</h4>
-                        <p class="text-xs text-slate-400 mt-1">${prod.description || ''}</p>
-                        <p class="text-sm font-black text-purple-400 mt-2">${prod.price} ر.س</p>
-                    </div>
-                    <div class="mt-4 pt-2 border-t border-slate-800 flex justify-end">
-                        <button onclick="deleteProduct('${prod.id}')" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i> حذف</button>
-                    </div>
-                </div>
-            `).join('');
-        };
-
-        window.loadBranches = async function() {
-            const container = document.getElementById('branches-list');
-            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id);
-            loadCounts();
-            if (!branches || branches.length === 0) { 
-                container.innerHTML = `<div class="text-center py-8 text-slate-500">لا توجد فروع مضافة بعد.</div>`; 
-                return; 
-            }
-            container.innerHTML = branches.map(branch => `
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                        <h4 class="font-bold text-sm text-slate-200">${branch.name} <span class="text-xs font-normal text-slate-400">(${branch.city})</span></h4>
-                        <p class="text-xs text-indigo-400 mt-1">${branch.phone || ''}</p>
-                    </div>
-                    <button onclick="deleteBranch('${branch.id}')" class="text-rose-400 hover:text-rose-300 p-2 text-sm"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `).join('');
-        };
-
-        window.loadTeam = async function() {
-            const container = document.getElementById('team-list');
-            // استعلام تجريبي لعرض أعضاء الفريق إن توفر جدول
-            container.innerHTML = `<div class="text-center py-8 text-slate-500">لا يوجد أعضاء فريق إضافيين.</div>`;
-        };
-
-        window.downloadQR = () => {
-            const canvasImg = document.querySelector('#qrcode-canvas img');
-            if (!canvasImg) return;
-            const a = document.createElement('a');
-            a.href = canvasImg.src;
-            a.download = `qrcode-${currentProfile.username}.png`;
-            a.click();
         };
 
         document.getElementById('form-add-link').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const title = document.getElementById('link-title').value;
-            const url = document.getElementById('link-url').value;
-            const { error } = await supabase.from('links').insert([{ user_id: currentUser.id, title, url, sort_order: 0 }]);
-            if (error) { showToast('خطأ أثناء إضافة الرابط', 'error'); return; }
-            showToast('تم إضافة الرابط بنجاح');
-            document.getElementById('form-add-link').reset();
+            await supabase.from('links').insert([{ user_id: currentUser.id, title: document.getElementById('link-title').value, url: document.getElementById('link-url').value }]);
+            e.target.reset();
             loadLinks();
+            showToast("تمت الإضافة بنجاح!");
         });
 
-        window.deleteLink = async (id) => {
-            await supabase.from('links').delete().eq('id', id);
-            showToast('تم حذف الرابط');
-            loadLinks();
+        // المنتجات
+        window.loadProducts = async function() {
+            const container = document.getElementById('products-list');
+            const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id);
+            if (!products || products.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">لا توجد منتجات</div>`; return; }
+            container.innerHTML = products.map(p => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center gap-4">
+                    ${p.image_url ? `<img src="${p.image_url}" class="w-16 h-16 rounded-xl object-cover shrink-0">` : ''}
+                    <div class="flex-grow"><h4 class="font-bold text-slate-200">${p.title}</h4><span class="text-xs text-indigo-400 font-bold">${p.price} ر.س</span></div>
+                    <button onclick="deleteItem('products', '${p.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         };
 
-        window.deleteProduct = async (id) => {
-            await supabase.from('products').delete().eq('id', id);
-            showToast('تم حذف المنتج');
+        document.getElementById('form-add-product').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const imageFile = document.getElementById('prod-image').files[0];
+            let imageUrl = '';
+            if (imageFile) {
+                const filePath = `products/${currentUser.id}-${Date.now()}.${imageFile.name.split('.').pop()}`;
+                await supabase.storage.from('uploads').upload(filePath, imageFile);
+                imageUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
+            }
+            await supabase.from('products').insert([{ user_id: currentUser.id, title: document.getElementById('prod-title').value, price: parseFloat(document.getElementById('prod-price').value), description: document.getElementById('prod-desc').value, image_url: imageUrl }]);
+            e.target.reset();
             loadProducts();
+            showToast("تمت إضافة المنتج!");
+        });
+
+        // الفروع
+        window.loadBranches = async function() {
+            const container = document.getElementById('branches-list');
+            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id);
+            if (!branches || branches.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">لا توجد فروع</div>`; return; }
+            container.innerHTML = branches.map(b => `
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                    <div><h4 class="font-bold text-slate-200">${b.branch_name || b.name} (${b.city})</h4></div>
+                    <button onclick="deleteItem('branches', '${b.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         };
 
-        window.deleteBranch = async (id) => {
-            await supabase.from('branches').delete().eq('id', id);
-            showToast('تم حذف الفرع');
+        document.getElementById('form-add-branch').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await supabase.from('branches').insert([{ 
+                owner_id: currentUser.id, 
+                branch_name: document.getElementById('branch-name').value, 
+                city: document.getElementById('branch-city').value,
+                phone: document.getElementById('branch-phone').value,
+                location_url: document.getElementById('branch-map-url').value 
+            }]);
+            e.target.reset();
             loadBranches();
+            showToast("تم حفظ الفرع!");
+        });
+
+        window.deleteItem = async (table, id) => {
+            if (confirm("هل أنت متأكد من الحذف؟")) {
+                await supabase.from(table).delete().eq('id', id);
+                if (table === 'links') loadLinks();
+                if (table === 'products') loadProducts();
+                if (table === 'branches') loadBranches();
+                showToast("تم الحذف بنجاح!");
+            }
         };
 
+        // الإعدادات
         document.getElementById('form-settings').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const display_name = document.getElementById('settings-display-name').value;
-            const username = document.getElementById('settings-username').value;
-            const bio = document.getElementById('settings-bio').value;
-            const contact_phone = document.getElementById('settings-contact-phone').value;
-            const contact_email = document.getElementById('settings-contact-email').value;
             const show_links = document.getElementById('chk-show-links').checked;
             const show_store = document.getElementById('chk-show-store').checked;
             const show_branches = document.getElementById('chk-show-branches').checked;
-            const show_contact = document.getElementById('chk-show-contact').checked;
 
-            const { error } = await supabase.from('users_profiles').upsert({
-                id: currentUser.id,
-                display_name, username, bio, contact_phone, contact_email,
-                show_links, show_store, show_branches, show_contact
-            });
+            const { error } = await supabase.from('users_profiles').update({
+                display_name: document.getElementById('settings-display-name').value,
+                username: document.getElementById('settings-username').value.trim().toLowerCase(),
+                bio: document.getElementById('settings-bio-ar').value,
+                bio_en: document.getElementById('settings-bio-en').value,
+                show_links, show_store, show_branches
+            }).eq('id', currentUser.id);
 
-            if (error) { showToast('حدث خطأ أثناء الحفظ', 'error'); return; }
-            showToast('تم حفظ الإعدادات بنجاح!');
-            checkAuth();
+            if (error) showToast("خطأ: " + error.message, "error");
+            else { showToast("تم حفظ الإعدادات!"); setTimeout(() => location.reload(), 1000); }
         });
 
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabase.auth.signOut();
-            window.location.href = 'login.html';
+            window.location.href = "login.html";
         });
 
         checkAuth();
