@@ -229,6 +229,118 @@
     });
 </script>
 
-    <!-- سنقوم بربط Firebase SDK هنا في الخطوة القادمة -->
+    <script type="module">
+    import { 
+        auth, 
+        db, 
+        googleProvider, 
+        signInWithPopup, 
+        signInWithEmailAndPassword, 
+        createUserWithEmailAndPassword, 
+        doc, 
+        setDoc, 
+        getDoc 
+    } from './assets/js/firebase-config.js';
+
+    const authForm = document.getElementById('auth-form');
+    const errorMsg = document.getElementById('error-msg');
+    const btnGoogle = document.getElementById('btn-google');
+
+    // تسجيل الدخول بواسطة Google
+    btnGoogle.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            // التأكد إذا كان المستخدم جديداً لإنشاء مستند له في Firestore
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+                const defaultUsername = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    username: defaultUsername,
+                    displayName: user.displayName || defaultUsername,
+                    bio: "مرحباً بك في صفحتي الشخصية!",
+                    plan: "free",
+                    createdAt: new Date()
+                });
+            }
+
+            // التوجيه للوحة التحكم
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            showError(error.message);
+        }
+    });
+
+    // التسجيل عبر البريد الإلكتروني وكلمة المرور
+    authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('input-email').value.trim();
+        const password = document.getElementById('input-password').value;
+        const usernameInput = document.getElementById('input-username');
+        
+        hideError();
+
+        try {
+            if (isSignUpMode) {
+                // إنشاء حساب جديد
+                const username = usernameInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (!username) {
+                    showError("يرجى إدخال اسم مستخدم صالح (حروف إنجليزية وأرقام فقط)");
+                    return;
+                }
+
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // حفظ بيانات المستخدم في Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    email: user.email,
+                    username: username,
+                    displayName: username,
+                    bio: "مرحباً بك في صفحتي الشخصية!",
+                    plan: "free",
+                    createdAt: new Date()
+                });
+
+            } else {
+                // تسجيل دخول بحساب حالي
+                await signInWithEmailAndPassword(auth, email, password);
+            }
+
+            // التوجيه للوحة التحكم
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            showError(getArabicError(error.code) || error.message);
+        }
+    });
+
+    function showError(msg) {
+        errorMsg.textContent = msg;
+        errorMsg.classList.remove('hidden');
+    }
+
+    function hideError() {
+        errorMsg.classList.add('hidden');
+    }
+
+    // ترجمة أخطاء فايربيز الشهيرة للعربية
+    function getArabicError(code) {
+        switch(code) {
+            case 'auth/email-already-in-use': return 'البريد الإلكتروني مستخدم بالفعل.';
+            case 'auth/invalid-email': return 'صيغة البريد الإلكتروني غير صحيحة.';
+            case 'auth/weak-password': return 'كلمة المرور ضعيفة (يجب أن تكون 6 خانات على الأقل).';
+            case 'auth/user-not-found': return 'المستخدم غير موجود.';
+            case 'auth/wrong-password': return 'كلمة المرور غير صحيحة.';
+            case 'auth/invalid-credential': return 'بيانات الدخول غير صحيحة.';
+            default: return null;
+        }
+    }
+</script>
 </body>
 </html>
