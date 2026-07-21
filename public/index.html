@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">رابطي | منصة الروابط والمتجر المصغر</title>
+    <title id="page-title">Keymerv | منصة الروابط والمتجر المصغر</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,8 +35,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <!-- الشعار -->
             <a href="#" class="flex items-center gap-2 text-2xl font-extrabold text-indigo-600">
-                <i data-lucide="link-2" class="w-8 h-8 text-indigo-600"></i>
-                <span>Linky<span class="text-pink-500">.</span></span>
+                <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center font-extrabold text-white text-xl shadow-md">
+                    K
+                </div>
+                <span>Keymerv<span class="text-pink-500">.</span></span>
             </a>
 
             <!-- الروابط للكمبيوتر -->
@@ -76,7 +78,7 @@
                     <span data-i18n="hero_title_2">في</span> <span class="bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent" data-i18n="hero_title_3">رابط واحد ذكي</span>
                 </h1>
                 <p class="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">
-                    أنشئ صفحة تجمع كل حساباتك، منتجاتك، ومولد رمز QR يعمل مباشرة من المتصفح بسرعة فائقة وبكل خصوصية وأمان.
+                    أنشئ صفحة تجمع كل حساباتك، منتجاتك، ومولد رمز QR يعمل مباشرة من المتصفح بسرعة فائقة وبكل خصوصية وأمان عبر Keymerv.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <a href="login.html?mode=signup" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base sm:text-lg px-8 py-3.5 rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2">
@@ -126,9 +128,9 @@
                         <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
                             <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold mb-2" data-i18n="feat_3_title">أمان عالي عبر Firebase</h3>
+                        <h3 class="text-xl font-bold mb-2" data-i18n="feat_3_title">أمان عالي وسرعة فادحة</h3>
                         <p class="text-slate-600 leading-relaxed text-sm" data-i18n="feat_3_desc">
-                            بياناتك وقواعد أمان Firestore محمية بنسبة 100% مع أداء فائق وسرعة استجابة عالية.
+                            بياناتك وقواعد الأمان محمية بنسبة 100% مع أداء فائق وسرعة استجابة عالية عبر قاعدة البيانات.
                         </p>
                     </div>
                 </div>
@@ -160,7 +162,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1" data-i18n="prev_label_url">الرابط الخاص بك (لتوليد الـ QR)</label>
-                                <input type="url" id="input-url" value="https://my-link.com/ahmed" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" dir="ltr">
+                                <input type="url" id="input-url" value="https://keymerv.com/ahmed" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" dir="ltr">
                             </div>
                         </div>
                     </div>
@@ -239,7 +241,7 @@
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p data-i18n="footer_copy">© 2026 منصة رابطي. جميع الحقوق محفوظة.</p>
+            <p data-i18n="footer_copy">© 2026 منصة Keymerv. جميع الحقوق محفوظة.</p>
             <div class="flex gap-6">
                 <a href="#" class="hover:text-white transition-colors" data-i18n="footer_privacy">الخصوصية</a>
                 <a href="#" class="hover:text-white transition-colors" data-i18n="footer_terms">الشروط والأحكام</a>
@@ -252,7 +254,7 @@
         // قاموس الترجمة
         const translations = {
             ar: {
-                page_title: "رابطي | منصة الروابط والمتجر المصغر",
+                page_title: "Keymerv | منصة الروابط والمتجر المصغر",
                 nav_features: "المميزات",
                 nav_preview: "تجربة حية",
                 nav_pricing: "الخطط والمجانية",
@@ -262,7 +264,7 @@
                 hero_title_1: "صفحتك الشخصية ومتجرك الخفيف",
                 hero_title_2: "في",
                 hero_title_3: "رابط واحد ذكي",
-                hero_desc: "أنشئ صفحة تجمع كل حساباتك، منتجاتك، ومولد رمز QR يعمل مباشرة من المتصفح بسرعة فائقة وبكل خصوصية وأمان.",
+                hero_desc: "أنشئ صفحة تجمع كل حساباتك، منتجاتك، ومولد رمز QR يعمل مباشرة من المتصفح بسرعة فائقة وبكل خصوصية وأمان عبر Keymerv.",
                 hero_cta_primary: "ابدأ مجاناً الآن",
                 hero_cta_secondary: "تجربة المولد التفاعلي",
                 feat_title: "كل ما تحتاجه للنمو أونلاين",
@@ -271,8 +273,8 @@
                 feat_1_desc: "يتم توليد رموز QR فورياً داخل جهازك بدون الحاجة للانتظار أو إرسال بياناتك لسيرفرات خارجية.",
                 feat_2_title: "متجر خفيف (Lite Store)",
                 feat_2_desc: "اعرض منتجاتك الرقمية أو خدماتك بسهولة واستقبل الطلبات فوراً مع تحكم كامل بالروابط.",
-                feat_3_title: "أمان عالي عبر Firebase",
-                feat_3_desc: "بياناتك وقواعد أمان Firestore محمية بنسبة 100% مع أداء فائق وسرعة استجابة عالية.",
+                feat_3_title: "أمان عالي وسرعة فادحة",
+                feat_3_desc: "بياناتك وقواعد الأمان محمية بنسبة 100% مع أداء فائق وسرعة استجابة عالية عبر قاعدة البيانات.",
                 prev_title: "جرب المنصة الآن مباشرة!",
                 prev_subtitle: "اكتب اسمك ورابطك واشهد كيف تتحدث معاينة الجوال كود الـ QR لحظياً.",
                 prev_controls: "مدخلات التجربة",
@@ -295,7 +297,7 @@
                 plan_pro_3: "إزالة شعار المنصة",
                 plan_pro_4: "تحليلات زيارات تفصيلية",
                 plan_pro_cta: "احصل على التجربة الكاملة",
-                footer_copy: "© 2026 منصة رابطي. جميع الحقوق محفوظة.",
+                footer_copy: "© 2026 منصة Keymerv. جميع الحقوق محفوظة.",
                 footer_privacy: "الخصوصية",
                 footer_terms: "الشروط والأحكام",
                 lang_toggle_btn: "English",
@@ -303,7 +305,7 @@
                 default_bio: "مطور برمجيات وصانع محتوى 🚀"
             },
             en: {
-                page_title: "Linky | Bio-Links & Lite Store Platform",
+                page_title: "Keymerv | Bio-Links & Lite Store Platform",
                 nav_features: "Features",
                 nav_preview: "Live Demo",
                 nav_pricing: "Pricing",
@@ -313,7 +315,7 @@
                 hero_title_1: "Your Bio-Link & Lite Store",
                 hero_title_2: "in",
                 hero_title_3: "One Smart Link",
-                hero_desc: "Build a single page for all your social links, products, and a fast browser-side QR code generator with total security.",
+                hero_desc: "Build a single page for all your social links, products, and a fast browser-side QR code generator with total security on Keymerv.",
                 hero_cta_primary: "Start Free Now",
                 hero_cta_secondary: "Try Interactive Demo",
                 feat_title: "Everything You Need to Grow",
@@ -322,8 +324,8 @@
                 feat_1_desc: "QR codes are generated instantly on your device without sending data to external servers.",
                 feat_2_title: "Lite Store",
                 feat_2_desc: "Showcase digital products or services effortlessly and receive orders directly.",
-                feat_3_title: "Firebase Security",
-                feat_3_desc: "Your data is secured with Firestore Rules, delivering lightning-fast performance.",
+                feat_3_title: "High Security & Performance",
+                feat_3_desc: "Your data is secured with high-grade database rules, delivering lightning-fast performance.",
                 prev_title: "Try it Live Right Now!",
                 prev_subtitle: "Type your name and link to see instant mobile & QR code preview.",
                 prev_controls: "Demo Inputs",
@@ -346,7 +348,7 @@
                 plan_pro_3: "Remove Platform Branding",
                 plan_pro_4: "Detailed Analytics",
                 plan_pro_cta: "Get Full Experience",
-                footer_copy: "© 2026 Linky Platform. All rights reserved.",
+                footer_copy: "© 2026 Keymerv Platform. All rights reserved.",
                 footer_privacy: "Privacy Policy",
                 footer_terms: "Terms of Service",
                 lang_toggle_btn: "عربي",
@@ -427,9 +429,9 @@
             const nameVal = nameInput.value.trim();
             previewName.textContent = nameVal || (currentLang === 'ar' ? 'اسمك هنا' : 'Your Name');
             previewBio.textContent = bioInput.value.trim() || (currentLang === 'ar' ? 'الوصف هنا' : 'Bio here');
-            previewAvatar.textContent = nameVal ? nameVal.charAt(0).toUpperCase() : 'A';
+            previewAvatar.textContent = nameVal ? nameVal.charAt(0).toUpperCase() : 'K';
 
-            const urlValue = urlInput.value.trim() || 'https://my-link.com';
+            const urlValue = urlInput.value.trim() || 'https://keymerv.com';
             qrcode.clear();
             qrcode.makeCode(urlValue);
         }
