@@ -185,7 +185,7 @@ window.toggleAccordion = (id) => {
 
 window.copyProfileUrl = () => {
     if (!currentProfile || !currentProfile.username) return;
-    const fullUrl = `${window.location.origin}/profile.html?u=${currentProfile.username}`;
+    const fullUrl = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
         showToast(currentLang === 'ar' ? 'تم نسخ رابط البروفايل بنجاح!' : 'Profile link copied successfully!');
     });
