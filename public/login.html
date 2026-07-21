@@ -210,7 +210,24 @@
         }
 
         applyLanguage(currentLang);
+
+        
     </script>
+
+    <script type="module">
+    import { auth, googleProvider, signInWithPopup } from './assets/js/firebase-config.js';
+
+    // مثال لتشغيل تسجيل الدخول بـ Google عند الضغط على الزر
+    document.getElementById('btn-google').addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            console.log("تم تسجيل الدخول بنجاح:", result.user);
+            window.location.href = "dashboard.html"; // التوجيه للوحة التحكم
+        } catch (error) {
+            console.error("حدث خطأ:", error.message);
+        }
+    });
+</script>
 
     <!-- سنقوم بربط Firebase SDK هنا في الخطوة القادمة -->
 </body>
