@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="profile-page-title">Keymerv | البروفايل</title>
+    <title id="profile-page-title">Keymerv | كيميرف</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -13,32 +13,38 @@
 
     <main class="w-full max-w-md mx-auto my-auto space-y-6">
 
+        <!-- شريط علوي: زر اللغة وزر المشاركة فقط -->
         <div class="flex justify-between items-center px-2">
-            <button onclick="toggleLanguage()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-indigo-400 font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-2">
+            <button onclick="toggleLanguage()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-indigo-400 font-bold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-2 shadow-sm">
                 <i class="fa-solid fa-globe"></i> <span id="lang-text">English</span>
             </button>
-            <button onclick="shareProfile()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5">
+
+            <button onclick="shareProfile()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 font-bold px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm">
                 <i class="fa-solid fa-share-nodes"></i> <span data-i18n="share">مشاركة</span>
             </button>
         </div>
 
-        <!-- بطاقة البروفايل (صورة بالأعلى، تحتها الاسم مباشرة بدون يوزرنيم، ثم البايو) -->
+        <!-- بطاقة البروفايل (صورة بالأعلى، تحتها الاسم مباشرة، ثم البايو) -->
         <div class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-3xl text-center shadow-2xl backdrop-blur-md space-y-3">
             <div id="profile-avatar" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-extrabold text-3xl flex items-center justify-center border-4 border-slate-700 shadow-xl overflow-hidden">K</div>
             <h1 id="profile-name" class="text-xl font-bold text-slate-100">جاري التحميل...</h1>
             <p id="profile-bio" class="text-xs text-slate-400 leading-relaxed px-2"></p>
         </div>
 
-        <!-- التصنيفات والروابط بترتيب 4 في كل صف (أيقونات شبكية) -->
+        <!-- التصنيفات والروابط بترتيب شبكي احترافي -->
         <div id="dynamic-sections-container" class="space-y-4"></div>
 
     </main>
 
-    <footer class="mt-8 text-center space-y-2">
-        <p id="watermark-text" class="text-[10px] text-slate-500 font-medium tracking-wider uppercase opacity-70">Created by Keymerv</p>
-        <a href="index.html" class="inline-flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
-            <div class="w-5 h-5 bg-indigo-600 rounded-md flex items-center justify-center text-[10px] font-black text-white">K</div>
-            <span class="text-xs text-slate-400 font-bold">Keymerv</span>
+    <!-- شعار Keymerv في المنتصف بالأسفل تحت الكلام والروابط (مع دعم استبدال الشعار لاحقاً) -->
+    <footer class="mt-8 mb-4 text-center">
+        <a href="index.html" class="inline-flex flex-col items-center gap-1.5 group transition-all opacity-80 hover:opacity-100">
+            <span id="footer-watermark-text" class="text-[10px] text-slate-500 font-medium tracking-wider uppercase">Created by</span>
+            <div class="flex items-center gap-2 bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 px-4 py-1.5 rounded-full transition-all shadow-md">
+                <!-- مكان شعار Keymerv (حرف K أو استبداله لاحقاً بصورة شعار) -->
+                <div id="footer-brand-logo" class="w-5 h-5 bg-indigo-600 rounded flex items-center justify-center text-[10px] font-black text-white shadow-sm overflow-hidden">K</div>
+                <span class="text-xs font-extrabold text-slate-200 group-hover:text-indigo-400 transition-colors">Keymerv</span>
+            </div>
         </a>
     </footer>
 
@@ -49,8 +55,8 @@
         let currentLang = 'ar';
 
         const translations = {
-            ar: { share: "مشاركة", watermark: "Created by Keymerv" },
-            en: { share: "Share", watermark: "Created by Keymerv" }
+            ar: { share: "مشاركة" },
+            en: { share: "Share" }
         };
 
         const platformIcons = {
@@ -67,13 +73,25 @@
             jaco: { icon: 'fa-solid fa-video', name: 'Jaco' },
             twitch: { icon: 'fa-brands fa-twitch', name: 'Twitch' },
             spotify: { icon: 'fa-brands fa-spotify', name: 'Spotify' },
+            applepodcasts: { icon: 'fa-solid fa-podcast', name: 'Podcasts' },
+            anghami: { icon: 'fa-solid fa-music', name: 'Anghami' },
+            soundcloud: { icon: 'fa-brands fa-soundcloud', name: 'SoundCloud' },
+            steam: { icon: 'fa-solid fa-gamepad', name: 'Steam' },
+            gaming: { icon: 'fa-brands fa-xbox', name: 'Gaming' },
             discord: { icon: 'fa-brands fa-discord', name: 'Discord' },
             github: { icon: 'fa-brands fa-github', name: 'GitHub' },
             reddit: { icon: 'fa-brands fa-reddit', name: 'Reddit' },
             pinterest: { icon: 'fa-brands fa-pinterest', name: 'Pinterest' },
             patreon: { icon: 'fa-brands fa-patreon', name: 'Patreon' },
-            substack: { icon: 'fa-solid fa-pen-nib', name: 'Substack' },
-            medium: { icon: 'fa-brands fa-medium', name: 'Medium' }
+            substack: { icon: 'fa-solid fa-newspaper', name: 'Substack' },
+            medium: { icon: 'fa-brands fa-medium', name: 'Medium' },
+            email: { icon: 'fa-solid fa-envelope', name: 'Email' },
+            website: { icon: 'fa-solid fa-globe', name: 'Website' },
+            storeplatform: { icon: 'fa-solid fa-store', name: 'Store' },
+            signal: { icon: 'fa-solid fa-comment-sms', name: 'Signal' },
+            goodreads: { icon: 'fa-solid fa-book', name: 'Goodreads' },
+            behance: { icon: 'fa-solid fa-briefcase', name: 'Behance' },
+            scholar: { icon: 'fa-solid fa-graduation-cap', name: 'Scholar' }
         };
 
         async function initProfile() {
@@ -94,6 +112,10 @@
                 avatarEl.textContent = (profile.display_name || profile.username)[0].toUpperCase();
             }
 
+            // ملاحظة مستقبلية لاستبدال حرف K بشعار رسمي:
+            // إذا أردت استبدال الأيقونة بشعار لاحقاً، يمكنك تعيين رابط صورة الشعار هنا هكذا:
+            // document.getElementById('footer-brand-logo').innerHTML = `<img src="path-to-logo.png" class="w-full h-full object-cover">`;
+
             updateBioAndUI();
             renderProfileSections();
         }
@@ -101,7 +123,6 @@
         window.updateBioAndUI = function() {
             if (!targetUser) return;
             document.getElementById('profile-bio').textContent = currentLang === 'en' ? (targetUser.bio_en || "") : (targetUser.bio || "");
-            document.getElementById('watermark-text').textContent = translations[currentLang].watermark;
             document.querySelector('[data-i18n="share"]').textContent = translations[currentLang].share;
         }
 
@@ -110,7 +131,7 @@
             const container = document.getElementById('dynamic-sections-container');
             container.innerHTML = "";
 
-            const orderList = [targetUser.order_1 || 'social', targetUser.order_2 || 'custom_links'];
+            const orderList = ['social', 'custom_links', 'store', 'branches'];
 
             for (const sectionKey of orderList) {
                 if (sectionKey === 'social' && (targetUser.show_links ?? true)) {
