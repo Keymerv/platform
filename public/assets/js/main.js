@@ -355,7 +355,7 @@ window.closeQrStyleModal = function() {
 
 function getQrTextToEncode() {
     const type = document.getElementById('qr-type-select').value;
-    let textToEncode = `${window.location.origin}/profile.html?u=${currentProfile.username || 'user'}`;
+    let textToEncode = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username || 'user'}`;
     if (type === 'custom') {
         textToEncode = document.getElementById('qr-custom-text').value || textToEncode;
     } else if (type === 'wifi') {
