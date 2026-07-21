@@ -291,7 +291,7 @@
                 links_desc: "أضف روابطك، تحكم بترتيب ظهورها، أو أخفها مؤقتاً",
                 add_link_heading: "إضافة رابط جديد",
                 add_link_btn: "إضافة الرابط",
-                loading: "جاري التحميل...",
+                loading: "لا توجد بيانات مضافة بعد",
                 store_title: "المتجر المصغر (Lite Store)",
                 store_desc: "اعرض منتجاتك وخدماتك للجمهور مع الصور",
                 add_prod_heading: "إضافة منتج جديد",
@@ -349,7 +349,7 @@
                 links_desc: "Add links, reorder them, or hide them temporarily",
                 add_link_heading: "Add New Link",
                 add_link_btn: "Add Link",
-                loading: "Loading...",
+                loading: "No data added yet",
                 store_title: "Lite Store",
                 store_desc: "Showcase your products and services with images",
                 add_prod_heading: "Add New Product",
@@ -449,66 +449,90 @@
         };
 
         async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { window.location.href = "login.html"; return; }
-            currentUser = session.user;
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) { 
+                    window.location.href = "login.html"; 
+                    return; 
+                }
+                currentUser = session.user;
 
-            const { data: profile } = await supabase.from('users_profiles').select('*').eq('id', currentUser.id).single();
-            currentProfile = profile;
-            
-            const displayName = profile?.display_name || currentUser.email.split('@')[0];
-            const username = profile?.username || '';
+                const { data: profile, error: profileError } = await supabase
+                    .from('users_profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .maybeSingle();
 
-            document.getElementById('user-display-name').textContent = displayName;
-            document.getElementById('user-handle').textContent = `@${username}`;
-            document.getElementById('user-avatar').textContent = displayName[0].toUpperCase();
-            document.getElementById('view-live-profile').href = `profile.html?u=${username}`;
-            document.getElementById('qr-profile-url').textContent = `${window.location.origin}/profile.html?u=${username}`;
+                if (profileError) {
+                    console.error("Profile fetch error:", profileError);
+                }
 
-            document.getElementById('settings-display-name').value = profile?.display_name || '';
-            document.getElementById('settings-username').value = username;
-            document.getElementById('settings-bio').value = profile?.bio || '';
-            
-            document.getElementById('chk-show-links').checked = profile?.show_links ?? true;
-            document.getElementById('chk-show-store').checked = profile?.show_store ?? true;
-            document.getElementById('chk-show-branches').checked = profile?.show_branches ?? true;
+                currentProfile = profile || { username: currentUser.email.split('@')[0], display_name: currentUser.email.split('@')[0] };
+                
+                const displayName = currentProfile.display_name || currentUser.email.split('@')[0];
+                const username = currentProfile.username || '';
 
-            const qrContainer = document.getElementById('qrcode-canvas');
-            qrContainer.innerHTML = "";
-            new QRCode(qrContainer, {
-                text: `${window.location.origin}/profile.html?u=${username}`,
-                width: 160,
-                height: 160,
-                colorDark: "#0f172a",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+                document.getElementById('user-display-name').textContent = displayName;
+                document.getElementById('user-handle').textContent = `@${username}`;
+                document.getElementById('user-avatar').textContent = displayName[0].toUpperCase();
+                document.getElementById('view-live-profile').href = `profile.html?u=${username}`;
+                document.getElementById('qr-profile-url').textContent = `${window.location.origin}/profile.html?u=${username}`;
 
-            loadCounts();
-            loadLinks();
-            loadProducts();
-            loadBranches();
-            loadTeam();
+                document.getElementById('settings-display-name').value = displayName;
+                document.getElementById('settings-username').value = username;
+                document.getElementById('settings-bio').value = currentProfile.bio || '';
+                
+                document.getElementById('chk-show-links').checked = currentProfile.show_links ?? true;
+                document.getElementById('chk-show-store').checked = currentProfile.show_store ?? true;
+                document.getElementById('chk-show-branches').checked = currentProfile.show_branches ?? true;
+
+                const qrContainer = document.getElementById('qrcode-canvas');
+                qrContainer.innerHTML = "";
+                new QRCode(qrContainer, {
+                    text: `${window.location.origin}/profile.html?u=${username}`,
+                    width: 160,
+                    height: 160,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                loadCounts();
+                loadLinks();
+                loadProducts();
+                loadBranches();
+                loadTeam();
+
+            } catch (err) {
+                console.error("Auth check failed:", err);
+            }
         }
 
         async function loadCounts() {
             if (!currentUser) return;
-            const [linksRes, prodsRes, branchesRes] = await Promise.all([
-                supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
-                supabase.from('branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id)
-            ]);
+            try {
+                const [linksRes, prodsRes, branchesRes] = await Promise.all([
+                    supabase.from('links').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
+                    supabase.from('products').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id),
+                    supabase.from('branches').select('*', { count: 'exact', head: true }).eq('owner_id', currentUser.id)
+                ]);
 
-            document.getElementById('stat-links-count').textContent = linksRes.count || 0;
-            document.getElementById('stat-products-count').textContent = prodsRes.count || 0;
-            document.getElementById('stat-branches-count').textContent = branchesRes.count || 0;
+                document.getElementById('stat-links-count').textContent = linksRes.count || 0;
+                document.getElementById('stat-products-count').textContent = prodsRes.count || 0;
+                document.getElementById('stat-branches-count').textContent = branchesRes.count || 0;
+            } catch (e) {
+                console.error("Count load error:", e);
+            }
         }
 
         window.loadLinks = async function() {
             const container = document.getElementById('links-list');
-            const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
+            const { data: links, error } = await supabase.from('links').select('*').eq('user_id', currentUser.id).order('sort_order', { ascending: true });
             loadCounts();
-            if (!links || links.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
+            if (error || !links || links.length === 0) { 
+                container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; 
+                return; 
+            }
             container.innerHTML = links.map((link) => `
                 <div class="bg-slate-900 border ${link.is_hidden ? 'border-dashed border-amber-500/50 opacity-60' : 'border-slate-800'} p-4 rounded-xl flex items-center justify-between gap-3">
                     <div class="overflow-hidden flex-grow">
@@ -564,9 +588,12 @@
 
         window.loadProducts = async function() {
             const container = document.getElementById('products-list');
-            const { data: products } = await supabase.from('products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+            const { data: products, error } = await supabase.from('products').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
             loadCounts();
-            if (!products || products.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">${translations[currentLang].loading}</div>`; return; }
+            if (error || !products || products.length === 0) { 
+                container.innerHTML = `<div class="text-center py-8 text-slate-500 col-span-2">${translations[currentLang].loading}</div>`; 
+                return; 
+            }
 
             container.innerHTML = products.map(prod => `
                 <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center gap-4">
@@ -607,9 +634,12 @@
 
         window.loadBranches = async function() {
             const container = document.getElementById('branches-list');
-            const { data: branches } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
+            const { data: branches, error } = await supabase.from('branches').select('*').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
             loadCounts();
-            if (!branches || branches.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
+            if (error || !branches || branches.length === 0) { 
+                container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; 
+                return; 
+            }
             container.innerHTML = branches.map(b => `
                 <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
                     <div>
@@ -641,7 +671,10 @@
         window.loadTeam = async function() {
             const container = document.getElementById('team-list');
             const { data: team } = await supabase.from('team_members').select('*').eq('owner_id', currentUser.id);
-            if (!team || team.length === 0) { container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; return; }
+            if (!team || team.length === 0) { 
+                container.innerHTML = `<div class="text-center py-8 text-slate-500">${translations[currentLang].loading}</div>`; 
+                return; 
+            }
             container.innerHTML = team.map(m => `
                 <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
                     <div><span class="font-bold text-sm" dir="ltr">${m.member_email}</span></div>
@@ -655,7 +688,7 @@
             await supabase.from('team_members').insert([{ 
                 owner_id: currentUser.id, 
                 member_email: document.getElementById('team-email').value, 
-                role: document.getElementById('team-role'].value 
+                role: document.getElementById('team-role').value 
             }]);
             e.target.reset();
             loadTeam();
