@@ -13,7 +13,6 @@
 
     <main class="w-full max-w-md mx-auto my-auto space-y-6">
 
-        <!-- الأزرار العلوية -->
         <div class="flex justify-between items-center px-2">
             <button onclick="toggleLanguage()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-indigo-400 font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-2">
                 <i class="fa-solid fa-globe"></i> <span id="lang-text">English</span>
@@ -23,7 +22,6 @@
             </button>
         </div>
 
-        <!-- بطاقة البروفايل -->
         <div class="bg-slate-800/80 border border-slate-700/80 p-6 rounded-3xl text-center shadow-2xl backdrop-blur-md">
             <div id="profile-avatar" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-extrabold text-3xl flex items-center justify-center border-4 border-slate-700 shadow-xl mb-4">K</div>
             <h1 id="profile-name" class="text-xl font-bold text-slate-100">جاري التحميل...</h1>
@@ -31,7 +29,10 @@
             <p id="profile-bio" class="text-xs text-slate-400 mt-3 leading-relaxed px-2"></p>
         </div>
 
-        <!-- أزرار التبويبات العلوية -->
+        <!-- أزرار السوشيال ميديا (حتى 20 منصة) بأيقوناتها الاحترافية -->
+        <div id="social-links-container" class="grid grid-cols-4 sm:grid-cols-5 gap-3"></div>
+
+        <!-- أزرار التبويبات -->
         <div id="tabs-navigation" class="grid gap-2 bg-slate-800/40 p-1.5 rounded-2xl border border-slate-700/60"></div>
 
         <!-- محتوى التبويبات -->
@@ -39,12 +40,11 @@
             <div id="content-links" class="profile-content space-y-3 hidden"></div>
             <div id="content-store" class="profile-content space-y-3 hidden"></div>
             <div id="content-branches" class="profile-content space-y-3 hidden"></div>
-            <div id="content-contact" class="profile-content space-y-3 hidden"></div>
         </div>
 
     </main>
 
-    <!-- العلامة المائية الثابتة في الأسفل -->
+    <!-- العلامة المائية الثابتة المترجمة -->
     <footer class="mt-8 text-center space-y-2">
         <p id="watermark-text" class="text-[10px] text-slate-500 font-medium tracking-wider uppercase opacity-70">انضم إلى منصة كيميرف</p>
         <a href="index.html" class="inline-flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
@@ -61,8 +61,8 @@
         let availableTabs = [];
 
         const translations = {
-            ar: { share: "مشاركة", watermark: "انضم إلى منصة كيميرف", links: "الروابط", store: "المتجر", branches: "الفروع", contact: "تواصل" },
-            en: { share: "Share", watermark: "Join Keymerv Platform", links: "Links", store: "Store", branches: "Branches", contact: "Contact" }
+            ar: { share: "مشاركة", watermark: "انضم إلى منصة كيميرف", links: "السوشيال والروابط", store: "المتجر", branches: "الفروع" },
+            en: { share: "Share", watermark: "Join Keymerv Platform", links: "Social & Links", store: "Store", branches: "Branches" }
         };
 
         async function initProfile() {
@@ -79,20 +79,51 @@
             document.getElementById('profile-avatar').textContent = (profile.display_name || profile.username)[0].toUpperCase();
             
             updateBioAndUI();
+            renderSocialIcons();
             loadProfileData();
         }
 
         window.updateBioAndUI = function() {
             if (!targetUser) return;
-            if (currentLang === 'en') {
-                document.getElementById('profile-bio').textContent = targetUser.bio_en || "";
-            } else {
-                document.getElementById('profile-bio').textContent = targetUser.bio || "";
-            }
+            document.getElementById('profile-bio').textContent = currentLang === 'en' ? (targetUser.bio_en || "") : (targetUser.bio || "");
+            document.getElementById('watermark-text').textContent = translations[currentLang].watermark;
+            document.querySelector('[data-i18n="share"]').textContent = translations[currentLang].share;
+        }
 
-            const t = translations[currentLang];
-            document.getElementById('watermark-text').textContent = t.watermark;
-            document.querySelector('[data-i18n="share"]').textContent = t.share;
+        function renderSocialIcons() {
+            const container = document.getElementById('social-links-container');
+            if (!targetUser) return;
+
+            const platforms = [
+                { key: 'x', icon: 'fa-brands fa-x-twitter' },
+                { key: 'instagram', icon: 'fa-brands fa-instagram', color: 'text-pink-400' },
+                { key: 'snapchat', icon: 'fa-brands fa-snapchat', color: 'text-yellow-400' },
+                { key: 'tiktok', icon: 'fa-brands fa-tiktok', color: 'text-cyan-400' },
+                { key: 'linkedin', icon: 'fa-brands fa-linkedin', color: 'text-blue-400' },
+                { key: 'spotify', icon: 'fa-brands fa-spotify', color: 'text-emerald-400' },
+                { key: 'jaco', icon: 'fa-solid fa-video', color: 'text-rose-400' },
+                { key: 'telegram', icon: 'fa-brands fa-telegram', color: 'text-sky-400' },
+                { key: 'youtube', icon: 'fa-brands fa-youtube', color: 'text-red-500' },
+                { key: 'facebook', icon: 'fa-brands fa-facebook', color: 'text-blue-500' },
+                { key: 'whatsapp', icon: 'fa-brands fa-whatsapp', color: 'text-emerald-500' },
+                { key: 'reddit', icon: 'fa-brands fa-reddit', color: 'text-orange-500' },
+                { key: 'discord', icon: 'fa-brands fa-discord', color: 'text-indigo-400' },
+                { key: 'pinterest', icon: 'fa-brands fa-pinterest', color: 'text-red-400' },
+                { key: 'twitch', icon: 'fa-brands fa-twitch', color: 'text-purple-400' },
+                { key: 'github', icon: 'fa-brands fa-github', color: 'text-slate-200' },
+                { key: 'patreon', icon: 'fa-brands fa-patreon', color: 'text-orange-400' },
+                { key: 'substack', icon: 'fa-solid fa-pen-nib', color: 'text-amber-500' },
+                { key: 'threads', icon: 'fa-brands fa-threads', color: 'text-slate-100' },
+                { key: 'medium', icon: 'fa-brands fa-medium', color: 'text-slate-200' }
+            ];
+
+            let html = '';
+            platforms.forEach(p => {
+                if (targetUser[p.key]) {
+                    html += `<a href="${targetUser[p.key]}" target="_blank" class="bg-slate-800 border border-slate-700 p-3 rounded-2xl flex items-center justify-center text-lg ${p.color || 'text-slate-200'} hover:bg-slate-700 transition-all shadow-md"><i class="${p.icon}"></i></a>`;
+                }
+            });
+            container.innerHTML = html;
         }
 
         async function loadProfileData() {
@@ -100,12 +131,13 @@
             availableTabs = [];
             const t = translations[currentLang];
 
-            // 1. الروابط
+            // 1. تبويب الروابط والسوشيال
             if (targetUser.show_links ?? true) {
                 const { data: links } = await supabase.from('links').select('*').eq('user_id', targetUser.id);
                 if (links) {
-                    availableTabs.push({ id: 'links', label: `${t.links} (${links.length})`, icon: 'fa-link' });
-                    document.getElementById('content-links').innerHTML = links.length ? links.map(l => `<a href="${l.url}" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 transition-all shadow-lg">${l.title}</a>`).join('') : '<div class="text-center text-xs text-slate-500 py-4">لا توجد روابط</div>';
+                    availableTabs.push({ id: 'links', label: t.links, icon: 'fa-share-nodes' });
+                    let linksHtml = links.map(l => `<a href="${l.url}" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 p-4 rounded-2xl text-center font-bold text-sm text-slate-200 shadow-lg">${l.title}</a>`).join('');
+                    document.getElementById('content-links').innerHTML = linksHtml || '<div class="text-center text-xs text-slate-500 py-4">لا توجد روابط إضافية</div>';
                 }
             }
 
@@ -117,10 +149,7 @@
                     document.getElementById('content-store').innerHTML = products.length ? products.map(p => `
                         <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex items-center gap-4 shadow-lg">
                             ${p.image_url ? `<img src="${p.image_url}" class="w-16 h-16 rounded-xl object-cover shrink-0">` : ''}
-                            <div class="flex-grow overflow-hidden">
-                                <h3 class="font-bold text-sm text-slate-100 truncate">${p.title}</h3>
-                                <p class="text-xs text-indigo-400 font-bold mt-1">${p.price} ر.س</p>
-                            </div>
+                            <div class="flex-grow overflow-hidden"><h3 class="font-bold text-sm text-slate-100 truncate">${p.title}</h3><p class="text-xs text-indigo-400 font-bold mt-1">${p.price} ر.س</p></div>
                         </div>`).join('') : '<div class="text-center text-xs text-slate-500 py-4">لا توجد منتجات</div>';
                 }
             }
@@ -132,22 +161,9 @@
                     availableTabs.push({ id: 'branches', label: `${t.branches} (${branches.length})`, icon: 'fa-code-branch' });
                     document.getElementById('content-branches').innerHTML = branches.length ? branches.map(b => `
                         <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex justify-between items-center shadow-lg">
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-100">${b.branch_name}</h3>
-                                <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot text-indigo-400"></i> ${b.city}</p>
-                            </div>
+                            <div><h3 class="font-bold text-sm text-slate-100">${b.branch_name || b.name}</h3><p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot text-indigo-400"></i> ${b.city}</p></div>
                         </div>`).join('') : '<div class="text-center text-xs text-slate-500 py-4">لا توجد فروع</div>';
                 }
-            }
-
-            // 4. التواصل
-            if (targetUser.show_contact ?? true) {
-                availableTabs.push({ id: 'contact', label: t.contact, icon: 'fa-headset' });
-                document.getElementById('content-contact').innerHTML = `
-                    <div class="space-y-3">
-                        ${targetUser.contact_phone ? `<a href="tel:${targetUser.contact_phone}" class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex items-center justify-between shadow-lg"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center"><i class="fa-solid fa-phone"></i></div><div><h4 class="font-bold text-sm text-slate-200">Phone</h4><p class="text-xs text-slate-400" dir="ltr">${targetUser.contact_phone}</p></div></div></a>` : ''}
-                        ${targetUser.contact_email ? `<a href="mailto:${targetUser.contact_email}" class="bg-slate-800 border border-slate-700 p-4 rounded-2xl flex items-center justify-between shadow-lg"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center"><i class="fa-solid fa-envelope"></i></div><div><h4 class="font-bold text-sm text-slate-200">Email</h4><p class="text-xs text-slate-400 truncate" dir="ltr">${targetUser.contact_email}</p></div></div></a>` : ''}
-                    </div>`;
             }
 
             renderTabsNav();
