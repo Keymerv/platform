@@ -185,7 +185,7 @@ window.toggleAccordion = (id) => {
 
 window.copyProfileUrl = () => {
     if (!currentProfile || !currentProfile.username) return;
-    const fullUrl = `${window.location.origin}/public/profile.html?u=${currentProfile.username}`;
+    const fullUrl = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
         showToast(currentLang === 'ar' ? 'تم نسخ رابط البروفايل بنجاح!' : 'Profile link copied successfully!');
     });
@@ -358,7 +358,7 @@ window.closeQrStyleModal = function() {
 
 function getQrTextToEncode() {
     const type = document.getElementById('qr-type-select').value;
-    let textToEncode = `${window.location.origin}/public/profile.html?u=${currentProfile.username || 'user'}`;
+    let textToEncode = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username || 'user'}`;
     if (type === 'custom') {
         textToEncode = document.getElementById('qr-custom-text').value || textToEncode;
     } else if (type === 'wifi') {
