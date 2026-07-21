@@ -1,25 +1,37 @@
-// استيراد الخدمات المطلوبة من Firebase CDN
+// استيراد الخدمات المطلوبة من Firebase SDK (الإصدار 10)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    signOut 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc, 
+    getDoc 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// بيانات مشروعك في فايربيز (استبدل القيم ببيانات مشروعك الحقيقية)
+// إعدادات فايربيز الخاصة بمشروعك
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDmSIU_cUj1OYVxN7gmp20CTdhpTrjxCsg",
+    authDomain: "keymerv-platform.firebaseapp.com",
+    projectId: "keymerv-platform",
+    storageBucket: "keymerv-platform.firebasestorage.app",
+    messagingSenderId: "63907615583",
+    appId: "1:63907615583:web:68609ae1a6b6a16bd09cea"
 };
 
-// تهيئة تطبيق Firebase
+// تهيئة تطبيقات فايربيز
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// تصدير الأدوات لاستخدامها في باقي الملفات
+// تصدير المتغيرات والأدوات للاستخدام المباشر في باقي الصفحات
 export { 
     auth, 
     db, 
