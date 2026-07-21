@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">رابطي | تسجيل الدخول</title>
+    <title id="page-title">Keymerv | تسجيل الدخول</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,8 +23,8 @@
     <!-- الهيدر البسيط -->
     <header class="p-4 sm:p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
         <a href="index.html" class="flex items-center gap-2 text-2xl font-extrabold text-indigo-600">
-            <i data-lucide="link-2" class="w-8 h-8 text-indigo-600"></i>
-            <span>Linky<span class="text-pink-500">.</span></span>
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-white text-lg">K</div>
+            <span>Keymerv<span class="text-pink-500">.</span></span>
         </a>
 
         <!-- زر تحويل اللغة -->
@@ -41,7 +41,7 @@
             <!-- عنوان الصفحة -->
             <div class="text-center mb-6">
                 <h1 id="auth-title" data-i18n="login_title" class="text-2xl font-bold text-slate-900 mb-2">مرحباً بعودتك!</h1>
-                <p id="auth-subtitle" data-i18n="login_subtitle" class="text-sm text-slate-500">سجل دخولك لإدارة روابطك ومتجرك</p>
+                <p id="auth-subtitle" data-i18n="login_subtitle" class="text-sm text-slate-500">سجل دخولك لإدارة روابطك ومتجرك على Keymerv</p>
             </div>
 
             <!-- زر الدخول عبر Google -->
@@ -65,11 +65,14 @@
             <!-- نموذج البريد وكلمة المرور -->
             <form id="auth-form" class="space-y-4">
                 <!-- اسم المستخدم (يظهر فقط في حالة إنشاء حساب جديد) -->
-                <div id="username-field" class="hidden">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="label_username">اسم المستخدم (رابطك الخاص)</label>
-                    <div class="relative">
-                        <input type="text" id="input-username" placeholder="username" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
-                    </div>
+                <div id="username-field" class="hidden space-y-1">
+                    <label class="block text-xs font-semibold text-slate-700" data-i18n="label_username">اسم المستخدم (رابطك الخاص)</label>
+                    <input type="text" id="input-username" placeholder="ahmed_ali" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
+                    
+                    <!-- شروط اسم المستخدم للمستخدم -->
+                    <p id="username-hint" class="text-[11px] text-slate-500 leading-tight">
+                        * يجب أن يتكون من حروف إنجليزية، أرقام، أو شرطات (_ -) وبدون مسافات (مثال: ahmed-2026).
+                    </p>
                 </div>
 
                 <div>
@@ -82,8 +85,11 @@
                     <input type="password" id="input-password" required placeholder="••••••••" dir="ltr" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
                 </div>
 
-                <!-- رسائل الخطأ -->
-                <div id="error-msg" class="hidden p-3 bg-red-50 text-red-600 rounded-xl text-xs"></div>
+                <!-- صندوق رسائل الخطأ الأنيق -->
+                <div id="error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+                    <span id="error-text"></span>
+                </div>
 
                 <!-- زر الإرسال -->
                 <button type="submit" id="btn-submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md shadow-indigo-100 transition-all text-sm mt-2">
@@ -103,10 +109,10 @@
     </main>
 
     <footer class="p-4 text-center text-xs text-slate-400">
-        © 2026 Linky Platform.
+        © 2026 Keymerv Platform.
     </footer>
 
-    <!-- سكريبت إدارة الواجهة واللغات -->
+    <!-- سكريبت إعداد اللغة والواجهة -->
     <script>
         let isSignUpMode = false;
         let currentLang = localStorage.getItem('app_lang') || 'ar';
@@ -114,7 +120,7 @@
         const translations = {
             ar: {
                 login_title: "مرحباً بعودتك!",
-                login_subtitle: "سجل دخولك لإدارة روابطك ومتجرك",
+                login_subtitle: "سجل دخولك لإدارة روابطك ومتجرك على Keymerv",
                 signup_title: "إنشاء حساب جديد",
                 signup_subtitle: "احصل على رابطك المخصص ومتجرك الخفيف مجاناً",
                 google_btn: "المتابعة باستخدام Google",
@@ -132,7 +138,7 @@
             },
             en: {
                 login_title: "Welcome Back!",
-                login_subtitle: "Sign in to manage your links and store",
+                login_subtitle: "Sign in to manage your links and store on Keymerv",
                 signup_title: "Create New Account",
                 signup_subtitle: "Get your custom bio-link and lite store for free",
                 google_btn: "Continue with Google",
@@ -186,6 +192,8 @@
             const togglePrompt = document.getElementById('toggle-prompt');
             const toggleBtn = document.getElementById('toggle-mode-btn');
 
+            hideError();
+
             if (isSignUpMode) {
                 usernameField.classList.remove('hidden');
                 authTitle.textContent = t.signup_title;
@@ -203,7 +211,6 @@
             }
         }
 
-        // قراءة الرابط للتعرف إذا كان الزائر جاء بطلب تسجيل حساب مباشر (?mode=signup)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('mode') === 'signup') {
             isSignUpMode = true;
@@ -211,211 +218,125 @@
 
         applyLanguage(currentLang);
 
-        
+        function showError(msg) {
+            const errorMsg = document.getElementById('error-msg');
+            const errorText = document.getElementById('error-text');
+            if (errorMsg && errorText) {
+                errorText.textContent = msg;
+                errorMsg.classList.remove('hidden');
+                lucide.createIcons();
+            }
+        }
+
+        function hideError() {
+            const errorMsg = document.getElementById('error-msg');
+            if (errorMsg) errorMsg.classList.add('hidden');
+        }
     </script>
 
+    <!-- سكريبت الربط الموحد والوحيد مع Supabase -->
     <script type="module">
-    import { auth, googleProvider, signInWithPopup } from './assets/js/firebase-config.js';
+        import { supabase } from './assets/js/supabase-config.js';
 
-    // مثال لتشغيل تسجيل الدخول بـ Google عند الضغط على الزر
-    document.getElementById('btn-google').addEventListener('click', async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            console.log("تم تسجيل الدخول بنجاح:", result.user);
-            window.location.href = "dashboard.html"; // التوجيه للوحة التحكم
-        } catch (error) {
-            console.error("حدث خطأ:", error.message);
-        }
-    });
-</script>
+        const authForm = document.getElementById('auth-form');
+        const btnGoogle = document.getElementById('btn-google');
+        const btnSubmit = document.getElementById('btn-submit');
+        const submitText = document.getElementById('submit-text');
 
-    <script type="module">
-    import { 
-        auth, 
-        db, 
-        googleProvider, 
-        signInWithPopup, 
-        signInWithEmailAndPassword, 
-        createUserWithEmailAndPassword, 
-        doc, 
-        setDoc, 
-        getDoc 
-    } from './assets/js/firebase-config.js';
+        // تسجيل الدخول أو إنشاء الحساب
+        if (authForm) {
+            authForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('input-email').value.trim();
+                const password = document.getElementById('input-password').value;
+                const usernameInput = document.getElementById('input-username');
 
-    const authForm = document.getElementById('auth-form');
-    const errorMsg = document.getElementById('error-msg');
-    const btnGoogle = document.getElementById('btn-google');
+                hideError();
 
-    // تسجيل الدخول بواسطة Google
-    btnGoogle.addEventListener('click', async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-
-            // التأكد إذا كان المستخدم جديداً لإنشاء مستند له في Firestore
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-
-            if (!userSnap.exists()) {
-                const defaultUsername = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-                await setDoc(userRef, {
-                    uid: user.uid,
-                    email: user.email,
-                    username: defaultUsername,
-                    displayName: user.displayName || defaultUsername,
-                    bio: "مرحباً بك في صفحتي الشخصية!",
-                    plan: "free",
-                    createdAt: new Date()
-                });
-            }
-
-            // التوجيه للوحة التحكم
-            window.location.href = "dashboard.html";
-        } catch (error) {
-            showError(error.message);
-        }
-    });
-
-    // التسجيل عبر البريد الإلكتروني وكلمة المرور
-    authForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('input-email').value.trim();
-        const password = document.getElementById('input-password').value;
-        const usernameInput = document.getElementById('input-username');
-        
-        hideError();
-
-        try {
-            if (isSignUpMode) {
-                // إنشاء حساب جديد
-                const username = usernameInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-                if (!username) {
-                    showError("يرجى إدخال اسم مستخدم صالح (حروف إنجليزية وأرقام فقط)");
-                    return;
+                if (password.length < 6) {
+                    return showError("كلمة المرور ضعيفة جداً، يرجى كتابة 6 خانات على الأقل.");
                 }
 
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // حفظ بيانات المستخدم في Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    email: user.email,
-                    username: username,
-                    displayName: username,
-                    bio: "مرحباً بك في صفحتي الشخصية!",
-                    plan: "free",
-                    createdAt: new Date()
-                });
-
-            } else {
-                // تسجيل دخول بحساب حالي
-                await signInWithEmailAndPassword(auth, email, password);
-            }
-
-            // التوجيه للوحة التحكم
-            window.location.href = "dashboard.html";
-        } catch (error) {
-            showError(getArabicError(error.code) || error.message);
-        }
-    });
-
-    function showError(msg) {
-        errorMsg.textContent = msg;
-        errorMsg.classList.remove('hidden');
-    }
-
-    function hideError() {
-        errorMsg.classList.add('hidden');
-    }
-
-    // ترجمة أخطاء فايربيز الشهيرة للعربية
-    function getArabicError(code) {
-        switch(code) {
-            case 'auth/email-already-in-use': return 'البريد الإلكتروني مستخدم بالفعل.';
-            case 'auth/invalid-email': return 'صيغة البريد الإلكتروني غير صحيحة.';
-            case 'auth/weak-password': return 'كلمة المرور ضعيفة (يجب أن تكون 6 خانات على الأقل).';
-            case 'auth/user-not-found': return 'المستخدم غير موجود.';
-            case 'auth/wrong-password': return 'كلمة المرور غير صحيحة.';
-            case 'auth/invalid-credential': return 'بيانات الدخول غير صحيحة.';
-            default: return null;
-        }
-    }
-</script>
-    <script type="module">
-    import { supabase } from './assets/js/supabase-config.js';
-
-    const authForm = document.getElementById('auth-form');
-    const errorMsg = document.getElementById('error-msg');
-    const btnGoogle = document.getElementById('btn-google');
-
-    // متغير لمعرفة ما إذا كنا في وضع إنشاء حساب أو تسجيل دخول
-    let isSignUpMode = false; 
-
-    if (authForm) {
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('input-email').value.trim();
-            const password = document.getElementById('input-password').value;
-            const usernameInput = document.getElementById('input-username');
-
-            hideError();
-
-            if (isSignUpMode) {
-                const username = usernameInput ? usernameInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
-                if (!username) return showError("يرجى إدخال اسم مستخدم صالح (حروف إنجليزية وأرقام)");
-
-                // 1. إنشاء الحساب في Supabase Auth
-                const { data, error } = await supabase.auth.signUp({ email, password });
-                if (error) return showError(error.message);
-
-                // 2. إنشاء بروفايل للمستخدم في جدول users_profiles
-                if (data.user) {
-                    const { error: profileError } = await supabase
-                        .from('users_profiles')
-                        .insert([{
-                            id: data.user.id,
-                            username: username,
-                            display_name: username,
-                            bio: "مرحباً بك في صفحتي الشخصية!"
-                        }]);
+                if (isSignUpMode) {
+                    const rawUsername = usernameInput ? usernameInput.value.trim().toLowerCase() : '';
                     
-                    if (profileError) console.error("Profile creation error:", profileError);
+                    // التحقق من صحة اسم المستخدم
+                    const validUsernameRegex = /^[a-z0-9_-]+$/;
+                    if (!rawUsername || !validUsernameRegex.test(rawUsername)) {
+                        return showError("اسم المستخدم غير صالح. استخدم فقط الحروف الإنجليزية والأرقام والشرطات (_ -) بدون مسافات.");
+                    }
+
+                    if (rawUsername.length < 3) {
+                        return showError("اسم المستخدم قصيرا جداً، يجب أن يكون 3 أحرف على الأقل.");
+                    }
+
+                    btnSubmit.disabled = true;
+                    submitText.textContent = "جاري إنشاء الحساب...";
+
+                    // 1. إنشاء الحساب
+                    const { data, error } = await supabase.auth.signUp({ email, password });
+                    
+                    if (error) {
+                        btnSubmit.disabled = false;
+                        submitText.textContent = translations[currentLang].signup_submit;
+                        return showError(getArabicError(error.message));
+                    }
+
+                    // 2. إنشاء بروفايل في قاعدة البيانات
+                    if (data.user) {
+                        const { error: profileError } = await supabase
+                            .from('users_profiles')
+                            .insert([{
+                                id: data.user.id,
+                                username: rawUsername,
+                                display_name: rawUsername,
+                                bio: "مرحباً بك في صفحتي الشخصية على Keymerv!"
+                            }]);
+
+                        if (profileError) {
+                            console.error("Profile Error:", profileError);
+                        }
+                    }
+
+                    window.location.href = "dashboard.html";
+
+                } else {
+                    btnSubmit.disabled = true;
+                    submitText.textContent = "جاري تسجيل الدخول...";
+
+                    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                    
+                    if (error) {
+                        btnSubmit.disabled = false;
+                        submitText.textContent = translations[currentLang].login_submit;
+                        return showError("بيانات الدخول غير صحيحة، يرجى التأكد من البريد وكلمة المرور.");
+                    }
+
+                    window.location.href = "dashboard.html";
                 }
-                
-                alert("تم إنشاء الحساب بنجاح!");
-                window.location.href = "dashboard.html";
-
-            } else {
-                // تسجيل الدخول لحساب حالي
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) return showError("بيانات الدخول غير صحيحة أو الحساب غير موجود");
-                
-                window.location.href = "dashboard.html";
-            }
-        });
-    }
-
-    // تسجيل الدخول عبر Google
-    if (btnGoogle) {
-        btnGoogle.addEventListener('click', async () => {
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
             });
-            if (error) showError(error.message);
-        });
-    }
-
-    function showError(msg) {
-        if (errorMsg) {
-            errorMsg.textContent = msg;
-            errorMsg.classList.remove('hidden');
         }
-    }
 
-    function hideError() {
-        if (errorMsg) errorMsg.classList.add('hidden');
-    }
-</script>
+        // تسجيل الدخول عبر Google
+        if (btnGoogle) {
+            btnGoogle.addEventListener('click', async () => {
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin + '/public/dashboard.html'
+                    }
+                });
+                if (error) showError(error.message);
+            });
+        }
+
+        // ترجمة رسائل أخطاء Supabase
+        function getArabicError(msg) {
+            if (msg.includes("User already registered")) return "هذا البريد الإلكتروني مسجل بالفعل، اختر تسجيل الدخول.";
+            if (msg.includes("Password should be")) return "كلمة المرور يجب أن تكون من 6 خانات على الأقل.";
+            if (msg.includes("Unable to validate email")) return "صيغة البريد الإلكتروني غير صحيحة.";
+            return msg;
+        }
+    </script>
 </body>
 </html>
