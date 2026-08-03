@@ -53,7 +53,8 @@ const translations = {
         wifi_pass_lbl: "كلمة المرور",
         wifi_enc_lbl: "نوع التشفير",
         btn_gen_qr_popup: "توليد واختيار تصميم الكود",
-        settings_title: "إعدادات الحساب والصفحة",
+        settings_title: "الإعدادات",
+        settings_main_title: "إعدادات الحساب والصفحة",
         settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك",
         sec_identity: "معلومات الحساب والهوية",
         display_name_lbl: "الاسم الظاهري",
@@ -73,8 +74,7 @@ const translations = {
         style_luxury: "فخم بإطار",
         style_glitch: "عصري مدوش",
         dl_png_btn: "تحميل كصورة (PNG)",
-        dl_pdf_btn: "تحميل كملف PDF",
-        nav_settings: "الإعدادات"
+        dl_pdf_btn: "تحميل كملف PDF"
     },
     en: {
         page_title: "Keymerv | Dashboard",
@@ -123,7 +123,8 @@ const translations = {
         wifi_pass_lbl: "Password",
         wifi_enc_lbl: "Encryption Type",
         btn_gen_qr_popup: "Generate & Choose QR Design",
-        settings_title: "Account & Page Settings",
+        settings_title: "Settings",
+        settings_main_title: "Account & Page Settings",
         settings_desc: "Manage your identity and visibility preferences",
         sec_identity: "Identity & Account Info",
         display_name_lbl: "Display Name",
@@ -143,8 +144,7 @@ const translations = {
         style_luxury: "Luxury Frame",
         style_glitch: "Modern Glitch",
         dl_png_btn: "PNG Image",
-        dl_pdf_btn: "PDF File",
-        nav_settings: "Settings"
+        dl_pdf_btn: "PDF File"
     }
 };
 
@@ -186,11 +186,9 @@ function showToast(msg, type = 'success') {
     setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
 }
 
-// التحكم الشامل بالتبويبات وإزالة التعليق البرمجي للأزرار
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
     
-    // إزالة التحديد والـ Active تماماً من كافة الأزرار والروابط في القائمة الجانبية
     document.querySelectorAll('.tab-btn, .sub-tab-btn').forEach(btn => {
         btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
         btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
@@ -204,7 +202,6 @@ window.switchTab = (tabId) => {
         btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
     }
 
-    // إدارة القائمة المنسدلة (تغلق تلقائياً إذا انتقلت لصفحة أخرى خارجها مثل الفروع والـ QR والإعدادات)
     const profileDropdown = document.getElementById('profile-dropdown-menu');
     const profileArrow = document.getElementById('icon-profile-dropdown');
     const profileTabs = ['links', 'settings'];
@@ -274,7 +271,6 @@ async function checkAuth() {
         settingsUser.value = currentProfile.username || '';
         settingsUser.disabled = true;
     }
-    // سحب بيانات البايو بدقة من الأعمدة الصحيحة
     if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
     if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
 
@@ -289,7 +285,6 @@ async function checkAuth() {
     }
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
 
-    // تعبئة حقول الـ 30 منصة تلقائياً من قاعدة البيانات
     const socInputs = document.querySelectorAll('.soc-input');
     socInputs.forEach(input => {
         const key = input.id.replace('soc-', '');
