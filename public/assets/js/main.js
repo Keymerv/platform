@@ -36,10 +36,10 @@ const translations = {
         branches_title: "إدارة الفروع",
         branches_desc: "أضف فروع نشاطك التجاري أو مقرات عملك",
         add_branch_heading: "إضافة فرع جديد",
-        branch_name_ph: "اسم الفرع (الفرع الرئيسي)",
-        branch_city_ph: "المدينة (الرياض، جدة...)",
-        branch_phone_ph: "رقم الهاتف",
-        branch_map_ph: "رابط خرائط جوجل (Google Maps)",
+        branch_name_ph: "اسم الفرع (مثال: فرع التحلية)",
+        branch_city_ph: "المدينة (مثال: الرياض)",
+        branch_phone_ph: "رقم الهاتف (اختياري)",
+        branch_map_ph: "(اختياري) رابط Google Maps الموقع على الخريطة",
         btn_save_branch: "حفظ الفرع",
         qrcode_title: "مولد رمز الـ QR الذكي",
         qrcode_desc: "أنشئ رمز استجابة سريع مع إطارات وتصاميم مميزة وبصمة Keymerv",
@@ -73,7 +73,8 @@ const translations = {
         style_luxury: "فخم بإطار",
         style_glitch: "عصري مدوش",
         dl_png_btn: "تحميل كصورة (PNG)",
-        dl_pdf_btn: "تحميل كملف PDF"
+        dl_pdf_btn: "تحميل كملف PDF",
+        nav_settings: "الإعدادات"
     },
     en: {
         page_title: "Keymerv | Dashboard",
@@ -105,10 +106,10 @@ const translations = {
         branches_title: "Manage Branches",
         branches_desc: "Add your business branches or office locations",
         add_branch_heading: "Add New Branch",
-        branch_name_ph: "Branch Name (Main Branch)",
-        branch_city_ph: "City (Riyadh, Jeddah...)",
-        branch_phone_ph: "Phone Number",
-        branch_map_ph: "Google Maps URL",
+        branch_name_ph: "Branch Name (e.g. Tahlia Branch)",
+        branch_city_ph: "City (e.g. Riyadh)",
+        branch_phone_ph: "Phone Number (Optional)",
+        branch_map_ph: "(Optional) Google Maps URL",
         btn_save_branch: "Save Branch",
         qrcode_title: "Smart QR Code Generator",
         qrcode_desc: "Generate custom QR codes with frames and Keymerv watermark",
@@ -142,7 +143,8 @@ const translations = {
         style_luxury: "Luxury Frame",
         style_glitch: "Modern Glitch",
         dl_png_btn: "PNG Image",
-        dl_pdf_btn: "PDF File"
+        dl_pdf_btn: "PDF File",
+        nav_settings: "Settings"
     }
 };
 
@@ -184,11 +186,11 @@ function showToast(msg, type = 'success') {
     setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
 }
 
-// تحكم صارم بالتبويبات وإغلاق أو فتح القائمة المنسدلة حسب الصفحة النشطة
+// التحكم الشامل بالتبويبات وإزالة التعليق البرمجي للأزرار
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
     
-    // إزالة التحديد عن كافة الأزرار والروابط في القائمة الجانبية
+    // إزالة التحديد والـ Active تماماً من كافة الأزرار والروابط في القائمة الجانبية
     document.querySelectorAll('.tab-btn, .sub-tab-btn').forEach(btn => {
         btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
         btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
@@ -202,7 +204,7 @@ window.switchTab = (tabId) => {
         btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
     }
 
-    // إدارة القائمة المنسدلة للصفحة الشخصية (تغلق تلقائياً إذا انتقلت لصفحة أخرى خارجها)
+    // إدارة القائمة المنسدلة (تغلق تلقائياً إذا انتقلت لصفحة أخرى خارجها مثل الفروع والـ QR والإعدادات)
     const profileDropdown = document.getElementById('profile-dropdown-menu');
     const profileArrow = document.getElementById('icon-profile-dropdown');
     const profileTabs = ['links', 'settings'];
@@ -272,6 +274,7 @@ async function checkAuth() {
         settingsUser.value = currentProfile.username || '';
         settingsUser.disabled = true;
     }
+    // سحب بيانات البايو بدقة من الأعمدة الصحيحة
     if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
     if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
 
