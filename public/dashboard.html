@@ -16,11 +16,13 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row relative">
 
+    <!-- إشعار التنبيه (Toast) -->
     <div id="toast" class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
         <div id="toast-icon" class="text-indigo-400 text-lg"></div>
         <span id="toast-message" class="text-xs font-bold"></span>
     </div>
 
+    <!-- القائمة الجانبية (Sidebar) -->
     <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-l border-slate-800 p-5 flex flex-col justify-between shrink-0">
         <div>
             <div class="flex items-center justify-between mb-6">
@@ -50,7 +52,6 @@
                         <span class="flex items-center gap-3"><i class="fa-solid fa-user-pen w-5"></i> <span data-i18n="tab_bio">الصفحة الشخصية</span></span>
                         <i id="bio-chevron-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
                     </button>
-                    <!-- القائمة المنسدلة مفتوحة افتراضياً أو تبدأ بالروابط -->
                     <div id="bio-dropdown-menu" class="mt-1 space-y-1 pr-4 border-r-2 border-indigo-500/30 mr-2">
                         <button onclick="switchTab('links')" id="tab-sub-btn-links" class="w-full text-right flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">
                             <i class="fa-solid fa-link text-white w-4"></i> <span data-i18n="subtab_links">تعديل الروابط</span>
@@ -76,26 +77,27 @@
             </nav>
         </div>
         <div class="mt-8 pt-4 border-t border-slate-800">
-            <button id="logout-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm">
+            <button id="logout-btn" onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 font-bold text-sm">
                 <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">تسجيل الخروج</span>
             </button>
         </div>
     </aside>
 
+    <!-- المحتوى الرئيسي -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- قسم الروابط (يظهر افتراضياً) -->
+        <!-- قسم الروابط -->
         <section id="sec-links" class="tab-content space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="links_title">إدارة الروابط والمنصات</h2>
-                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية</p>
+                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك ومنصاتك لتظهر بأيقوناتها الاحترافية</p>
             </div>
 
-            <form id="form-add-link" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
+            <form id="form-add-link" onsubmit="addCustomLink(event)" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
                 <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base"><i class="fa-solid fa-link text-indigo-400"></i> <span data-i18n="add_link_heading">إضافة رابط عام إضافي</span></h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
-                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
+                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
                 </div>
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_add_link">إضافة الرابط العام</button>
             </form>
@@ -105,14 +107,14 @@
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-social')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-share-nodes text-indigo-400"></i> <span data-i18n="cat_social">سوشيال ميديا أساسية</span></span>
-                        <i id="icon-acc-social" class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+                        <i id="icon-acc-social" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
                     </button>
                     <div id="acc-social" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div><label class="block text-xs text-slate-400 mb-1">X (تويتر)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
-                        <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">X (تويتر)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                     </div>
                 </div>
                 <button onclick="saveSocialAccounts()" type="button" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_save_social">حفظ جميع المنصات</button>
@@ -126,7 +128,7 @@
                 <p class="text-slate-400 text-sm" data-i18n="bio_config_desc">تحكم بالنبذة الترحيبية وإظهار أو إخفاء التصنيفات في صفحتك العامة</p>
             </div>
 
-            <form id="form-bio-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-lg">
+            <form id="form-bio-settings" onsubmit="saveBioSettings(event)" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-lg">
                 <div class="space-y-4">
                     <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-address-card text-indigo-400"></i> <span data-i18n="sec_bio">النبذة الترحيبية (Bio) - إجباري</span></h3>
                     <div>
@@ -146,9 +148,9 @@
                             <input type="checkbox" id="chk-show-links" class="w-4 h-4 accent-indigo-600 rounded bg-slate-900 border-slate-700">
                             <span class="text-sm font-medium text-slate-200" data-i18n="chk_links">تبويب الروابط</span>
                         </label>
-                        <label class="flex items-center gap-3 cursor-pointer">
+                        <label class="flex items-center gap-3 cursor-pointer opacity-60">
                             <input type="checkbox" id="chk-show-store" disabled class="w-4 h-4 accent-indigo-600 rounded bg-slate-900 border-slate-700">
-                            <span class="text-sm font-medium text-slate-500" data-i18n="chk_store">تبويب المتجر (قريباً)</span>
+                            <span class="text-sm font-medium text-slate-400" data-i18n="chk_store">تبويب المتجر (قريباً)</span>
                         </label>
                         <label class="flex items-center gap-3 cursor-pointer">
                             <input type="checkbox" id="chk-show-branches" class="w-4 h-4 accent-indigo-600 rounded bg-slate-900 border-slate-700">
@@ -161,7 +163,7 @@
             </form>
         </section>
 
-        <!-- باقي الأقسام (المتجر، الفروع، QR، الإعدادات) -->
+        <!-- قسم المتجر الخفيف -->
         <section id="sec-store" class="tab-content hidden space-y-6">
             <div>
                 <div class="flex items-center gap-3 mb-1">
@@ -178,24 +180,26 @@
             </div>
         </section>
 
+        <!-- قسم الفروع -->
         <section id="sec-branches" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2>
                 <p class="text-slate-400 text-sm" data-i18n="branches_desc">أضف فروع نشاطك التجاري أو مقرات عملك</p>
             </div>
-            <form id="form-add-branch" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
+            <form id="form-add-branch" onsubmit="addBranch(event)" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
                 <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base"><i class="fa-solid fa-code-branch text-indigo-400"></i> <span data-i18n="add_branch_heading">إضافة فرع جديد</span></h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="branch-name" required placeholder="اسم الفرع (مثال: فرع التحلية)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
-                    <input type="text" id="branch-city" required placeholder="المدينة (مثال: الرياض)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
-                    <input type="text" id="branch-phone" placeholder="رقم الهاتف (اختياري)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
-                    <input type="url" id="branch-map-url" placeholder="رابط الموقع على الخريطة Google Maps (اختياري)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                    <input type="text" id="branch-name" required placeholder="اسم الفرع (مثال: فرع التحلية)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
+                    <input type="text" id="branch-city" required placeholder="المدينة (مثال: الرياض)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
+                    <input type="text" id="branch-phone" placeholder="رقم الهاتف (اختياري)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
+                    <input type="url" id="branch-map-url" placeholder="رابط الموقع على الخريطة Google Maps (اختياري)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
                 </div>
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_save_branch">حفظ الفرع</button>
             </form>
             <div id="branches-list" class="space-y-3"></div>
         </section>
 
+        <!-- قسم مولد QR -->
         <section id="sec-qrcode" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="qrcode_title">مولد رمز الـ QR الذكي</h2>
@@ -205,7 +209,7 @@
                 <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-qrcode text-indigo-400"></i> <span data-i18n="qr_settings_heading">تخصيص محتوى الـ QR</span></h3>
                 <div class="space-y-2">
                     <label class="block text-xs text-slate-400" data-i18n="qr_type_lbl">نوع المحتوى</label>
-                    <select id="qr-type-select" onchange="toggleQrInputs()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                    <select id="qr-type-select" onchange="toggleQrInputs()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
                         <option value="profile" data-i18n="qr_opt_profile">رابط صفحتي الشخصية العامة</option>
                         <option value="custom" data-i18n="qr_opt_custom">رابط مخصص آخر</option>
                         <option value="wifi" data-i18n="qr_opt_wifi">الاتصال بشبكة واي فاي (Wi-Fi)</option>
@@ -213,22 +217,22 @@
                 </div>
                 <div id="qr-input-custom-wrap" class="hidden space-y-2">
                     <label class="block text-xs text-slate-400" data-i18n="qr_custom_lbl">أدخل الرابط أو النص</label>
-                    <input type="text" id="qr-custom-text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                    <input type="text" id="qr-custom-text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
                 </div>
                 <div id="qr-input-wifi-wrap" class="hidden space-y-4 bg-slate-950/40 p-4 rounded-xl border border-slate-800">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="wifi_ssid_lbl">اسم شبكة الواي فاي (SSID)</label>
-                            <input type="text" id="wifi-ssid" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                            <input type="text" id="wifi-ssid" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="wifi_pass_lbl">كلمة المرور</label>
-                            <input type="text" id="wifi-pass" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100" dir="ltr">
+                            <input type="text" id="wifi-pass" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-400 mb-1" data-i18n="wifi_enc_lbl">نوع التشفير</label>
-                        <select id="wifi-enc" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                        <select id="wifi-enc" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
                             <option value="WPA">WPA/WPA2</option>
                             <option value="WEP">WEP</option>
                             <option value="nopass">بدون كلمة مرور (Open)</option>
@@ -241,18 +245,19 @@
             </div>
         </section>
 
+        <!-- قسم الإعدادات -->
         <section id="sec-settings" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والهوية</h2>
                 <p class="text-slate-400 text-sm" data-i18n="settings_desc">إدارة بيانات حسابك الشخصي ومعلومات تسجيل الدخول</p>
             </div>
-            <form id="form-settings" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-lg">
+            <form id="form-settings" onsubmit="saveAccountSettings(event)" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-lg">
                 <div class="space-y-4">
                     <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-id-badge text-indigo-400"></i> <span data-i18n="sec_identity">معلومات الحساب الأساسية</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_lbl">الاسم الظاهري</label>
-                            <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                            <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-400 mb-1" data-i18n="username_lbl">اسم المستخدم (لا يمكن تعديله)</label>
@@ -274,6 +279,7 @@
 
     </main>
 
+    <!-- نافذة QR الملبسة (Modal) -->
     <div id="qr-style-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl p-6 space-y-6 shadow-2xl relative">
             <div class="flex justify-between items-center">
@@ -308,7 +314,7 @@
         </div>
     </div>
 
+ 
     <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
-
