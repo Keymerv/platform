@@ -35,7 +35,7 @@
             <div class="grid grid-cols-3 gap-2 mb-6">
                 <a id="view-live-profile" href="profile.html" target="_blank" title="معاينة الصفحة العامة" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-400 flex items-center justify-center text-sm transition-all shadow-sm"><i class="fa-solid fa-eye"></i></a>
                 <button onclick="copyProfileUrl()" title="نسخ رابط الصفحة" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 flex items-center justify-center text-sm transition-all shadow-sm"><i class="fa-solid fa-copy"></i></button>
-                <button onclick="toggleDashboardLang()" id="lang-btn-top" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all shadow-sm">AR</button>
+                <button onclick="toggleDashboardLang()" id="lang-btn-top" class="h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs font-bold transition-all shadow-sm">EN</button>
             </div>
 
             <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-2xl mb-6 flex items-center gap-3">
@@ -47,31 +47,35 @@
             </div>
 
             <nav class="space-y-1.5">
+                <!-- قسم الصفحة الشخصية (القائمة المنسدلة) -->
                 <div>
-                    <button onclick="toggleBioDropdown()" id="tab-btn-bio-main" class="tab-btn active w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <!-- أضفت class "main-tab" للتعرف عليها برمجياً -->
+                    <button onclick="toggleBioDropdown()" id="tab-btn-bio-main" class="main-tab w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all bg-slate-800 text-white">
                         <span class="flex items-center gap-3"><i class="fa-solid fa-user-pen w-5"></i> <span data-i18n="tab_bio">الصفحة الشخصية</span></span>
-                        <i id="bio-chevron-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                        <i id="bio-chevron-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-200" style="transform: rotate(180deg);"></i>
                     </button>
+                    <!-- القائمة المنسدلة (مفتوحة افتراضياً هنا، والجافاسكريبت سيتحكم بها) -->
                     <div id="bio-dropdown-menu" class="mt-1 space-y-1 pr-4 border-r-2 border-indigo-500/30 mr-2">
-                        <button onclick="switchTab('links')" id="tab-sub-btn-links" class="w-full text-right flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">
+                        <!-- أضفت class "sub-tab" -->
+                        <button onclick="switchTab('links')" id="tab-btn-links" class="sub-tab w-full text-right flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold bg-indigo-600 text-white transition-all">
                             <i class="fa-solid fa-link text-white w-4"></i> <span data-i18n="subtab_links">تعديل الروابط</span>
                         </button>
-                        <button onclick="switchTab('bio-settings')" id="tab-sub-btn-bio-settings" class="w-full text-right flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                        <button onclick="switchTab('bio-settings')" id="tab-btn-bio-settings" class="sub-tab w-full text-right flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
                             <i class="fa-solid fa-sliders text-indigo-400 w-4"></i> <span data-i18n="subtab_bio_settings">إعدادات البايو</span>
                         </button>
                     </div>
                 </div>
 
-                <button onclick="switchTab('store')" id="tab-btn-store" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                <button onclick="switchTab('store')" id="tab-btn-store" class="main-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-store w-5"></i> <span data-i18n="tab_store">المتجر الخفيف</span>
                 </button>
-                <button onclick="switchTab('branches')" id="tab-btn-branches" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                <button onclick="switchTab('branches')" id="tab-btn-branches" class="main-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-code-branch w-5"></i> <span data-i18n="tab_branches">الفروع</span>
                 </button>
-                <button onclick="switchTab('qrcode')" id="tab-btn-qrcode" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                <button onclick="switchTab('qrcode')" id="tab-btn-qrcode" class="main-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-qrcode w-5"></i> <span data-i18n="tab_qrcode">مولد الـ QR</span>
                 </button>
-                <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="main-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-gear w-5"></i> <span data-i18n="tab_settings">الإعدادات</span>
                 </button>
             </nav>
@@ -86,42 +90,102 @@
     <!-- المحتوى الرئيسي -->
     <main class="flex-grow p-4 sm:p-8 max-w-5xl mx-auto w-full">
 
-        <!-- قسم الروابط -->
+        <!-- ================= قسم الروابط (تحديث الـ 30 رابط وتصنيفاتها) ================= -->
         <section id="sec-links" class="tab-content space-y-6">
             <div>
-                <h2 class="text-2xl font-bold" data-i18n="links_title">إدارة الروابط والمنصات</h2>
-                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك ومنصاتك لتظهر بأيقوناتها الاحترافية</p>
+                <h2 class="text-2xl font-bold" data-i18n="links_title">إدارة الروابط والمنصات (30 رابط)</h2>
+                <p class="text-slate-400 text-sm" data-i18n="links_desc">أضف روابطك ومنصاتك مرتبة حسب الأقسام لتظهر بأيقوناتها الاحترافية</p>
             </div>
 
-            <form id="form-add-link" onsubmit="addCustomLink(event)" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
-                <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base"><i class="fa-solid fa-link text-indigo-400"></i> <span data-i18n="add_link_heading">إضافة رابط عام إضافي</span></h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="link-title" required placeholder="عنوان الرابط" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
-                    <input type="url" id="link-url" required placeholder="الرابط (https://...)" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr">
-                </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_add_link">إضافة الرابط العام</button>
-            </form>
-            <div id="links-list" class="space-y-3"></div>
-
-            <div class="space-y-4 pt-4">
+            <div class="space-y-4">
+                
+                <!-- القسم 1: التواصل الاجتماعي -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <button onclick="toggleAccordion('acc-social')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
-                        <span class="flex items-center gap-2"><i class="fa-solid fa-share-nodes text-indigo-400"></i> <span data-i18n="cat_social">سوشيال ميديا أساسية</span></span>
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-share-nodes text-indigo-400"></i> <span data-i18n="cat_social">التواصل الاجتماعي (6 روابط)</span></span>
                         <i id="icon-acc-social" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
                     </button>
+                    <!-- مفتوح افتراضياً -->
                     <div id="acc-social" class="p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div><label class="block text-xs text-slate-400 mb-1">X (تويتر)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">X (Twitter)</label><input type="url" id="soc-x" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                         <div><label class="block text-xs text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
                     </div>
                 </div>
-                <button onclick="saveSocialAccounts()" type="button" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_save_social">حفظ جميع المنصات</button>
+
+                <!-- القسم 2: المراسلة والتواصل المباشر -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <button onclick="toggleAccordion('acc-messaging')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-comments text-emerald-400"></i> <span data-i18n="cat_messaging">المراسلة والاتصال (6 روابط)</span></span>
+                        <i id="icon-acc-messaging" class="fa-solid fa-chevron-left text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <!-- مغلق افتراضياً (مخفي) -->
+                    <div id="acc-messaging" class="hidden p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="block text-xs text-slate-400 mb-1">WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Discord</label><input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Skype</label><input type="url" id="soc-skype" placeholder="skype:..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Zoom</label><input type="url" id="soc-zoom" placeholder="https://zoom.us/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="email_lbl">Email (البريد)</label><input type="email" id="soc-email" placeholder="mailto:..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                    </div>
+                </div>
+
+                <!-- القسم 3: الأعمال والتصميم -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <button onclick="toggleAccordion('acc-business')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-blue-400"></i> <span data-i18n="cat_business">الأعمال والتصميم (6 روابط)</span></span>
+                        <i id="icon-acc-business" class="fa-solid fa-chevron-left text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="acc-business" class="hidden p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="block text-xs text-slate-400 mb-1">LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Behance</label><input type="url" id="soc-behance" placeholder="https://behance.net/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">GitHub</label><input type="url" id="soc-github" placeholder="https://github.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Dribbble</label><input type="url" id="soc-dribbble" placeholder="https://dribbble.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://pinterest.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Reddit</label><input type="url" id="soc-reddit" placeholder="https://reddit.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                    </div>
+                </div>
+
+                <!-- القسم 4: المتاجر والمنصات -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <button onclick="toggleAccordion('acc-stores')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-purple-400"></i> <span data-i18n="cat_stores">المتاجر والمنصات (6 روابط)</span></span>
+                        <i id="icon-acc-stores" class="fa-solid fa-chevron-left text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="acc-stores" class="hidden p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="block text-xs text-slate-400 mb-1">Salla (سلة)</label><input type="url" id="soc-salla" placeholder="https://salla.sa/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Zid (زد)</label><input type="url" id="soc-zid" placeholder="https://zid.store/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Shopify</label><input type="url" id="soc-shopify" placeholder="https://shopify.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Amazon</label><input type="url" id="soc-amazon" placeholder="https://amazon.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Upwork</label><input type="url" id="soc-upwork" placeholder="https://upwork.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1">Freelancer</label><input type="url" id="soc-freelancer" placeholder="https://freelancer.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                    </div>
+                </div>
+
+                <!-- القسم 5: روابط مخصصة (مواقعك الشخصية) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <button onclick="toggleAccordion('acc-custom')" type="button" class="w-full flex justify-between items-center p-4 bg-slate-900 hover:bg-slate-800/60 font-bold text-slate-200 text-sm transition-all">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-globe text-pink-400"></i> <span data-i18n="cat_custom_links">مواقعك وروابط أخرى (6 روابط)</span></span>
+                        <i id="icon-acc-custom" class="fa-solid fa-chevron-left text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="acc-custom" class="hidden p-5 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_website_1">الموقع الشخصي 1</label><input type="url" id="soc-website1" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_website_2">الموقع الشخصي 2</label><input type="url" id="soc-website2" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_blog">المدونة</label><input type="url" id="soc-blog" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_portfolio">معرض الأعمال</label><input type="url" id="soc-portfolio" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_other_1">رابط إضافي 1</label><input type="url" id="soc-other1" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                        <div><label class="block text-xs text-slate-400 mb-1" data-i18n="lbl_other_2">رابط إضافي 2</label><input type="url" id="soc-other2" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none" dir="ltr"></div>
+                    </div>
+                </div>
+
+                <button onclick="saveSocialAccounts()" type="button" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md" data-i18n="btn_save_social">حفظ جميع المنصات والروابط</button>
             </div>
         </section>
 
-        <!-- قسم إعدادات البايو -->
+        <!-- ================= قسم إعدادات البايو ================= -->
         <section id="sec-bio-settings" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="bio_config_title">إعدادات الصفحة الشخصية (البايو)</h2>
@@ -163,7 +227,7 @@
             </form>
         </section>
 
-        <!-- قسم المتجر الخفيف -->
+        <!-- ================= قسم المتجر ================= -->
         <section id="sec-store" class="tab-content hidden space-y-6">
             <div>
                 <div class="flex items-center gap-3 mb-1">
@@ -180,7 +244,7 @@
             </div>
         </section>
 
-        <!-- قسم الفروع -->
+        <!-- ================= قسم الفروع ================= -->
         <section id="sec-branches" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="branches_title">إدارة الفروع</h2>
@@ -199,7 +263,7 @@
             <div id="branches-list" class="space-y-3"></div>
         </section>
 
-        <!-- قسم مولد QR -->
+        <!-- ================= قسم الـ QR ================= -->
         <section id="sec-qrcode" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="qrcode_title">مولد رمز الـ QR الذكي</h2>
@@ -245,7 +309,7 @@
             </div>
         </section>
 
-        <!-- قسم الإعدادات -->
+        <!-- ================= قسم الإعدادات ================= -->
         <section id="sec-settings" class="tab-content hidden space-y-6">
             <div>
                 <h2 class="text-2xl font-bold" data-i18n="settings_title">إعدادات الحساب والهوية</h2>
@@ -256,7 +320,7 @@
                     <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-id-badge text-indigo-400"></i> <span data-i18n="sec_identity">معلومات الحساب الأساسية</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_lbl">الاسم الظاهري</label>
+                            <label class="block text-xs text-slate-400 mb-1" data-i18n="display_name_lbl">الاسم الظاهري (Display Name)</label>
                             <input type="text" id="settings-display-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none">
                         </div>
                         <div>
@@ -314,7 +378,7 @@
         </div>
     </div>
 
- 
+    <!-- استدعاء ملف الجافاسكريبت الخاص بك بنظام الـ Modules -->
     <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
