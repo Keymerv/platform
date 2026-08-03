@@ -1,5 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-import { supabase } from './supabase-config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../supabase-config.js';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -11,7 +11,7 @@ let selectedQrStyle = 'basic';
 const translations = {
     ar: {
         page_title: "Keymerv | لوحة التحكم",
-        tab_bio: "البايو",
+        tab_bio: "الصفحة الشخصية",
         subtab_links: "تعديل الروابط",
         subtab_bio_settings: "إعدادات البايو",
         tab_store: "المتجر الخفيف",
@@ -191,18 +191,29 @@ window.switchTab = function(tabId) {
         btn.classList.remove('bg-indigo-600', 'text-white');
         btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
     });
+
+    document.querySelectorAll('#bio-dropdown-menu button').forEach(subBtn => {
+        subBtn.classList.remove('bg-indigo-600', 'text-white');
+        subBtn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+        const icon = subBtn.querySelector('i');
+        if (icon) {
+            icon.className = icon.className.replace('text-white', 'text-indigo-400');
+        }
+    });
     
     if (tabId === 'links' || tabId === 'bio-settings') {
         if (mainBioBtn) {
             mainBioBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
             mainBioBtn.classList.add('bg-indigo-600', 'text-white');
         }
+        const activeSubBtn = document.getElementById(`tab-sub-btn-${tabId}`);
+        if (activeSubBtn) {
+            activeSubBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+            activeSubBtn.classList.add('bg-indigo-600', 'text-white');
+            const icon = activeSubBtn.querySelector('i');
+            if (icon) icon.className = icon.className.replace('text-indigo-400', 'text-white');
+        }
     } else {
-        const dropdown = document.getElementById('bio-dropdown-menu');
-        const chevron = document.getElementById('bio-chevron-icon');
-        if (dropdown) dropdown.classList.add('hidden');
-        if (chevron) chevron.classList.remove('rotate-180');
-
         const btn = document.getElementById(`tab-btn-${tabId}`);
         if (btn) {
             btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
@@ -230,11 +241,19 @@ window.copyProfileUrl = function() {
 };
 
 async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { window.location.href = "login.html"; return; }
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !session) { 
+        window.location.href = "login.html"; 
+        return; 
+    }
     currentUser = session.user;
 
-    const { data: profile } = await supabase.from('users_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    const { data: profile, error: profileError } = await supabase
+        .from('users_profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .maybeSingle();
+
     currentProfile = profile || {};
 
     const displayNameEl = document.getElementById('user-display-name');
@@ -248,7 +267,7 @@ async function checkAuth() {
         if (currentProfile.avatar_url) {
             avatarEl.innerHTML = `<img src="${currentProfile.avatar_url}" class="w-full h-full object-cover">`;
         } else {
-            avatarEl.textContent = (currentProfile.display_name || 'K')[0].toUpperCase();
+            avatarEl.textContent = (currentProfile.display_name || currentUser.email || 'K')[0].toUpperCase();
         }
     }
     if (viewProfileEl && currentProfile.username) {
@@ -286,6 +305,9 @@ async function checkAuth() {
     applyLanguage();
     loadLinks();
     loadBranches();
+    
+    // تفعيل تبويب الروابط تلقائياً عند بدء التشغيل
+    switchTab('links');
 }
 
 window.saveSocialAccounts = async function() {
@@ -558,4 +580,5 @@ if (logoutBtn) {
     });
 }
 
+// تنفيذ فحص الجلسة عند التحميل
 checkAuth();
