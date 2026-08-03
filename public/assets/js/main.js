@@ -8,15 +8,13 @@ let selectedQrStyle = 'basic';
 const translations = {
     ar: {
         page_title: "Keymerv | لوحة التحكم",
-        tab_links: "تعديل الروابط",
-        tab_store: "المتجر الخفيف",
-        tab_branches: "الفروع",
-        tab_qrcode: "مولد الـ QR",
-        tab_settings: "إعدادات البايو",
-        logout: "تسجيل الخروج",
         menu_profile: "الصفحة الشخصية",
         menu_links: "تعديل الروابط",
         menu_bio: "إعدادات البايو",
+        tab_store: "المتجر الخفيف",
+        tab_branches: "الفروع",
+        tab_qrcode: "مولد الـ QR",
+        logout: "تسجيل الخروج",
         links_title: "إدارة الروابط والمنصات",
         links_desc: "أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية",
         add_link_heading: "إضافة رابط عام إضافي",
@@ -79,15 +77,13 @@ const translations = {
     },
     en: {
         page_title: "Keymerv | Dashboard",
-        tab_links: "Links",
-        tab_store: "Lite Store",
-        tab_branches: "Branches",
-        tab_qrcode: "QR Code",
-        tab_settings: "Bio Settings",
-        logout: "Sign Out",
         menu_profile: "Profile Section",
         menu_links: "Edit Links",
         menu_bio: "Bio Settings",
+        tab_store: "Lite Store",
+        tab_branches: "Branches",
+        tab_qrcode: "QR Code",
+        logout: "Sign Out",
         links_title: "Links & Platforms Management",
         links_desc: "Add your links and 30 organized platforms with professional icons",
         add_link_heading: "Add Extra General Link",
@@ -177,12 +173,6 @@ function applyLanguage() {
 
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) pageTitle.textContent = dict.page_title;
-
-    // تحديث نصوص التغريد أو المنصات إذا وجدت معيار ديناميكي
-    const twitterLabel = document.getElementById('label-twitter');
-    if (twitterLabel) {
-        twitterLabel.textContent = currentLang === 'ar' ? '(تويتر) X' : 'Twitter (X)';
-    }
 }
 
 function showToast(msg, type = 'success') {
@@ -194,9 +184,12 @@ function showToast(msg, type = 'success') {
     setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
 }
 
+// تحكم صارم بالتبويبات وإغلاق أو فتح القائمة المنسدلة حسب الصفحة النشطة
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    
+    // إزالة التحديد عن كافة الأزرار والروابط في القائمة الجانبية
+    document.querySelectorAll('.tab-btn, .sub-tab-btn').forEach(btn => {
         btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
         btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
     });
@@ -208,6 +201,26 @@ window.switchTab = (tabId) => {
         btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
         btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
     }
+
+    // إدارة القائمة المنسدلة للصفحة الشخصية (تغلق تلقائياً إذا انتقلت لصفحة أخرى خارجها)
+    const profileDropdown = document.getElementById('profile-dropdown-menu');
+    const profileArrow = document.getElementById('icon-profile-dropdown');
+    const profileTabs = ['links', 'settings'];
+
+    if (profileTabs.includes(tabId)) {
+        if (profileDropdown) profileDropdown.classList.remove('hidden');
+        if (profileArrow) profileArrow.classList.add('rotate-180');
+    } else {
+        if (profileDropdown) profileDropdown.classList.add('hidden');
+        if (profileArrow) profileArrow.classList.remove('rotate-180');
+    }
+};
+
+window.toggleProfileDropdown = function() {
+    const dropdown = document.getElementById('profile-dropdown-menu');
+    const arrow = document.getElementById('icon-profile-dropdown');
+    if (dropdown) dropdown.classList.toggle('hidden');
+    if (arrow) arrow.classList.toggle('rotate-180');
 };
 
 window.toggleAccordion = (id) => {
@@ -273,6 +286,7 @@ async function checkAuth() {
     }
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
 
+    // تعبئة حقول الـ 30 منصة تلقائياً من قاعدة البيانات
     const socInputs = document.querySelectorAll('.soc-input');
     socInputs.forEach(input => {
         const key = input.id.replace('soc-', '');
