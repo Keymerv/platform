@@ -4,15 +4,11 @@ let currentUser = null;
 let currentProfile = null;
 let currentLang = localStorage.getItem('dashboard_lang') || 'ar';
 let selectedQrStyle = 'basic';
-let currentLang = localStorage.getItem('dashboard_lang') || 'ar';
-let selectedQrStyle = 'basic';
 
 const translations = {
     ar: {
         page_title: "Keymerv | لوحة التحكم",
-        tab_bio: "الصفحة الشخصية",
-        subtab_links: "تعديل الروابط",
-        subtab_bio_settings: "إعدادات البايو",
+        tab_links: "الروابط",
         tab_store: "المتجر الخفيف",
         tab_branches: "الفروع",
         tab_qrcode: "مولد الـ QR",
@@ -24,16 +20,9 @@ const translations = {
         btn_add_link: "إضافة الرابط العام",
         btn_save_social: "حفظ جميع المنصات",
         cat_social: "سوشيال ميديا أساسية",
-        bio_config_title: "إعدادات الصفحة الشخصية (البايو)",
-        bio_config_desc: "تحكم بالنبذة الترحيبية وإظهار أو إخفاء التصنيفات في صفحتك العامة",
-        sec_bio: "النبذة الترحيبية (Bio) - إجباري",
-        bio_ar_lbl: "النبذة بالعربية (إجباري)",
-        bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
-        sec_visibility: "إظهار أو إخفاء التصنيفات في الصفحة العامة",
-        chk_links: "تبويب الروابط",
-        chk_store: "تبويب المتجر (قريباً)",
-        chk_branches: "تبويب الفروع",
-        btn_save_bio: "حفظ إعدادات البايو",
+        cat_media: "بث وتصوير وترفيه",
+        cat_dev: "مجتمعات وبرمجة وأعمال",
+        cat_extra: "منصات إضافية أخرى",
         store_title: "المتجر المصغر",
         store_desc: "استعرض منتجاتك الرقمية أو المادية بأسلوب عصري",
         badge_soon: "قريباً جداً",
@@ -56,14 +45,20 @@ const translations = {
         wifi_pass_lbl: "كلمة المرور",
         wifi_enc_lbl: "نوع التشفير",
         btn_gen_qr_popup: "توليد واختيار تصميم الكود",
-        settings_title: "إعدادات الحساب والهوية",
-        settings_desc: "إدارة بيانات حسابك الشخصي ومعلومات تسجيل الدخول",
-        sec_identity: "معلومات الحساب الأساسية",
+        settings_title: "إعدادات الحساب والصفحة",
+        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك",
+        sec_identity: "معلومات الحساب والهوية",
         display_name_lbl: "الاسم الظاهري",
         username_lbl: "اسم المستخدم (لا يمكن تعديله)",
-        email_lbl: "البريد الإلكتروني (لا يمكن تعديله)",
         avatar_lbl: "صورة الحساب / الشعار",
-        btn_save_account: "حفظ معلومات الحساب",
+        sec_bio: "النبذة الترحيبية (Bio) - إجباري",
+        bio_ar_lbl: "النبذة بالعربية (إجباري)",
+        bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
+        sec_visibility: "إظهار أو إخفاء التصنيفات في الصفحة العامة",
+        chk_links: "تبويب الروابط",
+        chk_store: "تبويب المتجر (قريباً)",
+        chk_branches: "تبويب الفروع",
+        btn_save: "حفظ جميع التغييرات",
         modal_qr_title: "اختر تصميم الـ QR المناسب",
         modal_qr_desc: "يحتوي الكود تلقائياً على بصمة 'Created by Keymerv':",
         style_basic: "عادي (بيسك)",
@@ -74,9 +69,7 @@ const translations = {
     },
     en: {
         page_title: "Keymerv | Dashboard",
-        tab_bio: "Bio",
-        subtab_links: "Edit Links",
-        subtab_bio_settings: "Bio Settings",
+        tab_links: "Links",
         tab_store: "Lite Store",
         tab_branches: "Branches",
         tab_qrcode: "QR Code",
@@ -88,16 +81,9 @@ const translations = {
         btn_add_link: "Add General Link",
         btn_save_social: "Save All Platforms",
         cat_social: "Essential Social Media",
-        bio_config_title: "Profile (Bio) Settings",
-        bio_config_desc: "Manage your welcome bio and toggle section visibility on your public page",
-        sec_bio: "Bio - Required",
-        bio_ar_lbl: "Arabic Bio (Required)",
-        bio_en_lbl: "English Bio (Required)",
-        sec_visibility: "Section Visibility on Public Page",
-        chk_links: "Links Tab",
-        chk_store: "Store Tab (Soon)",
-        chk_branches: "Branches Tab",
-        btn_save_bio: "Save Bio Settings",
+        cat_media: "Streaming & Entertainment",
+        cat_dev: "Communities, Dev & Business",
+        cat_extra: "Additional Platforms",
         store_title: "Lite Store",
         store_desc: "Showcase your digital or physical products modernly",
         badge_soon: "Coming Soon",
@@ -120,14 +106,20 @@ const translations = {
         wifi_pass_lbl: "Password",
         wifi_enc_lbl: "Encryption Type",
         btn_gen_qr_popup: "Generate & Choose QR Design",
-        settings_title: "Account & Identity Settings",
-        settings_desc: "Manage your personal account details and login credentials",
-        sec_identity: "Basic Account Info",
+        settings_title: "Account & Page Settings",
+        settings_desc: "Manage your identity and visibility preferences",
+        sec_identity: "Identity & Account Info",
         display_name_lbl: "Display Name",
         username_lbl: "Username (Read-only)",
-        email_lbl: "Email Address (Read-only)",
         avatar_lbl: "Account Avatar / Logo",
-        btn_save_account: "Save Account Info",
+        sec_bio: "Bio - Required",
+        bio_ar_lbl: "Arabic Bio (Required)",
+        bio_en_lbl: "English Bio (Required)",
+        sec_visibility: "Section Visibility on Public Page",
+        chk_links: "Links Tab",
+        chk_store: "Store Tab (Soon)",
+        chk_branches: "Branches Tab",
+        btn_save: "Save All Changes",
         modal_qr_title: "Choose QR Design Style",
         modal_qr_desc: "Includes 'Created by Keymerv' watermark automatically:",
         style_basic: "Basic",
@@ -170,68 +162,28 @@ function showToast(msg, type = 'success') {
     setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
 }
 
-window.toggleBioDropdown = function() {
-    const dropdown = document.getElementById('bio-dropdown-menu');
-    const chevron = document.getElementById('bio-chevron-icon');
-    if (dropdown) dropdown.classList.toggle('hidden');
-    if (chevron) chevron.classList.toggle('rotate-180');
-};
-
-window.switchTab = function(tabId) {
+window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white'));
     
-    const mainBioBtn = document.getElementById('tab-btn-bio-main');
-    if (mainBioBtn) {
-        mainBioBtn.classList.remove('bg-indigo-600', 'text-white');
-        mainBioBtn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-    }
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white');
-        btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-    });
-
-    document.querySelectorAll('#bio-dropdown-menu button').forEach(subBtn => {
-        subBtn.classList.remove('bg-indigo-600', 'text-white');
-        subBtn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
-        const icon = subBtn.querySelector('i');
-        if (icon) {
-            icon.className = icon.className.replace('text-white', 'text-indigo-400');
-        }
-    });
-    
-    if (tabId === 'links' || tabId === 'bio-settings') {
-        if (mainBioBtn) {
-            mainBioBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-            mainBioBtn.classList.add('bg-indigo-600', 'text-white');
-        }
-        const activeSubBtn = document.getElementById(`tab-sub-btn-${tabId}`);
-        if (activeSubBtn) {
-            activeSubBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
-            activeSubBtn.classList.add('bg-indigo-600', 'text-white');
-            const icon = activeSubBtn.querySelector('i');
-            if (icon) icon.className = icon.className.replace('text-indigo-400', 'text-white');
-        }
-    } else {
-        const btn = document.getElementById(`tab-btn-${tabId}`);
-        if (btn) {
-            btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-            btn.classList.add('bg-indigo-600', 'text-white');
-        }
-    }
-
     const sec = document.getElementById(`sec-${tabId}`);
+    const btn = document.getElementById(`tab-btn-${tabId}`);
     if (sec) sec.classList.remove('hidden');
+    if (btn) {
+        btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+        btn.classList.add('bg-indigo-600', 'text-white');
+    }
 };
 
-window.toggleAccordion = function(id) {
+window.toggleAccordion = (id) => {
     const el = document.getElementById(id);
     const icon = document.getElementById(`icon-${id}`);
     if (el) el.classList.toggle('hidden');
     if (icon) icon.classList.toggle('rotate-180');
 };
 
-window.copyProfileUrl = function() {
+window.copyProfileUrl = () => {
     if (!currentProfile || !currentProfile.username) return;
     const fullUrl = `${window.location.origin}/platform/public/profile.html?u=${currentProfile.username}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
@@ -240,19 +192,11 @@ window.copyProfileUrl = function() {
 };
 
 async function checkAuth() {
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError || !session) { 
-        window.location.href = "login.html"; 
-        return; 
-    }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = "login.html"; return; }
     currentUser = session.user;
 
-    const { data: profile, error: profileError } = await supabase
-        .from('users_profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .maybeSingle();
-
+    const { data: profile } = await supabase.from('users_profiles').select('*').eq('id', currentUser.id).maybeSingle();
     currentProfile = profile || {};
 
     const displayNameEl = document.getElementById('user-display-name');
@@ -266,33 +210,33 @@ async function checkAuth() {
         if (currentProfile.avatar_url) {
             avatarEl.innerHTML = `<img src="${currentProfile.avatar_url}" class="w-full h-full object-cover">`;
         } else {
-            avatarEl.textContent = (currentProfile.display_name || currentUser.email || 'K')[0].toUpperCase();
+            avatarEl.textContent = (currentProfile.display_name || 'K')[0].toUpperCase();
         }
     }
-    if (viewProfileEl && currentProfile.username) {
-        viewProfileEl.href = `profile.html?u=${currentProfile.username}`;
-    }
+    if (viewProfileEl) viewProfileEl.href = `profile.html?u=${currentProfile.username || ''}`;
 
     const settingsName = document.getElementById('settings-display-name');
     const settingsUser = document.getElementById('settings-username');
-    const settingsEmail = document.getElementById('settings-email');
+    const settingsBioAr = document.getElementById('settings-bio-ar');
+    const settingsBioEn = document.getElementById('settings-bio-en');
 
     if (settingsName) settingsName.value = currentProfile.display_name || '';
-    if (settingsUser) { settingsUser.value = currentProfile.username || ''; settingsUser.disabled = true; }
-    if (settingsEmail) { settingsEmail.value = currentUser.email || ''; settingsEmail.disabled = true; }
-
-    const bioSettingsBioAr = document.getElementById('bio-settings-bio-ar');
-    const bioSettingsBioEn = document.getElementById('bio-settings-bio-en');
-
-    if (bioSettingsBioAr) bioSettingsBioAr.value = currentProfile.bio || '';
-    if (bioSettingsBioEn) bioSettingsBioEn.value = currentProfile.bio_en || '';
+    if (settingsUser) {
+        settingsUser.value = currentProfile.username || '';
+        settingsUser.disabled = true;
+    }
+    if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
+    if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
 
     const chkLinks = document.getElementById('chk-show-links');
     const chkStore = document.getElementById('chk-show-store');
     const chkBranches = document.getElementById('chk-show-branches');
 
     if (chkLinks) chkLinks.checked = currentProfile.show_links ?? true;
-    if (chkStore) chkStore.checked = false;
+    if (chkStore) {
+        chkStore.checked = false;
+        chkStore.disabled = true;
+    }
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
 
     const socInputs = document.querySelectorAll('.soc-input');
@@ -304,9 +248,6 @@ async function checkAuth() {
     applyLanguage();
     loadLinks();
     loadBranches();
-    
-    // تفعيل تبويب الروابط تلقائياً عند بدء التشغيل
-    switchTab('links');
 }
 
 window.saveSocialAccounts = async function() {
@@ -333,7 +274,7 @@ window.loadLinks = async function() {
     container.innerHTML = links.map(l => `
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center shadow-md">
             <div><h4 class="font-bold text-slate-200 text-sm">${l.title}</h4><a href="${l.url}" target="_blank" class="text-xs text-indigo-400 break-all" dir="ltr">${l.url}</a></div>
-            <button onclick="deleteItem('links', '${l.id}')" type="button" class="text-red-400 hover:text-red-300 p-2"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="deleteItem('links', '${l.id}')" class="text-red-400 hover:text-red-300 p-2"><i class="fa-solid fa-trash"></i></button>
         </div>
     `).join('');
 };
@@ -362,7 +303,7 @@ window.loadBranches = async function() {
     container.innerHTML = branches.map(b => `
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center shadow-md">
             <div><h4 class="font-bold text-slate-200 text-sm">${b.branch_name || b.name} <span class="text-xs text-indigo-400 font-normal">(${b.city})</span></h4></div>
-            <button onclick="deleteItem('branches', '${b.id}')" type="button" class="text-red-400 hover:text-red-300 p-2"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="deleteItem('branches', '${b.id}')" class="text-red-400 hover:text-red-300 p-2"><i class="fa-solid fa-trash"></i></button>
         </div>
     `).join('');
 };
@@ -384,7 +325,7 @@ if (formAddBranch) {
     });
 }
 
-window.deleteItem = async function(table, id) {
+window.deleteItem = async (table, id) => {
     if (confirm(currentLang === 'ar' ? "هل أنت متأكد من الحذف؟" : "Are you sure you want to delete?")) {
         await supabase.from(table).delete().eq('id', id);
         if (table === 'links') loadLinks();
@@ -500,6 +441,7 @@ window.downloadSelectedQrPdf = async function() {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
         
+        pdf.setFont("Tajawal", "normal");
         pdf.setFontSize(18);
         pdf.text("Keymerv Smart QR Code", 105, 30, { align: 'center' });
         pdf.setFontSize(10);
@@ -517,39 +459,17 @@ window.downloadSelectedQrPdf = async function() {
     }
 };
 
-const formBioSettings = document.getElementById('form-bio-settings');
-if (formBioSettings) {
-    formBioSettings.addEventListener('submit', async (e) => {
+const formSettings = document.getElementById('form-settings');
+if (formSettings) {
+    formSettings.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const bioAr = document.getElementById('bio-settings-bio-ar').value.trim();
-        const bioEn = document.getElementById('bio-settings-bio-en').value.trim();
+        const bioAr = document.getElementById('settings-bio-ar').value.trim();
+        const bioEn = document.getElementById('settings-bio-en').value.trim();
         if (!bioAr || !bioEn) {
             showToast(currentLang === 'ar' ? 'يرجى إدخال النبذة بالعربية والإنجليزية إجبارياً' : 'Arabic and English bio are required', 'error');
             return;
         }
 
-        const show_links = document.getElementById('chk-show-links').checked;
-        const show_branches = document.getElementById('chk-show-branches').checked;
-
-        const { error } = await supabase.from('users_profiles').update({
-            bio: bioAr,
-            bio_en: bioEn,
-            show_links, 
-            show_branches
-        }).eq('id', currentUser.id);
-
-        if (error) showToast("خطأ: " + error.message, "error");
-        else { 
-            showToast(currentLang === 'ar' ? 'تم حفظ إعدادات البايو بنجاح!' : 'Bio settings saved successfully!'); 
-            setTimeout(() => location.reload(), 1000); 
-        }
-    });
-}
-
-const formSettings = document.getElementById('form-settings');
-if (formSettings) {
-    formSettings.addEventListener('submit', async (e) => {
-        e.preventDefault();
         const avatarFile = document.getElementById('settings-avatar-file').files[0];
         let avatarUrl = currentProfile.avatar_url || '';
         if (avatarFile) {
@@ -558,14 +478,21 @@ if (formSettings) {
             avatarUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
         }
 
+        const show_links = document.getElementById('chk-show-links').checked;
+        const show_branches = document.getElementById('chk-show-branches').checked;
+
         const { error } = await supabase.from('users_profiles').update({
             display_name: document.getElementById('settings-display-name').value,
-            avatar_url: avatarUrl
+            bio: bioAr,
+            bio_en: bioEn,
+            avatar_url: avatarUrl,
+            show_links, 
+            show_branches
         }).eq('id', currentUser.id);
 
         if (error) showToast("خطأ: " + error.message, "error");
         else { 
-            showToast(currentLang === 'ar' ? 'تم حفظ معلومات الحساب بنجاح!' : 'Account info saved successfully!'); 
+            showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات بنجاح!' : 'All settings saved successfully!'); 
             setTimeout(() => location.reload(), 1000); 
         }
     });
@@ -579,5 +506,4 @@ if (logoutBtn) {
     });
 }
 
-// تنفيذ فحص الجلسة عند التحميل
 checkAuth();
