@@ -14,17 +14,21 @@ const translations = {
         tab_qrcode: "مولد الـ QR",
         tab_settings: "إعدادات البايو",
         logout: "تسجيل الخروج",
+        menu_profile: "الصفحة الشخصية",
+        menu_links: "تعديل الروابط",
+        menu_bio: "إعدادات البايو",
         links_title: "إدارة الروابط والمنصات",
         links_desc: "أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية",
         add_link_heading: "إضافة رابط عام إضافي",
-        link_title_placeholder: "عنوان الرابط (مثال: موقعي الشخصي)",
-        link_url_placeholder: "https://example.com",
+        link_title_ph: "عنوان الرابط (مثال: موقعي الشخصي)",
+        link_url_ph: "رابط الرابط (https://...)",
         btn_add_link: "إضافة الرابط العام",
         btn_save_social: "حفظ جميع المنصات",
         cat_social: "سوشيال ميديا أساسية",
         cat_media: "بث وتصوير وترفيه",
         cat_dev: "مجتمعات وبرمجة وأعمال",
         cat_extra: "منصات إضافية أخرى",
+        empty_links: "لا توجد روابط عامة إضافية حالياً",
         store_title: "المتجر المصغر",
         store_desc: "استعرض منتجاتك الرقمية أو المادية بأسلوب عصري",
         badge_soon: "قريباً جداً",
@@ -34,10 +38,10 @@ const translations = {
         branches_title: "إدارة الفروع",
         branches_desc: "أضف فروع نشاطك التجاري أو مقرات عملك",
         add_branch_heading: "إضافة فرع جديد",
-        branch_name_placeholder: "اسم الفرع (الفرع الرئيسي)",
-        branch_city_placeholder: "المدينة (الرياض، جدة...)",
-        branch_phone_placeholder: "رقم الهاتف",
-        branch_map_placeholder: "رابط خرائط جوجل (Google Maps)",
+        branch_name_ph: "اسم الفرع (الفرع الرئيسي)",
+        branch_city_ph: "المدينة (الرياض، جدة...)",
+        branch_phone_ph: "رقم الهاتف",
+        branch_map_ph: "رابط خرائط جوجل (Google Maps)",
         btn_save_branch: "حفظ الفرع",
         qrcode_title: "مولد رمز الـ QR الذكي",
         qrcode_desc: "أنشئ رمز استجابة سريع مع إطارات وتصاميم مميزة وبصمة Keymerv",
@@ -81,17 +85,21 @@ const translations = {
         tab_qrcode: "QR Code",
         tab_settings: "Bio Settings",
         logout: "Sign Out",
+        menu_profile: "Profile Section",
+        menu_links: "Edit Links",
+        menu_bio: "Bio Settings",
         links_title: "Links & Platforms Management",
         links_desc: "Add your links and 30 organized platforms with professional icons",
         add_link_heading: "Add Extra General Link",
-        link_title_placeholder: "Link Title (e.g. My Website)",
-        link_url_placeholder: "https://example.com",
+        link_title_ph: "Link Title (e.g. My Website)",
+        link_url_ph: "Link URL (https://...)",
         btn_add_link: "Add General Link",
         btn_save_social: "Save All Platforms",
         cat_social: "Essential Social Media",
         cat_media: "Streaming & Entertainment",
         cat_dev: "Communities, Dev & Business",
         cat_extra: "Additional Platforms",
+        empty_links: "No additional general links currently",
         store_title: "Lite Store",
         store_desc: "Showcase your digital or physical products modernly",
         badge_soon: "Coming Soon",
@@ -101,10 +109,10 @@ const translations = {
         branches_title: "Manage Branches",
         branches_desc: "Add your business branches or office locations",
         add_branch_heading: "Add New Branch",
-        branch_name_placeholder: "Branch Name (Main Branch)",
-        branch_city_placeholder: "City (Riyadh, Jeddah...)",
-        branch_phone_placeholder: "Phone Number",
-        branch_map_placeholder: "Google Maps URL",
+        branch_name_ph: "Branch Name (Main Branch)",
+        branch_city_ph: "City (Riyadh, Jeddah...)",
+        branch_phone_ph: "Phone Number",
+        branch_map_ph: "Google Maps URL",
         btn_save_branch: "Save Branch",
         qrcode_title: "Smart QR Code Generator",
         qrcode_desc: "Generate custom QR codes with frames and Keymerv watermark",
@@ -162,7 +170,6 @@ function applyLanguage() {
         if (dict[key]) el.textContent = dict[key];
     });
 
-    // ترجمة الـ Placeholders للحقول لتعمل بشكل كامل باللغتين
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (dict[key]) el.placeholder = dict[key];
@@ -170,6 +177,12 @@ function applyLanguage() {
 
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) pageTitle.textContent = dict.page_title;
+
+    // تحديث نصوص التغريد أو المنصات إذا وجدت معيار ديناميكي
+    const twitterLabel = document.getElementById('label-twitter');
+    if (twitterLabel) {
+        twitterLabel.textContent = currentLang === 'ar' ? '(تويتر) X' : 'Twitter (X)';
+    }
 }
 
 function showToast(msg, type = 'success') {
@@ -288,8 +301,9 @@ window.loadLinks = async function() {
     const container = document.getElementById('links-list');
     if (!container) return;
     const { data: links } = await supabase.from('links').select('*').eq('user_id', currentUser.id);
+    const dict = translations[currentLang];
     if (!links || links.length === 0) { 
-        container.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs">لا توجد روابط عامة إضافية حالياً</div>`; 
+        container.innerHTML = `<div class="text-center py-4 text-slate-500 text-xs">${dict.empty_links}</div>`; 
         return; 
     }
     container.innerHTML = links.map(l => `
