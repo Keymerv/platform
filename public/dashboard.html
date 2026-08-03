@@ -323,7 +323,7 @@
         </div>
     </div>
 
-    <!-- السكربت البرمجي المدمج -->
+    <!-- السكربت البرمجي المدمج الصحيح -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-config.js';
@@ -508,10 +508,11 @@
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             
-            // إلغاء تفعيل أزرار القائمة الرئيسية
             const mainBioBtn = document.getElementById('tab-btn-bio-main');
-            if (mainBioBtn) mainBioBtn.classList.remove('bg-indigo-600', 'text-white');
-            if (mainBioBtn) mainBioBtn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+            if (mainBioBtn) {
+                mainBioBtn.classList.remove('bg-indigo-600', 'text-white');
+                mainBioBtn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+            }
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-indigo-600', 'text-white');
