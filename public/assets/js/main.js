@@ -222,11 +222,16 @@ window.toggleProfileDropdown = function() {
     if (arrow) arrow.classList.toggle('rotate-180');
 };
 
-window.toggleAccordion = (id) => {
-    const el = document.getElementById(id);
-    const icon = document.getElementById(`icon-${id}`);
-    if (el) el.classList.toggle('hidden');
-    if (icon) icon.classList.toggle('rotate-180');
+// دالة لفتح وغلق أقسام المنصات (Accordion)
+window.togglePlatformSection = function(sectionId, iconId) {
+    const section = document.getElementById(sectionId);
+    const icon = document.getElementById(iconId);
+    if (section) {
+        section.classList.toggle('hidden');
+    }
+    if (icon) {
+        icon.classList.toggle('rotate-180');
+    }
 };
 
 window.copyProfileUrl = () => {
@@ -326,19 +331,6 @@ window.loadLinks = async function() {
     `).join('');
 };
 
-const formAddLink = document.getElementById('form-add-link');
-if (formAddLink) {
-    formAddLink.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const title = document.getElementById('link-title').value;
-        const url = document.getElementById('link-url').value;
-        await supabase.from('links').insert([{ user_id: currentUser.id, title, url }]);
-        e.target.reset();
-        loadLinks();
-        showToast(currentLang === 'ar' ? 'تمت إضافة الرابط بنجاح!' : 'Link added successfully!');
-    });
-}
-
 window.loadBranches = async function() {
     const container = document.getElementById('branches-list');
     if (!container) return;
@@ -354,23 +346,6 @@ window.loadBranches = async function() {
         </div>
     `).join('');
 };
-
-const formAddBranch = document.getElementById('form-add-branch');
-if (formAddBranch) {
-    formAddBranch.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await supabase.from('branches').insert([{ 
-            owner_id: currentUser.id, 
-            branch_name: document.getElementById('branch-name').value, 
-            city: document.getElementById('branch-city').value,
-            phone: document.getElementById('branch-phone').value,
-            location_url: document.getElementById('branch-map-url').value 
-        }]);
-        e.target.reset();
-        loadBranches();
-        showToast(currentLang === 'ar' ? 'تم حفظ الفرع بنجاح!' : 'Branch saved successfully!');
-    });
-}
 
 window.deleteItem = async (table, id) => {
     if (confirm(currentLang === 'ar' ? "هل أنت متأكد من الحذف؟" : "Are you sure you want to delete?")) {
@@ -506,53 +481,87 @@ window.downloadSelectedQrPdf = async function() {
     }
 };
 
-const formSettings = document.getElementById('form-settings');
-if (formSettings) {
-    formSettings.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const bioAr = document.getElementById('settings-bio-ar').value.trim();
-        const bioEn = document.getElementById('settings-bio-en').value.trim();
-        
-        if (!bioAr || !bioEn) {
-            showToast(currentLang === 'ar' ? 'يرجى إدخال النبذة بالعربية والإنجليزية إجبارياً' : 'Arabic and English bio are required', 'error');
-            return;
-        }
+// تجميع الاستماع للأحداث عند تحميل عناصر الصفحة بالكامل
+document.addEventListener('DOMContentLoaded', () => {
+    const formAddLink = document.getElementById('form-add-link');
+    if (formAddLink) {
+        formAddLink.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('link-title').value;
+            const url = document.getElementById('link-url').value;
+            await supabase.from('links').insert([{ user_id: currentUser.id, title, url }]);
+            e.target.reset();
+            loadLinks();
+            showToast(currentLang === 'ar' ? 'تمت إضافة الرابط بنجاح!' : 'Link added successfully!');
+        });
+    }
 
-        const avatarFile = document.getElementById('settings-avatar-file').files[0];
-        let avatarUrl = currentProfile.avatar_url || '';
-        if (avatarFile) {
-            const filePath = `avatars/${currentUser.id}-${Date.now()}.${avatarFile.name.split('.').pop()}`;
-            await supabase.storage.from('uploads').upload(filePath, avatarFile);
-            avatarUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
-        }
+    const formAddBranch = document.getElementById('form-add-branch');
+    if (formAddBranch) {
+        formAddBranch.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await supabase.from('branches').insert([{ 
+                owner_id: currentUser.id, 
+                branch_name: document.getElementById('branch-name').value, 
+                city: document.getElementById('branch-city').value,
+                phone: document.getElementById('branch-phone').value,
+                location_url: document.getElementById('branch-map-url').value 
+            }]);
+            e.target.reset();
+            loadBranches();
+            showToast(currentLang === 'ar' ? 'تم حفظ الفرع بنجاح!' : 'Branch saved successfully!');
+        });
+    }
 
-        const show_links = document.getElementById('chk-show-links').checked;
-        const show_branches = document.getElementById('chk-show-branches').checked;
+    const formSettings = document.getElementById('form-settings');
+    if (formSettings) {
+        formSettings.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const bioAr = document.getElementById('settings-bio-ar').value.trim();
+            const bioEn = document.getElementById('settings-bio-en').value.trim();
+            
+            if (!bioAr || !bioEn) {
+                showToast(currentLang === 'ar' ? 'يرجى إدخال النبذة بالعربية والإنجليزية إجبارياً' : 'Arabic and English bio are required', 'error');
+                return;
+            }
 
-        const { error } = await supabase.from('users_profiles').update({
-            display_name: document.getElementById('settings-display-name').value,
-            bio: bioAr,
-            bio_en: bioEn,
-            avatar_url: avatarUrl,
-            show_links, 
-            show_branches
-        }).eq('id', currentUser.id);
+            const avatarFile = document.getElementById('settings-avatar-file').files[0];
+            let avatarUrl = currentProfile.avatar_url || '';
+            if (avatarFile) {
+                const filePath = `avatars/${currentUser.id}-${Date.now()}.${avatarFile.name.split('.').pop()}`;
+                await supabase.storage.from('uploads').upload(filePath, avatarFile);
+                avatarUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
+            }
 
-        if (error) {
-            showToast("خطأ في الحفظ: " + error.message, "error");
-        } else { 
-            showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات والنبذة بنجاح!' : 'All settings and bio saved successfully!'); 
-            setTimeout(() => location.reload(), 1000); 
-        }
-    });
-}
+            const show_links = document.getElementById('chk-show-links').checked;
+            const show_branches = document.getElementById('chk-show-branches').checked;
 
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        window.location.href = "login.html";
-    });
-}
+            const { error } = await supabase.from('users_profiles').update({
+                display_name: document.getElementById('settings-display-name').value,
+                bio: bioAr,
+                bio_en: bioEn,
+                avatar_url: avatarUrl,
+                show_links, 
+                show_branches
+            }).eq('id', currentUser.id);
 
-checkAuth();
+            if (error) {
+                showToast("خطأ في الحفظ: " + error.message, "error");
+            } else { 
+                showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات والنبذة بنجاح!' : 'All settings and bio saved successfully!'); 
+                setTimeout(() => location.reload(), 1000); 
+            }
+        });
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = "login.html";
+        });
+    }
+
+    // بدء عملية التحقق وجلب بيانات الجلسة بعد اكتمال جاهزية الصفحة
+    checkAuth();
+});
