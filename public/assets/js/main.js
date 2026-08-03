@@ -8,15 +8,17 @@ let selectedQrStyle = 'basic';
 const translations = {
     ar: {
         page_title: "Keymerv | لوحة التحكم",
-        tab_links: "الروابط",
+        tab_links: "تعديل الروابط",
         tab_store: "المتجر الخفيف",
         tab_branches: "الفروع",
         tab_qrcode: "مولد الـ QR",
-        tab_settings: "الإعدادات",
+        tab_settings: "إعدادات البايو",
         logout: "تسجيل الخروج",
         links_title: "إدارة الروابط والمنصات",
         links_desc: "أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية",
         add_link_heading: "إضافة رابط عام إضافي",
+        link_title_placeholder: "عنوان الرابط (مثال: موقعي الشخصي)",
+        link_url_placeholder: "https://example.com",
         btn_add_link: "إضافة الرابط العام",
         btn_save_social: "حفظ جميع المنصات",
         cat_social: "سوشيال ميديا أساسية",
@@ -32,6 +34,10 @@ const translations = {
         branches_title: "إدارة الفروع",
         branches_desc: "أضف فروع نشاطك التجاري أو مقرات عملك",
         add_branch_heading: "إضافة فرع جديد",
+        branch_name_placeholder: "اسم الفرع (الفرع الرئيسي)",
+        branch_city_placeholder: "المدينة (الرياض، جدة...)",
+        branch_phone_placeholder: "رقم الهاتف",
+        branch_map_placeholder: "رابط خرائط جوجل (Google Maps)",
         btn_save_branch: "حفظ الفرع",
         qrcode_title: "مولد رمز الـ QR الذكي",
         qrcode_desc: "أنشئ رمز استجابة سريع مع إطارات وتصاميم مميزة وبصمة Keymerv",
@@ -73,11 +79,13 @@ const translations = {
         tab_store: "Lite Store",
         tab_branches: "Branches",
         tab_qrcode: "QR Code",
-        tab_settings: "Settings",
+        tab_settings: "Bio Settings",
         logout: "Sign Out",
         links_title: "Links & Platforms Management",
         links_desc: "Add your links and 30 organized platforms with professional icons",
         add_link_heading: "Add Extra General Link",
+        link_title_placeholder: "Link Title (e.g. My Website)",
+        link_url_placeholder: "https://example.com",
         btn_add_link: "Add General Link",
         btn_save_social: "Save All Platforms",
         cat_social: "Essential Social Media",
@@ -93,6 +101,10 @@ const translations = {
         branches_title: "Manage Branches",
         branches_desc: "Add your business branches or office locations",
         add_branch_heading: "Add New Branch",
+        branch_name_placeholder: "Branch Name (Main Branch)",
+        branch_city_placeholder: "City (Riyadh, Jeddah...)",
+        branch_phone_placeholder: "Phone Number",
+        branch_map_placeholder: "Google Maps URL",
         btn_save_branch: "Save Branch",
         qrcode_title: "Smart QR Code Generator",
         qrcode_desc: "Generate custom QR codes with frames and Keymerv watermark",
@@ -149,6 +161,13 @@ function applyLanguage() {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
     });
+
+    // ترجمة الـ Placeholders للحقول لتعمل بشكل كامل باللغتين
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) el.placeholder = dict[key];
+    });
+
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) pageTitle.textContent = dict.page_title;
 }
@@ -164,15 +183,17 @@ function showToast(msg, type = 'success') {
 
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white'));
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
+        btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+    });
     
     const sec = document.getElementById(`sec-${tabId}`);
     const btn = document.getElementById(`tab-btn-${tabId}`);
     if (sec) sec.classList.remove('hidden');
     if (btn) {
         btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
-        btn.classList.add('bg-indigo-600', 'text-white');
+        btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
     }
 };
 
@@ -259,7 +280,7 @@ window.saveSocialAccounts = async function() {
     });
 
     const { error } = await supabase.from('users_profiles').update(dataObj).eq('id', currentUser.id);
-    if (error) showToast("خطأ أثناء حفظ المنصات", "error");
+    if (error) showToast("خطأ أثناء حفظ المنصات: " + error.message, "error");
     else showToast(currentLang === 'ar' ? 'تم حفظ جميع المنصات بنجاح!' : 'All platforms saved successfully!');
 };
 
@@ -465,6 +486,7 @@ if (formSettings) {
         e.preventDefault();
         const bioAr = document.getElementById('settings-bio-ar').value.trim();
         const bioEn = document.getElementById('settings-bio-en').value.trim();
+        
         if (!bioAr || !bioEn) {
             showToast(currentLang === 'ar' ? 'يرجى إدخال النبذة بالعربية والإنجليزية إجبارياً' : 'Arabic and English bio are required', 'error');
             return;
@@ -490,9 +512,10 @@ if (formSettings) {
             show_branches
         }).eq('id', currentUser.id);
 
-        if (error) showToast("خطأ: " + error.message, "error");
-        else { 
-            showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات بنجاح!' : 'All settings saved successfully!'); 
+        if (error) {
+            showToast("خطأ في الحفظ: " + error.message, "error");
+        } else { 
+            showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات والنبذة بنجاح!' : 'All settings and bio saved successfully!'); 
             setTimeout(() => location.reload(), 1000); 
         }
     });
