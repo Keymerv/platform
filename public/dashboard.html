@@ -103,7 +103,7 @@
                 <div class="flex items-center gap-4">
                     <button onclick="copyProfileUrl()" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 flex items-center gap-2 transition">
                         <i class="fa-solid fa-copy text-indigo-400"></i>
-                        <span>نسخ الرابط</span>
+                        <span data-i18n="copy_link_btn">نسخ الرابط</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-3">
@@ -114,82 +114,91 @@
             <!-- Container for Tabs -->
             <div class="p-6 md:p-10 max-w-5xl w-full mx-auto">
                 
-                <!-- 1. Links & Social Section -->
+                <!-- 1. Links & Social Section (30 Platforms with Collapsible Sections & English Names) -->
                 <section id="sec-links" class="tab-content space-y-8">
                     <div>
                         <h2 class="text-xl font-bold text-white mb-1" data-i18n="links_title">إدارة الروابط والمنصات</h2>
                         <p class="text-xs text-slate-400" data-i18n="links_desc">أضف روابطك ومنصاتك الـ 30 لتظهر بأيقوناتها الاحترافية</p>
                     </div>
 
-                    <!-- Social Accounts Grid -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-                        <h3 class="text-sm font-bold text-indigo-400 border-b border-slate-800 pb-3" data-i18n="cat_social">سوشيال ميديا أساسية</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">تيك توك (TikTok)</label>
-                                <input type="url" id="soc-tiktok" placeholder="https://tiktok.com/@..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">إكس / تويتر (X)</label>
-                                <input type="url" id="soc-twitter" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">انستقرام (Instagram)</label>
-                                <input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">سناب شات (Snapchat)</label>
-                                <input type="url" id="soc-snapchat" placeholder="https://snapchat.com/add/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <!-- Accordion 1: Essential Social Media -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                        <button onclick="togglePlatformSection('sec-cat-1', 'icon-cat-1')" class="w-full flex items-center justify-between p-6 text-right hover:bg-slate-800/50 transition">
+                            <h3 class="text-sm font-bold text-indigo-400" data-i18n="cat_social">سوشيال ميديا أساسية (Essential Social Media)</h3>
+                            <i id="icon-cat-1" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="sec-cat-1" class="p-6 pt-0 border-t border-slate-800/60 space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">TikTok</label><input type="url" id="soc-tiktok" placeholder="https://tiktok.com/@..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">X (Twitter)</label><input type="url" id="soc-twitter" placeholder="https://x.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Instagram</label><input type="url" id="soc-instagram" placeholder="https://instagram.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Snapchat</label><input type="url" id="soc-snapchat" placeholder="https://snapchat.com/add/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Facebook</label><input type="url" id="soc-facebook" placeholder="https://facebook.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Threads</label><input type="url" id="soc-threads" placeholder="https://threads.net/@..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Pinterest</label><input type="url" id="soc-pinterest" placeholder="https://pinterest.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">LinkedIn</label><input type="url" id="soc-linkedin" placeholder="https://linkedin.com/in/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
                             </div>
                         </div>
+                    </div>
 
-                        <h3 class="text-sm font-bold text-indigo-400 border-b border-slate-800 pb-3 pt-4" data-i18n="cat_media">بث وتصوير وترفيه</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">يوتيوب (YouTube)</label>
-                                <input type="url" id="soc-youtube" placeholder="https://youtube.com/@..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">تويتش (Twitch)</label>
-                                <input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <!-- Accordion 2: Music & Artists Platforms -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                        <button onclick="togglePlatformSection('sec-cat-2', 'icon-cat-2')" class="w-full flex items-center justify-between p-6 text-right hover:bg-slate-800/50 transition">
+                            <h3 class="text-sm font-bold text-pink-400" data-i18n="cat_music">منصات الموسيقى والفنانين (Music & Artists Platforms)</h3>
+                            <i id="icon-cat-2" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="sec-cat-2" class="p-6 pt-0 border-t border-slate-800/60 space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Spotify</label><input type="url" id="soc-spotify" placeholder="https://open.spotify.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Apple Music</label><input type="url" id="soc-applemusic" placeholder="https://music.apple.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">SoundCloud</label><input type="url" id="soc-soundcloud" placeholder="https://soundcloud.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Anghami</label><input type="url" id="soc-anghami" placeholder="https://play.anghami.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">YouTube Music</label><input type="url" id="soc-youtubemusic" placeholder="https://music.youtube.com/channel/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Deezer</label><input type="url" id="soc-deezer" placeholder="https://deezer.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Tidal</label><input type="url" id="soc-tidal" placeholder="https://tidal.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Bandcamp</label><input type="url" id="soc-bandcamp" placeholder="https://bandcamp.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Shazam</label><input type="url" id="soc-shazam" placeholder="https://shazam.com/artist/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Genius</label><input type="url" id="soc-genius" placeholder="https://genius.com/artists/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-pink-500" dir="ltr"></div>
                             </div>
                         </div>
+                    </div>
 
-                        <h3 class="text-sm font-bold text-indigo-400 border-b border-slate-800 pb-3 pt-4" data-i18n="cat_dev">مجتمعات وبرمجة وأعمال</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">جيت هب (GitHub)</label>
-                                <input type="url" id="soc-github" placeholder="https://github.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">لينكد إن (LinkedIn)</label>
-                                <input type="url" id="soc-linkedin" placeholder="https://linkedin.com/in/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">ديسكورد (Discord)</label>
-                                <input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">تيليجرام (Telegram)</label>
-                                <input type="url" id="soc-telegram" placeholder="https://t.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <!-- Accordion 3: Streaming & Video -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                        <button onclick="togglePlatformSection('sec-cat-3', 'icon-cat-3')" class="w-full flex items-center justify-between p-6 text-right hover:bg-slate-800/50 transition">
+                            <h3 class="text-sm font-bold text-indigo-400" data-i18n="cat_media">بث وتصوير وترفيه (Streaming & Video)</h3>
+                            <i id="icon-cat-3" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="sec-cat-3" class="p-6 pt-0 border-t border-slate-800/60 space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">YouTube</label><input type="url" id="soc-youtube" placeholder="https://youtube.com/@..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Twitch</label><input type="url" id="soc-twitch" placeholder="https://twitch.tv/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Kick</label><input type="url" id="soc-kick" placeholder="https://kick.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Vimeo</label><input type="url" id="soc-vimeo" placeholder="https://vimeo.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
                             </div>
                         </div>
+                    </div>
 
-                        <h3 class="text-sm font-bold text-indigo-400 border-b border-slate-800 pb-3 pt-4" data-i18n="cat_extra">منصات إضافية أخرى</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">واتساب (WhatsApp)</label>
-                                <input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-medium text-slate-400 mb-1">الموقع الإلكتروني (Website)</label>
-                                <input type="url" id="soc-website" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr">
+                    <!-- Accordion 4: Communities, Dev & Contact -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                        <button onclick="togglePlatformSection('sec-cat-4', 'icon-cat-4')" class="w-full flex items-center justify-between p-6 text-right hover:bg-slate-800/50 transition">
+                            <h3 class="text-sm font-bold text-indigo-400" data-i18n="cat_dev">مجتمعات وبرمجة وأعمال (Communities & Contact)</h3>
+                            <i id="icon-cat-4" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="sec-cat-4" class="p-6 pt-0 border-t border-slate-800/60 space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Discord</label><input type="url" id="soc-discord" placeholder="https://discord.gg/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Telegram</label><input type="url" id="soc-telegram" placeholder="https://t.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">WhatsApp</label><input type="url" id="soc-whatsapp" placeholder="https://wa.me/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">GitHub</label><input type="url" id="soc-github" placeholder="https://github.com/..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Website</label><input type="url" id="soc-website" placeholder="https://..." class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
+                                <div><label class="block text-[11px] font-medium text-slate-400 mb-1">Email</label><input type="email" id="soc-email" placeholder="name@example.com" class="soc-input w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" dir="ltr"></div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="pt-2 flex justify-end">
-                            <button onclick="saveSocialAccounts()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20" data-i18n="btn_save_social">حفظ جميع المنصات</button>
-                        </div>
+                    <div class="pt-2 flex justify-end">
+                        <button onclick="saveSocialAccounts()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20" data-i18n="btn_save_social">حفظ جميع المنصات</button>
                     </div>
 
                     <!-- Add General Link -->
@@ -413,7 +422,7 @@
         </div>
     </div>
 
-    <!-- Main JS Script (تم إعادة اسم الملف القديم الخاص بك هنا) -->
-    <script type="module" src="assets/js/main.js"></script>
+    <!-- JavaScript Script with Correct Assets Path -->
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
