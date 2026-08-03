@@ -8,7 +8,9 @@ let selectedQrStyle = 'basic';
 const translations = {
     ar: {
         page_title: "Keymerv | لوحة التحكم",
-        tab_links: "الروابط",
+        tab_bio: "البايو",
+        subtab_links: "تعديل الروابط",
+        subtab_bio_settings: "إعدادات البايو",
         tab_store: "المتجر الخفيف",
         tab_branches: "الفروع",
         tab_qrcode: "مولد الـ QR",
@@ -23,6 +25,16 @@ const translations = {
         cat_media: "بث وتصوير وترفيه",
         cat_dev: "مجتمعات وبرمجة وأعمال",
         cat_extra: "منصات إضافية أخرى",
+        bio_config_title: "إعدادات الصفحة الشخصية (البايو)",
+        bio_config_desc: "تحكم بالنبذة الترحيبية وإظهار أو إخفاء التصنيفات في صفحتك العامة",
+        sec_bio: "النبذة الترحيبية (Bio) - إجباري",
+        bio_ar_lbl: "النبذة بالعربية (إجباري)",
+        bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
+        sec_visibility: "إظهار أو إخفاء التصنيفات في الصفحة العامة",
+        chk_links: "تبويب الروابط",
+        chk_store: "تبويب المتجر (قريباً)",
+        chk_branches: "تبويب الفروع",
+        btn_save_bio: "حفظ إعدادات البايو",
         store_title: "المتجر المصغر",
         store_desc: "استعرض منتجاتك الرقمية أو المادية بأسلوب عصري",
         badge_soon: "قريباً جداً",
@@ -45,20 +57,14 @@ const translations = {
         wifi_pass_lbl: "كلمة المرور",
         wifi_enc_lbl: "نوع التشفير",
         btn_gen_qr_popup: "توليد واختيار تصميم الكود",
-        settings_title: "إعدادات الحساب والصفحة",
-        settings_desc: "تحكم بكافة تفاصيل هويتك وعرض صفحاتك",
-        sec_identity: "معلومات الحساب والهوية",
+        settings_title: "إعدادات الحساب والهوية",
+        settings_desc: "إدارة بيانات حسابك الشخصي ومعلومات تسجيل الدخول",
+        sec_identity: "معلومات الحساب الأساسية",
         display_name_lbl: "الاسم الظاهري",
         username_lbl: "اسم المستخدم (لا يمكن تعديله)",
+        email_lbl: "البريد الإلكتروني (لا يمكن تعديله)",
         avatar_lbl: "صورة الحساب / الشعار",
-        sec_bio: "النبذة الترحيبية (Bio) - إجباري",
-        bio_ar_lbl: "النبذة بالعربية (إجباري)",
-        bio_en_lbl: "النبذة بالإنجليزية (إجباري)",
-        sec_visibility: "إظهار أو إخفاء التصنيفات في الصفحة العامة",
-        chk_links: "تبويب الروابط",
-        chk_store: "تبويب المتجر (قريباً)",
-        chk_branches: "تبويب الفروع",
-        btn_save: "حفظ جميع التغييرات",
+        btn_save_account: "حفظ معلومات الحساب",
         modal_qr_title: "اختر تصميم الـ QR المناسب",
         modal_qr_desc: "يحتوي الكود تلقائياً على بصمة 'Created by Keymerv':",
         style_basic: "عادي (بيسك)",
@@ -69,7 +75,9 @@ const translations = {
     },
     en: {
         page_title: "Keymerv | Dashboard",
-        tab_links: "Links",
+        tab_bio: "Bio",
+        subtab_links: "Edit Links",
+        subtab_bio_settings: "Bio Settings",
         tab_store: "Lite Store",
         tab_branches: "Branches",
         tab_qrcode: "QR Code",
@@ -84,6 +92,16 @@ const translations = {
         cat_media: "Streaming & Entertainment",
         cat_dev: "Communities, Dev & Business",
         cat_extra: "Additional Platforms",
+        bio_config_title: "Profile (Bio) Settings",
+        bio_config_desc: "Manage your welcome bio and toggle section visibility on your public page",
+        sec_bio: "Bio - Required",
+        bio_ar_lbl: "Arabic Bio (Required)",
+        bio_en_lbl: "English Bio (Required)",
+        sec_visibility: "Section Visibility on Public Page",
+        chk_links: "Links Tab",
+        chk_store: "Store Tab (Soon)",
+        chk_branches: "Branches Tab",
+        btn_save_bio: "Save Bio Settings",
         store_title: "Lite Store",
         store_desc: "Showcase your digital or physical products modernly",
         badge_soon: "Coming Soon",
@@ -106,20 +124,14 @@ const translations = {
         wifi_pass_lbl: "Password",
         wifi_enc_lbl: "Encryption Type",
         btn_gen_qr_popup: "Generate & Choose QR Design",
-        settings_title: "Account & Page Settings",
-        settings_desc: "Manage your identity and visibility preferences",
-        sec_identity: "Identity & Account Info",
+        settings_title: "Account & Identity Settings",
+        settings_desc: "Manage your personal account details and login credentials",
+        sec_identity: "Basic Account Info",
         display_name_lbl: "Display Name",
         username_lbl: "Username (Read-only)",
+        email_lbl: "Email Address (Read-only)",
         avatar_lbl: "Account Avatar / Logo",
-        sec_bio: "Bio - Required",
-        bio_ar_lbl: "Arabic Bio (Required)",
-        bio_en_lbl: "English Bio (Required)",
-        sec_visibility: "Section Visibility on Public Page",
-        chk_links: "Links Tab",
-        chk_store: "Store Tab (Soon)",
-        chk_branches: "Branches Tab",
-        btn_save: "Save All Changes",
+        btn_save_account: "Save Account Info",
         modal_qr_title: "Choose QR Design Style",
         modal_qr_desc: "Includes 'Created by Keymerv' watermark automatically:",
         style_basic: "Basic",
@@ -162,11 +174,26 @@ function showToast(msg, type = 'success') {
     setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
 }
 
+window.toggleBioDropdown = function() {
+    const dropdown = document.getElementById('bio-dropdown-menu');
+    const chevron = document.getElementById('bio-chevron-icon');
+    if (dropdown) dropdown.classList.toggle('hidden');
+    if (chevron) chevron.classList.toggle('rotate-180');
+};
+
 window.switchTab = (tabId) => {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white'));
     
+    // إذا لم يكن التبويب متعلق بالبايو، قم بإغلاق قائمة البايو المنسدلة
+    if (tabId !== 'links' && tabId !== 'bio-settings') {
+        const dropdown = document.getElementById('bio-dropdown-menu');
+        const chevron = document.getElementById('bio-chevron-icon');
+        if (dropdown) dropdown.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+    }
+
     const sec = document.getElementById(`sec-${tabId}`);
     const btn = document.getElementById(`tab-btn-${tabId}`);
     if (sec) sec.classList.remove('hidden');
@@ -215,18 +242,29 @@ async function checkAuth() {
     }
     if (viewProfileEl) viewProfileEl.href = `profile.html?u=${currentProfile.username || ''}`;
 
+    // تعبئة حقول صفحة الإعدادات المستقلة (الحساب والهوية فقط)
     const settingsName = document.getElementById('settings-display-name');
     const settingsUser = document.getElementById('settings-username');
-    const settingsBioAr = document.getElementById('settings-bio-ar');
-    const settingsBioEn = document.getElementById('settings-bio-en');
+    const settingsEmail = document.getElementById('settings-email');
 
     if (settingsName) settingsName.value = currentProfile.display_name || '';
     if (settingsUser) {
         settingsUser.value = currentProfile.username || '';
         settingsUser.disabled = true;
     }
-    if (settingsBioAr) settingsBioAr.value = currentProfile.bio || '';
-    if (settingsBioEn) settingsBioEn.value = currentProfile.bio_en || '';
+    if (settingsEmail) {
+        settingsEmail.value = currentUser.email || '';
+        settingsEmail.disabled = true;
+    }
+
+    // تعبئة حقول إعدادات البايو
+    const bioSettingsName = document.getElementById('bio-settings-display-name');
+    const bioSettingsBioAr = document.getElementById('bio-settings-bio-ar');
+    const bioSettingsBioEn = document.getElementById('bio-settings-bio-en');
+
+    if (bioSettingsName) bioSettingsName.value = currentProfile.display_name || '';
+    if (bioSettingsBioAr) bioSettingsBioAr.value = currentProfile.bio || '';
+    if (bioSettingsBioEn) bioSettingsBioEn.value = currentProfile.bio_en || '';
 
     const chkLinks = document.getElementById('chk-show-links');
     const chkStore = document.getElementById('chk-show-store');
@@ -235,7 +273,7 @@ async function checkAuth() {
     if (chkLinks) chkLinks.checked = currentProfile.show_links ?? true;
     if (chkStore) {
         chkStore.checked = false;
-        chkStore.disabled = true; // المتجر قريباً وغير قابل للتعديل
+        chkStore.disabled = true;
     }
     if (chkBranches) chkBranches.checked = currentProfile.show_branches ?? true;
 
@@ -459,16 +497,41 @@ window.downloadSelectedQrPdf = async function() {
     }
 };
 
-const formSettings = document.getElementById('form-settings');
-if (formSettings) {
-    formSettings.addEventListener('submit', async (e) => {
+// حفظ إعدادات البايو
+const formBioSettings = document.getElementById('form-bio-settings');
+if (formBioSettings) {
+    formBioSettings.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const bioAr = document.getElementById('settings-bio-ar').value.trim();
-        const bioEn = document.getElementById('settings-bio-en').value.trim();
+        const bioAr = document.getElementById('bio-settings-bio-ar').value.trim();
+        const bioEn = document.getElementById('bio-settings-bio-en').value.trim();
         if (!bioAr || !bioEn) {
             showToast(currentLang === 'ar' ? 'يرجى إدخال النبذة بالعربية والإنجليزية إجبارياً' : 'Arabic and English bio are required', 'error');
             return;
         }
+
+        const show_links = document.getElementById('chk-show-links').checked;
+        const show_branches = document.getElementById('chk-show-branches').checked;
+
+        const { error } = await supabase.from('users_profiles').update({
+            bio: bioAr,
+            bio_en: bioEn,
+            show_links, 
+            show_branches
+        }).eq('id', currentUser.id);
+
+        if (error) showToast("خطأ: " + error.message, "error");
+        else { 
+            showToast(currentLang === 'ar' ? 'تم حفظ إعدادات البايو بنجاح!' : 'Bio settings saved successfully!'); 
+            setTimeout(() => location.reload(), 1000); 
+        }
+    });
+}
+
+// حفظ معلومات الحساب والهوية فقط في صفحة الإعدادات المستقلة
+const formSettings = document.getElementById('form-settings');
+if (formSettings) {
+    formSettings.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
         const avatarFile = document.getElementById('settings-avatar-file').files[0];
         let avatarUrl = currentProfile.avatar_url || '';
@@ -478,21 +541,14 @@ if (formSettings) {
             avatarUrl = supabase.storage.from('uploads').getPublicUrl(filePath).data.publicUrl;
         }
 
-        const show_links = document.getElementById('chk-show-links').checked;
-        const show_branches = document.getElementById('chk-show-branches').checked; // حفظ حالة الفروع بنجاح
-
         const { error } = await supabase.from('users_profiles').update({
             display_name: document.getElementById('settings-display-name').value,
-            bio: bioAr,
-            bio_en: bioEn,
-            avatar_url: avatarUrl,
-            show_links, 
-            show_branches
+            avatar_url: avatarUrl
         }).eq('id', currentUser.id);
 
         if (error) showToast("خطأ: " + error.message, "error");
         else { 
-            showToast(currentLang === 'ar' ? 'تم حفظ كافة الإعدادات بنجاح!' : 'All settings saved successfully!'); 
+            showToast(currentLang === 'ar' ? 'تم حفظ معلومات الحساب بنجاح!' : 'Account info saved successfully!'); 
             setTimeout(() => location.reload(), 1000); 
         }
     });
